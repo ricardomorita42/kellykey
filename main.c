@@ -78,7 +78,7 @@ int main (int argc, char **argv)
             seed = getSeed();
 	    srand(seed);
         fluxo = getRiverFlux();
-        geraRio(fluxo);
+        desenhaRio(fluxo);
     }
     
     fclose(entrada);
@@ -100,20 +100,20 @@ void menu() {
 	    printf("* (3) sair                   *\n");
 	    printf("******************************\n");
 	    printf("Escolha uma opcao:");
-        fgets(entrada,MAXLINE,stdin);
+        fgets(entrada, MAXLINE, stdin);
         opcao = atoi(entrada);
 
 	    if (opcao == 1)
-	    	 break;
+	    	break;
 	
-       else if (opcao == 2) {
-       	 mudaAtributos();
-       	 break;
-	    }
+       	else if (opcao == 2) {
+       	 	mudaAtributos();
+       		break;
+		}
        else if (opcao == 3)
-	       exit(0);
+	       	exit(0);
        else
-          continue;
+          	continue;
 	}
 }
 

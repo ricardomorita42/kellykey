@@ -24,6 +24,11 @@ Referencias:
 #include "graficos.h"
 #include "rio.h"
 
+int criaJanela()
+{
+	
+}
+
 void desenhaMenu()
 {
     return;
@@ -31,5 +36,6 @@ void desenhaMenu()
 
 void desenhaRio(Rio** grade)
 {
+	
     return;
 }

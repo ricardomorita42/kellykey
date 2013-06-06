@@ -32,11 +32,6 @@ Referencias:
 #include "config.h"
 #include "graficos.h"
 
-/* #include "graficos.h"
- */
-
-
-
 /*--1--Gera rio */
 void geraRio(float fluxoEsperado) {
 	Rio **grade;
