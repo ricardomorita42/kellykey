@@ -25,9 +25,17 @@ Referencias:
 #include <time.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_primitives.h>
 #include "rio.h"
 #include "config.h"
 #include "debugger.h"
+#include "graficos.h"
+#include "grade.h"
+#define LARGURA 600
+#define ALTURA 400
 
 /*Prototipos*/
 void testeIntegridade(char** argv);
@@ -40,6 +48,9 @@ int main (int argc, char **argv)
 	char nomeArquivo[MAXLINE];
 	float fluxo;
 	FILE* entrada;
+	/*APENAS PARA TESTE!*/
+	Rio** grade;
+	int linha, primeiraLinha, linhaAnterior;
 
     strcpy(nomeArquivo,"debug/config.txt");
 
@@ -78,7 +89,31 @@ int main (int argc, char **argv)
             seed = getSeed();
 	    srand(seed);
         fluxo = getRiverFlux();
-        desenhaRio(fluxo);
+		
+		/*APENAS PARA TESTE!*/
+		grade = alocaGrade();
+		linha = primeiraLinha = 0;
+		do {
+			linhaAnterior = linha - 1;
+			if (linhaAnterior < 0) 
+				linhaAnterior = getNumLines() - 1;
+			if (linha == primeiraLinha)
+				grade[linha] = geraLinha(grade[linha], NULL, fluxo);
+			else
+				grade[linha] = geraLinha(grade[linha], grade[linhaAnterior], fluxo);
+
+			linha++;
+			if (linha == getNumLines()) 
+				linha = 0;
+		
+		} while (linha != primeiraLinha);
+		/*FIM DO TESTE!!!*/
+		
+		if (criaJanela(LARGURA, ALTURA) == -1) {
+			fprintf(stderr, "Desculpe, nao consegui gerar uma janela...\n");
+			exit(-1);
+		}
+        desenhaRio(grade);
     }
     
     fclose(entrada);

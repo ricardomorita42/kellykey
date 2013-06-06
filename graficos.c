@@ -21,12 +21,26 @@ Referencias:
  \__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__
 */
 
-#include "graficos.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_primitives.h>
 #include "rio.h"
+#include "config.h"
+#include "graficos.h"
+#define D 7
 
-int criaJanela()
+int criaJanela(int largura, int altura)
 {
-	
+	ALLEGRO_DISPLAY *janela = NULL;
+
+	if (!al_init())
+		return -1;
+
+	janela = al_create_display(largura, altura);
+	if (!janela)
+		return -1;
+	return 0;
 }
 
 void desenhaMenu()
@@ -36,6 +50,54 @@ void desenhaMenu()
 
 void desenhaRio(Rio** grade)
 {
+	int i, j, margEsqInf[2], margEsqSup[2], margDirInf[2], margDirSup[2],
+		ilhaEsq[2], ilhaDir[2];
+	ALLEGRO_VERTEX vtx[4];
+
+	al_clear_to_color(al_map_rgb(90, 90, 0));
+	al_flip_display();
 	
-    return;
+	for (i = 0; i < (getNumLines() - 2); i++)
+	{
+		/*extraindo os vertices*/
+		for (j = 0; j < (getNumColumns() - 1); j++)
+		{
+			if (grade[i][j].terreno == getEarthChar() && grade[i][j+1].terreno == getWaterChar()) {
+				margEsqSup[0] = i * D;
+				margEsqSup[1] = (j+1) * D;
+			}
+			if (grade[i][j].terreno == getWaterChar() && grade[i][j+1].terreno == getEarthChar()) {
+				margDirSup[0] = i * D;
+				margDirSup[1] = j * D;
+			}
+			if (grade[i+1][j].terreno == getEarthChar() && grade[i+1][j+1].terreno == getWaterChar()) {
+				margEsqInf[0] = (i+1) * D;
+				margEsqInf[1] = (j+1) * D;
+			}
+			if (grade[i+1][j].terreno == getWaterChar() && grade[i+1][j+1].terreno == getEarthChar()) {
+				margDirInf[0] = (i+1) * D;
+				margDirInf[1] = j * D;
+			}
+			if (grade[i][j].terreno == getWaterChar() && grade[i][j+1].terreno == getIsleChar()) {
+				ilhaEsq[0] = i * D;
+				ilhaEsq[1] = (j+1) * D;
+			}
+			if (grade[i][j].terreno == getIsleChar() && grade[i][j+1].terreno == getWaterChar()) {
+				ilhaDir[0] = i * D;
+				ilhaDir[1] = j * D;
+			}		
+		}
+		/*preenchendo os vertices do poligono*/
+		vtx[0].x = margEsqSup[1]; vtx[0].y = margEsqSup[0]; vtx[0].color = al_map_rgb(0, 0, 200);
+		vtx[1].x = margDirSup[1]; vtx[1].y = margDirSup[0]; vtx[1].color = al_map_rgb(0, 0, 200);
+		vtx[2].x = margDirInf[1]; vtx[2].y = margDirInf[0]; vtx[2].color = al_map_rgb(0, 0, 200);
+		vtx[3].x = margEsqInf[1]; vtx[3].y = margEsqInf[0]; vtx[3].color = al_map_rgb(0, 0, 200);
+		
+		/*desenhando*/
+		al_draw_prim(vtx, NULL, 0, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN);
+		if (ilhaEsq[0] != 0)
+			al_draw_filled_rounded_rectangle(ilhaEsq[1], ilhaEsq[0]+3, ilhaDir[1], ilhaDir[0]-3, 0.5, 0.5, al_map_rgb(90, 90, 0));
+	}	
+    al_flip_display();
+	al_rest(5.0);
 }
