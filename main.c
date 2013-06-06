@@ -26,6 +26,7 @@ Referencias:
 #include <string.h>
 #include <unistd.h>
 #include "rio.h"
+#include "grade.h"
 #include "config.h"
 #include "debugger.h"
 
@@ -36,10 +37,16 @@ void menu();
 /*MAIN*/
 int main (int argc, char **argv) 
 {
-	int i, checagem, seed, depuracao;
+	int i, checagem, seed, depuracao, linha;
 	char nomeArquivo[MAXLINE];
 	float fluxo;
 	FILE* entrada;
+	Rio **grade;
+	int primeiraLinha, rep;
+	float cronometro, tempoDecorrido = 0.0;
+	time_t t1;
+
+	
 
     strcpy(nomeArquivo,"debug/config.txt");
 
@@ -72,13 +79,44 @@ int main (int argc, char **argv)
     
     /*Chama o jogo*/
 	else {
+		
+		grade = alocaGrade();
+
         if (getSeed() <= 0)
             seed = time(NULL);
         else
             seed = getSeed();
 	    srand(seed);
         fluxo = getRiverFlux();
-        geraRio(fluxo);
+
+        primeiraLinha = linha = 0;
+        
+        rep = getNumIterations();
+        /*printf("%d %d\n", rep, getNumIterations());*/
+        while (rep > 0) {
+        	
+        	grade = geraRio(primeiraLinha, linha, fluxo, grade);
+
+        	/*graficos*/
+        	/*printf("%d\n", getNumIterations());*/
+        	printGrade(grade, primeiraLinha, tempoDecorrido);
+
+        	primeiraLinha++;
+        	if (primeiraLinha == getNumLines()) 
+				primeiraLinha = 0;
+
+			linha = primeiraLinha - 1;
+			if (linha < 0) 
+				linha = getNumLines()-1;
+
+			/*Delay entre a geracao de quadros*/
+			usleep(getRefreshRate());
+
+			if (rep > 0)
+			rep--;
+		}
+
+		freeGrade(grade);
     }
     
     fclose(entrada);
