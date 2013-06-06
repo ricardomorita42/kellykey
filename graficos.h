@@ -26,4 +26,5 @@ Referencias:
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_image.h>
 
-void pintaRio();
+void desenhaMenu();
+void desenhaRio(Rio**);
