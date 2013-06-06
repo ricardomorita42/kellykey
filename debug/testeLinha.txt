@@ -1,0 +1,53 @@
+;Isto é um comentário, o programa ignora esta linha.
+;Para se mudar os parâmetros, basta alterar os números de cada linha.
+;Não delete ou altere os nomes das linhas!
+
+;Dimensões do Mapa visualizado
+NUM_LINES = 2000                 ; números de linhas do mapa
+NUM_COLUMNS = 100               ; número de colunas do mapa
+
+;Define os limites para os quais a terra pode chegar.
+;Respeite os valores permitidos ou o programa reclamará.
+LEFT_MARGIN_LIMIT = 35          ;entre 0 e 35
+RIGHT_MARGIN_LIMIT = 65         ;entre 65 e 99
+
+;define a velocidade maxima que a agua atinge
+H20_MAX_SPEED = 20.3
+
+;Define o seed de geração das entidades do rio.
+;Não tem impacto direto com a dificuldade
+;-1 quer dizer que será gerada aleatoriamente
+NSEED = -1 
+
+;Define a taxa de atualização do jogo. Quanto menor, mais difícil
+REFRESH_RATE = 100000              ;em microssegundos
+
+;Define a proximidade mínima entre duas ilhas geradas.
+MIN_ISLE_DIST = 5               ; pelo menos (n-1) linhas entre duas linhas geradas
+
+;Após a dist. mínima entre duas ilhas, esta é a chance de gerar outra ilha.
+PROB_GEN_ISLE = 0.5
+
+;Caracteres que definem o tipo de terreno
+DEF_WATER = .                   ; lembrar de não usar 
+DEF_ISLE = #                    ; parâmetro opcional
+DEF_EARTH = #   
+
+;Define por quanto tempo o rio deve ser gerado. (< 0) = infinito
+NUM_SECONDS = 5
+
+;Fluxo do Rio em cada linha
+RIVER_FLUX = 30 
+
+;*************************
+;PARÂMETROS DE DEBUGAGEM
+;*************************
+;Os parâmetros abaixos são para debugagem caso a linha seja descomentada.
+
+;Imprime um relatório das variações das velocidades e das margens ao fim da execução
+;REPORT_DATA = 0 
+
+;Número de linhas a serem geradas. (< 0) = infinito
+;NUM_ITERATIONS = 0
+
+;fim do arquivo
