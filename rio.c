@@ -30,6 +30,12 @@ Referencias:
 #include "grade.h"
 #include "debugger.h"
 #include "config.h"
+#include "graficos.h"
+
+/* #include "graficos.h"
+ */
+
+
 
 /*--1--Gera rio */
 void geraRio(float fluxoEsperado) {
@@ -64,10 +70,13 @@ void geraRio(float fluxoEsperado) {
 				linha = 0;
 			
 		} while (linha != primeiraLinha);
-			
 	
+	
+
 		/*imprime o rio (ou grade gerada) na tela*/
-		printGrade(grade, primeiraLinha, tempoDecorrido);
+		/*printGrade(grade, primeiraLinha, tempoDecorrido);*/
+
+		
 		
 		primeiraLinha++;
 		if (primeiraLinha == getNumLines()) 
@@ -121,10 +130,13 @@ Rio* geraLinha(Rio *linhaNova, Rio *linhaAnterior, float fluxo)
 /*--3--sorteiaMargem*/
 int sorteiaMargem(char lado, Rio *linAnterior)
 {
-	int i, margem, normalizador;
+	int i, margem, normalizador, variacao;
 
 	/*define se a margem ira pra esquerda, centro ou direita*/
 	normalizador = (int)(((double)rand() / RAND_MAX)*100);
+
+	/*define o nivel de variacao em relacao 'a margem anterior*/
+	variacao = (int)ceil(((double)rand() / RAND_MAX)*2);
 
 	/*caso: primeira linha gerada*/
 	if (linAnterior == NULL)
@@ -142,9 +154,9 @@ int sorteiaMargem(char lado, Rio *linAnterior)
 		for (i = 0; linAnterior[i].terreno != getWaterChar() && i < getNumColumns()-1; i++)
 			margem = i;
 		if (normalizador < 33 && margem > 1)
-			return margem - 1;
+			return margem - variacao;
 		else if (normalizador > 66 && margem < getLeftMargin())
-			return margem + 1;
+			return margem + variacao;
 		else
 			return margem;
 
@@ -156,9 +168,9 @@ int sorteiaMargem(char lado, Rio *linAnterior)
 		for (i = getNumColumns()-1; linAnterior[i].terreno != getWaterChar(); i--)
 			margem = i;
 		if (normalizador < 33 && margem > getRightMargin())
-			return margem - 1;
+			return margem - variacao;
 		else if (normalizador > 66 && margem < getNumColumns()-1)
-			return margem + 1;
+			return margem + variacao;
 		else
 			return margem;
 	}
