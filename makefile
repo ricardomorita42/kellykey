@@ -1,6 +1,6 @@
 CFLAGS=-Wall -ansi -pedantic 
 CC=gcc
-ALLEGRO=-lallegro -lallegro_main -lallegro_primitives 
+ALLEGRO=-lallegro -lallegro_main -lallegro_primitives -lallegro_image 
 #=================================
 
 main: main.o rio.o grade.o debugger.o config.o graficos.o 

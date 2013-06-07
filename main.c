@@ -29,13 +29,14 @@ Referencias:
 #include <stdio.h>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_image.h>
 #include "rio.h"
 #include "grade.h"
 #include "config.h"
 #include "debugger.h"
 #include "graficos.h"
 #include "grade.h"
-#define LARGURA 800
+#define LARGURA 700
 #define ALTURA 500
 
 /*Prototipos*/
@@ -51,8 +52,9 @@ int main (int argc, char **argv)
 	FILE* entrada;
 	Rio **grade;
 	int primeiraLinha, rep;
-	float cronometro, tempoDecorrido = 0.0;
-	time_t t1;
+	/*float cronometro, tempoDecorrido = 0.0;*/
+	ALLEGRO_DISPLAY *janela = NULL;
+	ALLEGRO_BITMAP *fundo = NULL;
 
     strcpy(nomeArquivo,"debug/config.txt");
 
@@ -93,19 +95,26 @@ int main (int argc, char **argv)
 			seed = getSeed();
 		srand(seed);
 		fluxo = getRiverFlux();
-		if (criaJanela(LARGURA, ALTURA) == -1) {
+		if (criaJanela(LARGURA, ALTURA, janela) == -1) {
 			fprintf(stderr, "Desculpe, nao consegui gerar uma janela...\n");
 			exit(-1);
 		}
+		al_init_image_addon();
 		primeiraLinha = linha = 0;
         rep = getNumIterations();
+/* 		buffer = al_create_bitmap(LARGURA, ALTURA);
+ */
+
+		fundo = al_load_bitmap("textures/texture4.png");
 
 		while (rep > 0) {
-        	
+        
         	grade = geraRio(primeiraLinha, linha, fluxo, grade);
         	/*printGrade(grade, primeiraLinha, tempoDecorrido);*/
-			desenhaRio(criaImagemGrade(grade, primeiraLinha));
-
+			desenhaRio(criaImagemGrade(grade, primeiraLinha), janela, fundo);
+/* 			al_flip_display();
+ * 			al_rest(0.05);
+ */
         	primeiraLinha++;
         	if (primeiraLinha == getNumLines()) 
 				primeiraLinha = 0;
