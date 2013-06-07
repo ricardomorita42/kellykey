@@ -45,14 +45,10 @@ void menu();
 /*MAIN*/
 int main (int argc, char **argv) 
 {
-	int i, checagem, seed, depuracao;
 	int i, checagem, seed, depuracao, linha;
 	char nomeArquivo[MAXLINE];
 	float fluxo;
 	FILE* entrada;
-	/*APENAS PARA TESTE!*/
-	Rio** grade;
-	int linha, primeiraLinha, linhaAnterior;
 	Rio **grade;
 	int primeiraLinha, rep;
 	float cronometro, tempoDecorrido = 0.0;
@@ -89,34 +85,8 @@ int main (int argc, char **argv)
     }
     
     /*Chama o jogo*/
-	else {
-        if (getSeed() <= 0)
-            seed = time(NULL);
-        else
-            seed = getSeed();
-	    srand(seed);
-        fluxo = getRiverFlux();
-		
-		/*APENAS PARA TESTE!*/
     else {
 		grade = alocaGrade();
-		linha = primeiraLinha = 0;
-		do {
-			linhaAnterior = linha - 1;
-			if (linhaAnterior < 0) 
-				linhaAnterior = getNumLines() - 1;
-			if (linha == primeiraLinha)
-				grade[linha] = geraLinha(grade[linha], NULL, fluxo);
-			else
-				grade[linha] = geraLinha(grade[linha], grade[linhaAnterior], fluxo);
-
-			linha++;
-			if (linha == getNumLines()) 
-				linha = 0;
-		
-		} while (linha != primeiraLinha);
-		/*FIM DO TESTE!!!*/
-		
 
 		if (getSeed() <= 0)
 			seed = time(NULL);
@@ -128,8 +98,6 @@ int main (int argc, char **argv)
 			fprintf(stderr, "Desculpe, nao consegui gerar uma janela...\n");
 			exit(-1);
 		}
-        desenhaRio(grade);
-    }
 		primeiraLinha = linha = 0;
         rep = getNumIterations();
 
