@@ -28,6 +28,9 @@ Referencias:
 #include <stdlib.h>
 #include <stdio.h>
 #include <allegro5/allegro.h>
+#include <allegro5/allegro_image.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_image.h>
 #include "rio.h"
@@ -64,7 +67,6 @@ int main (int argc, char **argv)
         if (checagem == ('-' + 'f' +'n'))
            strcpy(nomeArquivo,&argv[i][3]);
     }
-    printf("--%s--", nomeArquivo);
     entrada = fopen(nomeArquivo,"r");
     if (entrada == NULL) {
         fprintf(stderr,"oh noes, o arquivo de config nao existe!\n");
@@ -74,11 +76,15 @@ int main (int argc, char **argv)
     /*Setando variaveis dadas ao jogo*/
     setEntradas(entrada, argc, argv);
 	depuracao = getReportData();
+
+	if (criaJanela(LARGURA, ALTURA) == -1) {
+		fprintf(stderr, "Desculpe, nao consegui gerar uma janela...\n");
+		exit(-1);
+	}
 	
     /*Criando um menu para o jogo*/
     if (depuracao != 2 && getDebugMode() != 1) 
         menu();
-    clearScreen();
 
     /*Caso queira testar a integridade do programa*/
 	if (getReportData() == 2) {
@@ -95,26 +101,17 @@ int main (int argc, char **argv)
 			seed = getSeed();
 		srand(seed);
 		fluxo = getRiverFlux();
-		if (criaJanela(LARGURA, ALTURA, janela) == -1) {
-			fprintf(stderr, "Desculpe, nao consegui gerar uma janela...\n");
-			exit(-1);
-		}
+		
 		al_init_image_addon();
 		primeiraLinha = linha = 0;
-        rep = getNumIterations();
-/* 		buffer = al_create_bitmap(LARGURA, ALTURA);
- */
-
+      rep = getNumIterations();
 		fundo = al_load_bitmap("textures/texture4.png");
 
 		while (rep > 0) {
         
         	grade = geraRio(primeiraLinha, linha, fluxo, grade);
-        	/*printGrade(grade, primeiraLinha, tempoDecorrido);*/
 			desenhaRio(criaImagemGrade(grade, primeiraLinha), janela, fundo);
-/* 			al_flip_display();
- * 			al_rest(0.05);
- */
+
         	primeiraLinha++;
         	if (primeiraLinha == getNumLines()) 
 				primeiraLinha = 0;
@@ -139,31 +136,11 @@ void menu() {
     int opcao;
     char entrada[MAXLINE];
 
-	while(TRUE) {
-	    clearScreen();
-	    printf("******************************\n");
-	    printf("*     CANOAGEM SIMULATOR     *\n");
-	    printf("******************************\n");
-	    printf("* (1) Iniciar o jogo         *\n");
-	    printf("* (2) Configuracoes          *\n");
-	    printf("* (3) sair                   *\n");
-	    printf("******************************\n");
-	    printf("Escolha uma opcao:");
-        fgets(entrada, MAXLINE, stdin);
-        opcao = atoi(entrada);
-
-	    if (opcao == 1)
-	    	break;
-	
-       	else if (opcao == 2) {
-       	 	mudaAtributos();
-       		break;
-		}
-       else if (opcao == 3)
-	       	exit(0);
-       else
-          	continue;
-	}
+    opcao = desenhaMenu(LARGURA,ALTURA);
+    if (opcao == 2) {
+       destroiJanela();
+       exit(1);
+    }
 }
 
 void testeIntegridade(char** argv) {
