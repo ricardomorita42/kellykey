@@ -20,7 +20,7 @@ H20_MAX_SPEED = 20.3
 NSEED = -1 
 
 ;Define a taxa de atualização do jogo. Quanto menor, mais difícil
-REFRESH_RATE = 100000              ;em microssegundos
+REFRESH_RATE = 200000              ;em microssegundos
 
 ;Define a proximidade mínima entre duas ilhas geradas.
 MIN_ISLE_DIST = 5               ; pelo menos (n-1) linhas entre duas linhas geradas
@@ -34,7 +34,7 @@ DEF_ISLE = @                    ; parâmetro opcional
 DEF_EARTH = #   
 
 ;Define por quanto tempo o rio deve ser gerado. (< 0) = infinito
-NUM_SECONDS = 10
+;NUM_SECONDS = 10
 
 ;Fluxo do Rio em cada linha
 RIVER_FLUX = 30 
@@ -48,6 +48,6 @@ RIVER_FLUX = 30
 ;REPORT_DATA = 1 
 
 ;Número de linhas a serem geradas. (< 0) = infinito
-;NUM_ITERATIONS = 0
+NUM_ITERATIONS = 20
 
 ;fim do arquivo

@@ -56,13 +56,13 @@ void printGrade(Rio **grade, int primeiraLinha, float tempoDecorrido)
 {
 	int i, j; 
 	
-	i = primeiraLinha-1;
+	i = primeiraLinha;
 	printf("\033[2J\033[;H");
 	if (getReportData()) 
 		printInfoTopo(tempoDecorrido);
 	
-	while ( i != primeiraLinha ) 
-	{
+	
+	do {
 		i--;
 		if (i < 0)
 			i = getNumLines()-1;
@@ -71,6 +71,6 @@ void printGrade(Rio **grade, int primeiraLinha, float tempoDecorrido)
 		if (getReportData()) 
 			printInfoLinha(grade[i]);
 		printf("\n");
-	}
+	} while ( i != primeiraLinha );
 	printf ("\n\n");
 }

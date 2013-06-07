@@ -33,61 +33,31 @@ Referencias:
 #include "graficos.h"
 
 /*--1--Gera rio */
-void geraRio(float fluxoEsperado) {
-	Rio **grade;
-	int linha, primeiraLinha, linhaAnterior, rep;
-	float cronometro, tempoDecorrido;
-	time_t t1;
+Rio** geraRio(int primeiraLinha, int linha, float fluxoEsperado, Rio **grade) {
+	int linhaAnterior;
 	
-	grade = alocaGrade();
-	linha = primeiraLinha = 0;
-	
-	rep = getNumIterations();
-	cronometro = getNumSeconds();
-	t1 = time(NULL);
+	/*linha = primeiraLinha;*/
 
-	/*loop para geracao do rio: pode ser limitado por tempo ou numero de linhas geradas*/
-	while (((tempoDecorrido = (float)(time(NULL) - t1)) < cronometro+1 || cronometro < 0)
-			|| (rep > 0 || rep < 0)) 
-	{
-		/*gera uma grade completa*/
-		do {
-			linhaAnterior = linha - 1;
-			if (linhaAnterior < 0) 
-				linhaAnterior = getNumLines() - 1;
-			if (linha == primeiraLinha)
-				grade[linha] = geraLinha(grade[linha], NULL, fluxoEsperado);
-			else
-				grade[linha] = geraLinha(grade[linha], grade[linhaAnterior], fluxoEsperado);
-	
-			linha++;
-			if (linha == getNumLines()) 
-				linha = 0;
-			
-		} while (linha != primeiraLinha);
-	
-	
+	/*gera uma grade completa*/
+	do {
+		linhaAnterior = linha - 1;
+		if (linhaAnterior < 0) 
+			linhaAnterior = getNumLines() - 1;
+		if (linha == primeiraLinha)
+			grade[linha] = geraLinha(grade[linha], NULL, fluxoEsperado);
+		else
+			grade[linha] = geraLinha(grade[linha], grade[linhaAnterior], fluxoEsperado);
 
-		/*imprime o rio (ou grade gerada) na tela*/
-		/*printGrade(grade, primeiraLinha, tempoDecorrido);*/
-
+		linha++;
+		if (linha == getNumLines()) 
+			linha = 0;
 		
-		
-		primeiraLinha++;
-		if (primeiraLinha == getNumLines()) 
-			primeiraLinha = 0;
-		
-		/*Delay entre a geracao de quadros*/
-		usleep(getRefreshRate());
-		
-		if (rep > 0)
-			rep--;
-	}
-	if (getDebugMode() || getReportData() == 1)
-		printRelatorio();
+	} while (linha != primeiraLinha);
 	
-	/*libera o espaco alocado*/
-	freeGrade(grade);
+	/*if (getDebugMode() || getReportData() == 1)
+		printRelatorio();*/
+
+	return grade;
 }
 
 /*--2--geraLinha*/

@@ -36,7 +36,7 @@ typedef struct rio
 /* prototipos das funcoes */
 /*------------------------*/
 /*--1--*/
-void geraRio(float fluxo);
+Rio** geraRio(int primeiraLinha, int linha, float fluxoEsperado, Rio **grade);
 /*--2--*/
 Rio* geraLinha(Rio *linhaNova, Rio *linhaAnterior, float fluxo);
 /*--3--*/
