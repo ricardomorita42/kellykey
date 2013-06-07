@@ -34,8 +34,8 @@ Referencias:
 #include "debugger.h"
 #include "graficos.h"
 #include "grade.h"
-#define LARGURA 600
-#define ALTURA 400
+#define LARGURA 700
+#define ALTURA 380
 
 /*Prototipos*/
 void testeIntegridade(char** argv);
