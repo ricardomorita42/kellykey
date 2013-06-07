@@ -135,7 +135,7 @@ void menu() {
     char entrada[MAXLINE];
 
 	while(TRUE) {
-        if (desenhaMenu() == FALSE)
+        if (desenhaMenu(LARGURA,ALTURA) == FALSE)
             break;
         /*
 	    clearScreen();

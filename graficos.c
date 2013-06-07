@@ -47,14 +47,34 @@ int criaJanela(int largura, int altura)
 	return 0;
 }
 
-int desenhaMenu()
+int desenhaMenu(int largura, int altura)
 {
     ALLEGRO_BITMAP *imagem = NULL;
+    ALLEGRO_FONT *fonte = NULL;
+
     al_init_image_addon();
+    al_init_font_addon();
+
+    if (!al_init_ttf_addon()) {
+        fprintf(stderr,"nao consegui abrir o ttf_addon");
+        exit(EXIT_FAILURE);
+    }
 
     imagem = al_load_bitmap("images/background.jpg");
+    fonte = al_load_font("pirulen.ttf",32,0);
+    
+    if (!fonte) {
+        fprintf(stderr,"nao consegui abrir o ttf_addon");
+        exit(EXIT_FAILURE);
+    }
+
 
     al_draw_scaled_bitmap(imagem,0,0,640,480,0,0,800,500,0);
+    al_flip_display();
+    al_rest(2.0);
+
+    al_draw_text(fonte,al_map_rgb(0,0,0),largura/2,90,ALLEGRO_ALIGN_CENTRE,"Extreme Canoeing!");
+
     al_flip_display();
     al_rest(2.0);
 
