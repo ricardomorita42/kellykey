@@ -24,5 +24,5 @@ Referencias:
 
 
 int desenhaMenu(int,int);
-int criaJanela(int, int);
+int criaJanela(int,int);
 void desenhaRio(Rio**);

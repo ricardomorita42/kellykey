@@ -49,35 +49,61 @@ int criaJanela(int largura, int altura)
 
 int desenhaMenu(int largura, int altura)
 {
+    /*Iniciando variaveis do Allegro*/
     ALLEGRO_BITMAP *imagem = NULL;
     ALLEGRO_FONT *fonte = NULL;
+    ALLEGRO_FONT *fonte2 = NULL;
+    ALLEGRO_FONT *fonte3 = NULL;
+    ALLEGRO_TIMER *timer;
+    ALLEGRO_EVENT_QUEUE *eventQueue;
 
+    /*Carregando fundo*/
     al_init_image_addon();
-    al_init_font_addon();
+    imagem = al_load_bitmap("images/background.jpg");
+    if (!imagem) {
+        fprintf(stderr,"nao consegui abrir a imagem de fundo");
+        exit(EXIT_FAILURE);
+    }
 
+    /*Carregando fonte*/
+    al_init_font_addon();
     if (!al_init_ttf_addon()) {
         fprintf(stderr,"nao consegui abrir o ttf_addon");
         exit(EXIT_FAILURE);
     }
-
-    imagem = al_load_bitmap("images/background.jpg");
-    fonte = al_load_font("pirulen.ttf",32,0);
-    
+    fonte = al_load_font("fonts/metalord.ttf",56,0);
     if (!fonte) {
         fprintf(stderr,"nao consegui abrir o ttf_addon");
         exit(EXIT_FAILURE);
     }
-
+    fonte2 = al_load_font("fonts/metalord.ttf",40,0);
+    if (!fonte2) {
+        fprintf(stderr,"nao consegui abrir o ttf_addon");
+        exit(EXIT_FAILURE);
+    }
+    fonte3 = al_load_font("fonts/pirulen.ttf",16,0);
+    if (!fonte3) {
+        fprintf(stderr,"nao consegui abrir o ttf_addon");
+        exit(EXIT_FAILURE);
+    }
 
     al_draw_scaled_bitmap(imagem,0,0,640,480,0,0,800,500,0);
+    al_draw_text(fonte,al_map_rgb(255,255,255),largura/2+2,92,ALLEGRO_ALIGN_CENTRE,"Extreme Canoeing");
+    al_draw_text(fonte,al_map_rgb(0,0,0),largura/2,90,ALLEGRO_ALIGN_CENTRE,"Extreme Canoeing");
     al_flip_display();
     al_rest(2.0);
 
-    al_draw_text(fonte,al_map_rgb(0,0,0),largura/2,90,ALLEGRO_ALIGN_CENTRE,"Extreme Canoeing!");
+    al_draw_text(fonte,al_map_rgb(255,255,255),largura/2+2,92,ALLEGRO_ALIGN_CENTRE,"Extreme Canoeing");
+    al_draw_text(fonte,al_map_rgb(0,0,0),largura/2,90,ALLEGRO_ALIGN_CENTRE,"Extreme Canoeing");
+    al_draw_text(fonte2,al_map_rgb(255,255,255),largura/2+1,altura/2+51,ALLEGRO_ALIGN_CENTRE,"Digite uma opção:");
+    al_draw_text(fonte2,al_map_rgb(0,0,0),largura/2,altura/2+50,ALLEGRO_ALIGN_CENTRE,"Digite uma opção:");
+    al_draw_text(fonte3,al_map_rgb(0,0,160),largura/2,altura/2+110,ALLEGRO_ALIGN_CENTRE,"(1) Iniciar o Jogo");
+    al_draw_text(fonte3,al_map_rgb(0,0,160),largura/2,altura/2+130,ALLEGRO_ALIGN_CENTRE,"(2) Setup");
+    al_draw_text(fonte3,al_map_rgb(0,0,160),largura/2,altura/2+150,ALLEGRO_ALIGN_CENTRE,"(3) Sair");
 
+    
     al_flip_display();
-    al_rest(2.0);
-
+    al_rest(4.0);
     return FALSE;
 }
 
