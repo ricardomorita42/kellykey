@@ -25,6 +25,7 @@ Referencias:
 #include <stdio.h>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_image.h>
 #include "rio.h"
 #include "config.h"
 #include "graficos.h"
@@ -32,6 +33,7 @@ Referencias:
 #define D 5
 
 int criaJanela(int largura, int altura)
+int criaJanela(int largura, int altura, ALLEGRO_DISPLAY *janela)
 {
 	ALLEGRO_DISPLAY *janela = NULL;
 
@@ -50,12 +52,24 @@ void desenhaMenu()
 }
 
 void desenhaRio(Rio** grade)
+void desenhaRio(Rio** grade, ALLEGRO_DISPLAY *janela, ALLEGRO_BITMAP *imagem)
 {
 	int i, j, margEsqInf[2], margEsqSup[2], margDirInf[2], margDirSup[2],
+	int i, j;
+	static int k = -30;
+	float margEsqInf[2], margEsqSup[2], margDirInf[2], margDirSup[2],
 		ilhaEsq[2], ilhaDir[2];
 	ALLEGRO_VERTEX vtx[4];
 	al_clear_to_color(al_map_rgb(90, 90, 0));
 	/*al_flip_display();*/
+
+	k++;
+	if (k == 0)
+		k = -30;
+
+	al_draw_bitmap(imagem, 0, k*D, 0);
+	/*al_clear_to_color(al_map_rgb(90, 90, 0));*/
+
 
 	for (i = 0; i < (getNumLines() - 2); i++)
 	{
@@ -106,4 +120,14 @@ void desenhaRio(Rio** grade)
     al_flip_display();
 	al_rest(0.1);
 	free(grade);
+			al_draw_bitmap_region(imagem, ilhaEsq[1], ilhaEsq[0], (ilhaEsq[1]-ilhaDir[1]), 2*D, ilhaDir[1], ilhaDir[0], 0);
+	/*	al_flip_display();
+		al_rest(0.02);*/
+	}
+	/*al_set_target_bitmap(al_get_backbuffer(janela));*/
+    /*al_draw_bitmap(buffer, 150, 150, 150);*/
+	al_flip_display();
+	al_rest(0.05);
+	/*al_destroy_bitmap(imagem);*/
+	freeGrade(grade);
 }
