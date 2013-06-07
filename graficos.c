@@ -24,6 +24,9 @@ Referencias:
 #include <stdlib.h>
 #include <stdio.h>
 #include <allegro5/allegro.h>
+#include <allegro5/allegro_image.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_primitives.h>
 #include "rio.h"
 #include "config.h"
@@ -44,9 +47,18 @@ int criaJanela(int largura, int altura)
 	return 0;
 }
 
-void desenhaMenu()
+int desenhaMenu()
 {
-    return;
+    ALLEGRO_BITMAP *imagem = NULL;
+    al_init_image_addon();
+
+    imagem = al_load_bitmap("images/background.jpg");
+
+    al_draw_scaled_bitmap(imagem,0,0,640,480,0,0,800,500,0);
+    al_flip_display();
+    al_rest(2.0);
+
+    return FALSE;
 }
 
 void desenhaRio(Rio** grade)

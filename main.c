@@ -28,6 +28,9 @@ Referencias:
 #include <stdlib.h>
 #include <stdio.h>
 #include <allegro5/allegro.h>
+#include <allegro5/allegro_image.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_primitives.h>
 #include "rio.h"
 #include "grade.h"
@@ -72,6 +75,11 @@ int main (int argc, char **argv)
     /*Setando variaveis dadas ao jogo*/
     setEntradas(entrada, argc, argv);
 	depuracao = getReportData();
+
+	if (criaJanela(LARGURA, ALTURA) == -1) {
+		fprintf(stderr, "Desculpe, nao consegui gerar uma janela...\n");
+		exit(-1);
+	}
 	
     /*Criando um menu para o jogo*/
     if (depuracao != 2 && getDebugMode() != 1) 
@@ -93,10 +101,6 @@ int main (int argc, char **argv)
 			seed = getSeed();
 		srand(seed);
 		fluxo = getRiverFlux();
-		if (criaJanela(LARGURA, ALTURA) == -1) {
-			fprintf(stderr, "Desculpe, nao consegui gerar uma janela...\n");
-			exit(-1);
-		}
 		primeiraLinha = linha = 0;
         rep = getNumIterations();
 
@@ -131,6 +135,9 @@ void menu() {
     char entrada[MAXLINE];
 
 	while(TRUE) {
+        if (desenhaMenu() == FALSE)
+            break;
+        /*
 	    clearScreen();
 	    printf("******************************\n");
 	    printf("*     CANOAGEM SIMULATOR     *\n");
@@ -154,6 +161,7 @@ void menu() {
 	       	exit(0);
        else
           	continue;
+            */
 	}
 }
 

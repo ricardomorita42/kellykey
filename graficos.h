@@ -23,6 +23,6 @@ Referencias:
 
 
 
-void desenhaMenu();
+int desenhaMenu();
 int criaJanela(int, int);
 void desenhaRio(Rio**);
