@@ -20,11 +20,9 @@ Referencias:
 
  \__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__
 */
-#include <stdlib.h>
-#include <stdio.h>
-#include <allegro5/allegro.h>
-#include <allegro5/allegro_primitives.h>
-#include <allegro5/allegro_image.h>
+
+
 
 void desenhaMenu();
+int criaJanela(int, int);
 void desenhaRio(Rio**);

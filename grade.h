@@ -31,6 +31,8 @@ Rio **alocaGrade();
 void freeGrade(Rio **grade);
 /*--3--*/
 void printGrade(Rio **grade, int primeiraLinha, float tempoDecorrido);
+/*TESTE!*/
+Rio** criaImagemGrade(Rio **grade, int primeiraLinha);
 
 /*--1--alocaGrade: aloca espaco para uma matriz do tipo Rio (linhas x colunas)
        parametros: linhas e colunas da matriz */

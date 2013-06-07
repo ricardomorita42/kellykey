@@ -1,9 +1,10 @@
-CFLAGS=-Wall -ansi -pedantic
+CFLAGS=-Wall -ansi -pedantic 
 CC=gcc
+ALLEGRO=-lallegro -lallegro_main -lallegro_primitives 
 #=================================
 
-main: main.o rio.o grade.o debugger.o config.o
-	$(CC) $(CFLAGS) main.o rio.o grade.o debugger.o config.o -o main -lm && rm *.o
+main: main.o rio.o grade.o debugger.o config.o graficos.o 
+	$(CC) $(CFLAGS) main.o rio.o grade.o debugger.o config.o graficos.o -o main -lm $(ALLEGRO) && rm *.o
 
 main.o: main.c rio.h
 	$(CC) $(CFLAGS) -c main.c
@@ -19,3 +20,6 @@ debugger.o: debugger.c debugger.h
 
 config.o: config.c config.h
 	$(CC) $(CFLAGS) -c config.c
+
+graficos.o: graficos.c graficos.h
+	$(CC) $(CFLAGS) -c graficos.c 

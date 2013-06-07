@@ -3,7 +3,7 @@
 ;Não delete ou altere os nomes das linhas!
 
 ;Dimensões do Mapa visualizado
-NUM_LINES = 30                 ; números de linhas do mapa
+NUM_LINES = 40                 ; números de linhas do mapa
 NUM_COLUMNS = 100               ; número de colunas do mapa
 
 ;Define os limites para os quais a terra pode chegar.
@@ -20,7 +20,7 @@ H20_MAX_SPEED = 20.3
 NSEED = -1 
 
 ;Define a taxa de atualização do jogo. Quanto menor, mais difícil
-REFRESH_RATE = 200000              ;em microssegundos
+REFRESH_RATE = 10000              ;em microssegundos
 
 ;Define a proximidade mínima entre duas ilhas geradas.
 MIN_ISLE_DIST = 5               ; pelo menos (n-1) linhas entre duas linhas geradas
@@ -30,7 +30,7 @@ PROB_GEN_ISLE = 0.5
 
 ;Caracteres que definem o tipo de terreno
 DEF_WATER = .                   ; lembrar de não usar 
-DEF_ISLE = #                    ; parâmetro opcional
+DEF_ISLE = @                    ; parâmetro opcional
 DEF_EARTH = #   
 
 ;Define por quanto tempo o rio deve ser gerado. (< 0) = infinito
@@ -48,6 +48,6 @@ RIVER_FLUX = 30
 ;REPORT_DATA = 1 
 
 ;Número de linhas a serem geradas. (< 0) = infinito
-NUM_ITERATIONS = 20
+NUM_ITERATIONS = 100
 
 ;fim do arquivo
