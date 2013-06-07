@@ -25,10 +25,18 @@ Referencias:
 #include <time.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_primitives.h>
 #include "rio.h"
 #include "grade.h"
 #include "config.h"
 #include "debugger.h"
+#include "graficos.h"
+#include "grade.h"
+#define LARGURA 800
+#define ALTURA 500
 
 /*Prototipos*/
 void testeIntegridade(char** argv);
@@ -45,8 +53,6 @@ int main (int argc, char **argv)
 	int primeiraLinha, rep;
 	float cronometro, tempoDecorrido = 0.0;
 	time_t t1;
-
-	
 
     strcpy(nomeArquivo,"debug/config.txt");
 
@@ -65,7 +71,7 @@ int main (int argc, char **argv)
     
     /*Setando variaveis dadas ao jogo*/
     setEntradas(entrada, argc, argv);
-	 depuracao = getReportData();
+	depuracao = getReportData();
 	
     /*Criando um menu para o jogo*/
     if (depuracao != 2 && getDebugMode() != 1) 
@@ -78,31 +84,27 @@ int main (int argc, char **argv)
     }
     
     /*Chama o jogo*/
-	else {
-		/*
-		Tirar o modo por tempo;
-		Colocar pra rodar infinitamente;
-		*/
+    else {
 		grade = alocaGrade();
 
-        if (getSeed() <= 0)
-            seed = time(NULL);
-        else
-            seed = getSeed();
-	    srand(seed);
-        fluxo = getRiverFlux();
-
-        primeiraLinha = linha = 0;
-        
+		if (getSeed() <= 0)
+			seed = time(NULL);
+		else
+			seed = getSeed();
+		srand(seed);
+		fluxo = getRiverFlux();
+		if (criaJanela(LARGURA, ALTURA) == -1) {
+			fprintf(stderr, "Desculpe, nao consegui gerar uma janela...\n");
+			exit(-1);
+		}
+		primeiraLinha = linha = 0;
         rep = getNumIterations();
-        /*printf("%d %d\n", rep, getNumIterations());*/
-        while (rep > 0) {
+
+		while (rep > 0) {
         	
         	grade = geraRio(primeiraLinha, linha, fluxo, grade);
-
-        	/*graficos*/
-        	/*printf("%d\n", getNumIterations());*/
-        	printGrade(grade, primeiraLinha, tempoDecorrido);
+        	/*printGrade(grade, primeiraLinha, tempoDecorrido);*/
+			desenhaRio(criaImagemGrade(grade, primeiraLinha));
 
         	primeiraLinha++;
         	if (primeiraLinha == getNumLines()) 
@@ -110,21 +112,18 @@ int main (int argc, char **argv)
 
 			linha = primeiraLinha - 1;
 			if (linha < 0) 
-				linha = getNumLines()-1;
-
-			/*Delay entre a geracao de quadros*/
-			usleep(getRefreshRate());
+				linha = getNumLines() - 1;
 
 			if (rep > 0)
-			rep--;
+				rep--;
 		}
-
 		freeGrade(grade);
-    }
+	}
     
     fclose(entrada);
 	return 0;
 }
+
 
 /*FUNCOES AUXILIARES*/
 void menu() {
@@ -141,20 +140,20 @@ void menu() {
 	    printf("* (3) sair                   *\n");
 	    printf("******************************\n");
 	    printf("Escolha uma opcao:");
-        fgets(entrada,MAXLINE,stdin);
+        fgets(entrada, MAXLINE, stdin);
         opcao = atoi(entrada);
 
 	    if (opcao == 1)
-	    	 break;
+	    	break;
 	
-       else if (opcao == 2) {
-       	 mudaAtributos();
-       	 break;
-	    }
+       	else if (opcao == 2) {
+       	 	mudaAtributos();
+       		break;
+		}
        else if (opcao == 3)
-	       exit(0);
+	       	exit(0);
        else
-          continue;
+          	continue;
 	}
 }
 

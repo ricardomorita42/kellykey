@@ -21,62 +21,89 @@ Referencias:
  \__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__
 */
 
-#include "graficos.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_primitives.h>
 #include "rio.h"
+#include "config.h"
+#include "graficos.h"
+#include "grade.h"
+#define D 5
 
-/* int main()
- * {
- * 	pintaRio();
- * 	return 0;
- * }
- */
-void pintaRio()
+int criaJanela(int largura, int altura)
 {
- 
-	ALLEGRO_DISPLAY *display = NULL;
-	ALLEGRO_VERTEX v[4];
-	ALLEGRO_BITMAP *image = NULL;
+	ALLEGRO_DISPLAY *janela = NULL;
 
-   	v[0].x = 128; v[0].y = 50; v[0].z = 0; v[0].color = al_map_rgb(150, 150, 150);
-	v[1].x = 50; v[1].y = 256; v[1].z = 0; v[1].color = al_map_rgb(150, 150, 150);
-	v[2].x = 256; v[2].y = 256; v[2].z = 0; v[2].color = al_map_rgb(150, 150, 150);
-	v[3].x = 340; v[3].y = 340; v[3].z = 0; v[3].color = al_map_rgb(150, 150, 150);
-	/*v[3].x = 140; v[3].y = 128; v[3].z = 0; v[3].u = 128; v[3].v = 128;*/
+	if (!al_init())
+		return -1;
 
-	if(!al_init())
-   	{
-		fprintf(stderr, "Nao consegui inicializar o allegro!\n");
-		exit(-1);
-   	}
-
-	if(!al_init_primitives_addon())
-	{
-		fprintf(stderr, "Xiiii\n");
-		exit(-1);
-	}
-
-	if(!al_init_image_addon()) 
-	{
-		fprintf(stderr, "Nao consegui abrir a imagem!\n");		
-		exit(-1);
-	}
- 
-	display = al_create_display(640, 480); /*substituir por get_tamanho()*/
-	if(!display)
-	{
-		fprintf(stderr, "nao consegui criar o display!\n");
-		exit(-1);
-  	}
-	al_clear_to_color(al_map_rgb(40,30,30));
-	al_flip_display();
-
-	image = al_load_bitmap("image.png");
-	al_draw_prim(v, NULL, 0, 0, 4, ALLEGRO_PRIM_LINE_LOOP);
-	al_flip_display();
-	al_rest(5.0);
- 
-	al_destroy_display(display);
+	janela = al_create_display(largura, altura);
+	if (!janela)
+		return -1;
+	return 0;
 }
 
+void desenhaMenu()
+{
+    return;
+}
 
+void desenhaRio(Rio** grade)
+{
+	int i, j, margEsqInf[2], margEsqSup[2], margDirInf[2], margDirSup[2],
+		ilhaEsq[2], ilhaDir[2];
+	ALLEGRO_VERTEX vtx[4];
+	al_clear_to_color(al_map_rgb(90, 90, 0));
+	/*al_flip_display();*/
 
+	for (i = 0; i < (getNumLines() - 2); i++)
+	{
+		/*inicializando valores das ilhas*/
+		ilhaEsq[0] = 0;
+
+		/*extraindo os vertices*/
+		for (j = 0; j < (getNumColumns() - 2); j++)
+		{
+			if (grade[i][j].terreno == getEarthChar() && grade[i][j+1].terreno == getWaterChar()) {
+				margEsqSup[0] = i * D;
+				margEsqSup[1] = j * D;
+			}
+			if (grade[i][j].terreno == getWaterChar() && grade[i][j+1].terreno == getEarthChar()) {
+				margDirSup[0] = i * D;
+				margDirSup[1] = (j+1) * D;
+			}
+			if (grade[i+1][j].terreno == getEarthChar() && grade[i+1][j+1].terreno == getWaterChar()) {
+				margEsqInf[0] = (i+1) * D;
+				margEsqInf[1] = j * D;
+			}
+			if (grade[i+1][j].terreno == getWaterChar() && grade[i+1][j+1].terreno == getEarthChar()) {
+				margDirInf[0] = (i+1) * D;
+				margDirInf[1] = (j+1) * D;
+			}
+			if (grade[i][j].terreno == getWaterChar() && grade[i][j+1].terreno == getIsleChar()) {
+				ilhaEsq[0] = i * D;
+				ilhaEsq[1] = (j+1) * D;
+			}
+			if (grade[i][j].terreno == getIsleChar() && grade[i][j+1].terreno == getWaterChar()) {
+				ilhaDir[0] = i * D;
+				ilhaDir[1] = j * D;
+			}		
+		}
+		/*preenchendo os vertices do poligono*/
+		vtx[0].x = margEsqSup[1]; vtx[0].y = margEsqSup[0]; vtx[0].color = al_map_rgb(0, 0, 200);
+		vtx[1].x = margDirSup[1]; vtx[1].y = margDirSup[0]; vtx[1].color = al_map_rgb(0, 0, 200);
+		vtx[2].x = margDirInf[1]; vtx[2].y = margDirInf[0]; vtx[2].color = al_map_rgb(0, 0, 200);
+		vtx[3].x = margEsqInf[1]; vtx[3].y = margEsqInf[0]; vtx[3].color = al_map_rgb(0, 0, 200);
+		
+		/*desenhando*/
+		al_draw_prim(vtx, NULL, 0, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN);
+		if (ilhaEsq[0] != 0)
+			al_draw_filled_rounded_rectangle(ilhaEsq[1], ilhaEsq[0]+D, ilhaDir[1], ilhaDir[0], 0.5, 0.5, al_map_rgb(90, 90, 0));
+		/*al_flip_display();
+		al_rest(0.01);*/
+	}	
+    al_flip_display();
+	al_rest(0.1);
+	free(grade);
+}

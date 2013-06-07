@@ -61,7 +61,6 @@ void printGrade(Rio **grade, int primeiraLinha, float tempoDecorrido)
 	if (getReportData()) 
 		printInfoTopo(tempoDecorrido);
 	
-	
 	do {
 		i--;
 		if (i < 0)
@@ -73,4 +72,21 @@ void printGrade(Rio **grade, int primeiraLinha, float tempoDecorrido)
 		printf("\n");
 	} while ( i != primeiraLinha );
 	printf ("\n\n");
+}
+
+/*PARA TESTE!*/
+Rio** criaImagemGrade(Rio **grade, int primeiraLinha)
+{
+	int i, j, k;
+   	Rio** imagem = alocaGrade();
+	
+	for (i = primeiraLinha-1, k = 0; k < getNumLines() - 1; k++, i--)
+	{
+		if (i < 0)
+			i = getNumLines()-1;
+		for (j = 0; j < getNumColumns(); j++) 
+			imagem[k][j].terreno = grade[i][j].terreno;
+	}
+	return imagem;
+
 }
