@@ -3,7 +3,7 @@
 ;Não delete ou altere os nomes das linhas!
 
 ;Dimensões do Mapa visualizado
-NUM_LINES = 10                 ; números de linhas do mapa
+NUM_LINES = 30                 ; números de linhas do mapa
 NUM_COLUMNS = 100               ; número de colunas do mapa
 
 ;Define os limites para os quais a terra pode chegar.
@@ -49,5 +49,6 @@ RIVER_FLUX = 30
 
 ;Número de linhas a serem geradas. (< 0) = infinito
 NUM_ITERATIONS = 20
+
 
 ;fim do arquivo

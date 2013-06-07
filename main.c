@@ -79,7 +79,10 @@ int main (int argc, char **argv)
     
     /*Chama o jogo*/
 	else {
-		
+		/*
+		Tirar o modo por tempo;
+		Colocar pra rodar infinitamente;
+		*/
 		grade = alocaGrade();
 
         if (getSeed() <= 0)
