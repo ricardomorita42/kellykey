@@ -34,9 +34,10 @@ Referencias:
 #include "grade.h"
 #define D 5
 
+ALLEGRO_DISPLAY *janela = NULL;
+
 int criaJanela(int largura, int altura)
 {
-	ALLEGRO_DISPLAY *janela = NULL;
 
 	if (!al_init())
 		return -1;
@@ -47,8 +48,13 @@ int criaJanela(int largura, int altura)
 	return 0;
 }
 
+void destroiJanela() {
+    al_destroy_display(janela);
+}
+
 int desenhaMenu(int largura, int altura)
 {
+    int done = FALSE;
     /*Iniciando variaveis do Allegro*/
     ALLEGRO_BITMAP *imagem = NULL;
     ALLEGRO_FONT *fonte = NULL;
@@ -56,6 +62,27 @@ int desenhaMenu(int largura, int altura)
     ALLEGRO_FONT *fonte3 = NULL;
     ALLEGRO_TIMER *timer;
     ALLEGRO_EVENT_QUEUE *eventQueue;
+    ALLEGRO_EVENT event;
+
+    /*Carregando teclado*/
+    if(!al_install_keyboard()) {
+        fprintf(stderr,"nao consegui iniciar o teclado");
+        exit(EXIT_FAILURE);
+    }
+
+    /*Iniciando o timer*/
+    timer = al_create_timer(1.0 / 60);
+    if (!timer) {
+        fprintf(stderr,"nao consegui iniciar o timer");
+        exit(EXIT_FAILURE);
+    }
+
+    /*Iniciando a fila de eventos*/
+    eventQueue= al_create_event_queue();
+    if (!eventQueue) {
+        fprintf(stderr,"nao consegui iniciar o timer");
+        exit(EXIT_FAILURE);
+    }
 
     /*Carregando fundo*/
     al_init_image_addon();
@@ -87,23 +114,47 @@ int desenhaMenu(int largura, int altura)
         exit(EXIT_FAILURE);
     }
 
+
+    /* Adicionando eventos para a fila*/
+    al_register_event_source(eventQueue, al_get_keyboard_event_source());
+    al_register_event_source(eventQueue, al_get_timer_event_source(timer));
+    
+    /*Desenhando o Menu*/
     al_draw_scaled_bitmap(imagem,0,0,640,480,0,0,800,500,0);
     al_draw_text(fonte,al_map_rgb(255,255,255),largura/2+2,92,ALLEGRO_ALIGN_CENTRE,"Extreme Canoeing");
     al_draw_text(fonte,al_map_rgb(0,0,0),largura/2,90,ALLEGRO_ALIGN_CENTRE,"Extreme Canoeing");
     al_flip_display();
     al_rest(2.0);
 
-    al_draw_text(fonte,al_map_rgb(255,255,255),largura/2+2,92,ALLEGRO_ALIGN_CENTRE,"Extreme Canoeing");
-    al_draw_text(fonte,al_map_rgb(0,0,0),largura/2,90,ALLEGRO_ALIGN_CENTRE,"Extreme Canoeing");
-    al_draw_text(fonte2,al_map_rgb(255,255,255),largura/2+1,altura/2+51,ALLEGRO_ALIGN_CENTRE,"Digite uma opção:");
-    al_draw_text(fonte2,al_map_rgb(0,0,0),largura/2,altura/2+50,ALLEGRO_ALIGN_CENTRE,"Digite uma opção:");
-    al_draw_text(fonte3,al_map_rgb(0,0,160),largura/2,altura/2+110,ALLEGRO_ALIGN_CENTRE,"(1) Iniciar o Jogo");
-    al_draw_text(fonte3,al_map_rgb(0,0,160),largura/2,altura/2+130,ALLEGRO_ALIGN_CENTRE,"(2) Setup");
-    al_draw_text(fonte3,al_map_rgb(0,0,160),largura/2,altura/2+150,ALLEGRO_ALIGN_CENTRE,"(3) Sair");
+    while (!done) {
+        al_draw_text(fonte,al_map_rgb(255,255,255),largura/2+2,92,ALLEGRO_ALIGN_CENTRE,"Extreme Canoeing");
+        al_draw_text(fonte,al_map_rgb(0,0,0),largura/2,90,ALLEGRO_ALIGN_CENTRE,"Extreme Canoeing");
+        al_draw_text(fonte2,al_map_rgb(255,255,255),largura/2+1,altura/2+51,ALLEGRO_ALIGN_CENTRE,"Digite uma opção:");
+        al_draw_text(fonte2,al_map_rgb(0,0,0),largura/2,altura/2+50,ALLEGRO_ALIGN_CENTRE,"Digite uma opção:");
+        al_draw_text(fonte3,al_map_rgb(0,0,160),largura/2,altura/2+110,ALLEGRO_ALIGN_CENTRE,"(1) Iniciar o Jogo");
+        al_draw_text(fonte3,al_map_rgb(0,0,160),largura/2,altura/2+130,ALLEGRO_ALIGN_CENTRE,"(2) Setup");
+        al_draw_text(fonte3,al_map_rgb(0,0,160),largura/2,altura/2+150,ALLEGRO_ALIGN_CENTRE,"(3) Sair");
+        al_flip_display();
 
-    
-    al_flip_display();
-    al_rest(4.0);
+        al_wait_for_event(eventQueue,&event);
+        if(event.type == ALLEGRO_EVENT_KEY_DOWN) {
+            if (event.keyboard.keycode == ALLEGRO_KEY_1)
+                return TRUE;
+            else if (event.keyboard.keycode == ALLEGRO_KEY_2)
+                return TRUE;
+            else if (event.keyboard.keycode == ALLEGRO_KEY_3) {
+                al_destroy_timer(timer);
+                al_destroy_event_queue(eventQueue);
+                return 2;
+            }
+            else
+                continue;
+        }
+
+    }
+
+    al_destroy_timer(timer);
+    al_destroy_event_queue(eventQueue);
     return FALSE;
 }
 

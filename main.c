@@ -65,7 +65,6 @@ int main (int argc, char **argv)
         if (checagem == ('-' + 'f' +'n'))
            strcpy(nomeArquivo,&argv[i][3]);
     }
-    printf("--%s--", nomeArquivo);
     entrada = fopen(nomeArquivo,"r");
     if (entrada == NULL) {
         fprintf(stderr,"oh noes, o arquivo de config nao existe!\n");
@@ -84,7 +83,6 @@ int main (int argc, char **argv)
     /*Criando um menu para o jogo*/
     if (depuracao != 2 && getDebugMode() != 1) 
         menu();
-    clearScreen();
 
     /*Caso queira testar a integridade do programa*/
 	if (getReportData() == 2) {
@@ -134,35 +132,11 @@ void menu() {
     int opcao;
     char entrada[MAXLINE];
 
-	while(TRUE) {
-        if (desenhaMenu(LARGURA,ALTURA) == FALSE)
-            break;
-        /*
-	    clearScreen();
-	    printf("******************************\n");
-	    printf("*     CANOAGEM SIMULATOR     *\n");
-	    printf("******************************\n");
-	    printf("* (1) Iniciar o jogo         *\n");
-	    printf("* (2) Configuracoes          *\n");
-	    printf("* (3) sair                   *\n");
-	    printf("******************************\n");
-	    printf("Escolha uma opcao:");
-        fgets(entrada, MAXLINE, stdin);
-        opcao = atoi(entrada);
-
-	    if (opcao == 1)
-	    	break;
-	
-       	else if (opcao == 2) {
-       	 	mudaAtributos();
-       		break;
-		}
-       else if (opcao == 3)
-	       	exit(0);
-       else
-          	continue;
-            */
-	}
+    opcao = desenhaMenu(LARGURA,ALTURA);
+    if (opcao == 2) {
+       destroiJanela();
+       exit(1);
+    }
 }
 
 void testeIntegridade(char** argv) {

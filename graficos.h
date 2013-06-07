@@ -21,8 +21,7 @@ Referencias:
  \__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__
 */
 
-
-
 int desenhaMenu(int,int);
 int criaJanela(int,int);
 void desenhaRio(Rio**);
+void destroiJanela();
