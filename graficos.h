@@ -22,6 +22,7 @@ Referencias:
 */
 
 int desenhaMenu(int,int);
+void desenhaSetup();
 int criaJanela(int,int);
 void desenhaRio(Rio**);
 void destroiJanela();
