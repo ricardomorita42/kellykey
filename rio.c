@@ -118,9 +118,9 @@ int sorteiaMargem(char lado, Rio *linAnterior)
 	{
 		for (i = 0; linAnterior[i].terreno != getWaterChar() && i < getNumColumns()-1; i++)
 			margem = i;
-		if (normalizador < 33 && margem > 1)
+		if (normalizador < 33 && margem > 2)
 			return margem - variacao;
-		else if (normalizador > 66 && margem < getLeftMargin())
+		else if (normalizador > 66 && margem < getLeftMargin()-1)
 			return margem + variacao;
 		else
 			return margem;
@@ -132,9 +132,9 @@ int sorteiaMargem(char lado, Rio *linAnterior)
 	{
 		for (i = getNumColumns()-1; linAnterior[i].terreno != getWaterChar(); i--)
 			margem = i;
-		if (normalizador < 33 && margem > getRightMargin())
+		if (normalizador < 33 && margem > getRightMargin()-1)
 			return margem - variacao;
-		else if (normalizador > 66 && margem < getNumColumns()-1)
+		else if (normalizador > 66 && margem < getNumColumns()-2)
 			return margem + variacao;
 		else
 			return margem;

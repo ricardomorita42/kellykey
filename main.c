@@ -35,8 +35,8 @@ Referencias:
 #include "debugger.h"
 #include "graficos.h"
 #include "grade.h"
-#define LARGURA 700
-#define ALTURA 380
+#define LARGURA 800
+#define ALTURA 500
 
 /*Prototipos*/
 void testeIntegridade(char** argv);
@@ -53,7 +53,6 @@ int main (int argc, char **argv)
 	int primeiraLinha, rep;
 	float cronometro, tempoDecorrido = 0.0;
 	time_t t1;
-
 
     strcpy(nomeArquivo,"debug/config.txt");
 
@@ -72,7 +71,7 @@ int main (int argc, char **argv)
     
     /*Setando variaveis dadas ao jogo*/
     setEntradas(entrada, argc, argv);
-	 depuracao = getReportData();
+	depuracao = getReportData();
 	
     /*Criando um menu para o jogo*/
     if (depuracao != 2 && getDebugMode() != 1) 
@@ -105,7 +104,7 @@ int main (int argc, char **argv)
         	
         	grade = geraRio(primeiraLinha, linha, fluxo, grade);
         	/*printGrade(grade, primeiraLinha, tempoDecorrido);*/
-			desenhaRio(grade);
+			desenhaRio(criaImagemGrade(grade, primeiraLinha));
 
         	primeiraLinha++;
         	if (primeiraLinha == getNumLines()) 
@@ -114,9 +113,6 @@ int main (int argc, char **argv)
 			linha = primeiraLinha - 1;
 			if (linha < 0) 
 				linha = getNumLines() - 1;
-
-			/*Delay entre a geracao de quadros*/
-			usleep(getRefreshRate());
 
 			if (rep > 0)
 				rep--;

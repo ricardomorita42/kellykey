@@ -28,7 +28,8 @@ Referencias:
 #include "rio.h"
 #include "config.h"
 #include "graficos.h"
-#define D 7
+#include "grade.h"
+#define D 5
 
 int criaJanela(int largura, int altura)
 {
@@ -53,37 +54,39 @@ void desenhaRio(Rio** grade)
 	int i, j, margEsqInf[2], margEsqSup[2], margDirInf[2], margDirSup[2],
 		ilhaEsq[2], ilhaDir[2];
 	ALLEGRO_VERTEX vtx[4];
-
 	al_clear_to_color(al_map_rgb(90, 90, 0));
-	al_flip_display();
-	
+	/*al_flip_display();*/
+
 	for (i = 0; i < (getNumLines() - 2); i++)
 	{
+		/*inicializando valores das ilhas*/
+		ilhaEsq[0] = 0;
+
 		/*extraindo os vertices*/
-		for (j = 0; j < (getNumColumns() - 1); j++)
+		for (j = 0; j < (getNumColumns() - 2); j++)
 		{
 			if (grade[i][j].terreno == getEarthChar() && grade[i][j+1].terreno == getWaterChar()) {
-				margEsqSup[0] = i * (D+D);
-				margEsqSup[1] = (j+1) * D;
+				margEsqSup[0] = i * D;
+				margEsqSup[1] = j * D;
 			}
 			if (grade[i][j].terreno == getWaterChar() && grade[i][j+1].terreno == getEarthChar()) {
-				margDirSup[0] = i * (D+D);
-				margDirSup[1] = j * D;
+				margDirSup[0] = i * D;
+				margDirSup[1] = (j+1) * D;
 			}
 			if (grade[i+1][j].terreno == getEarthChar() && grade[i+1][j+1].terreno == getWaterChar()) {
-				margEsqInf[0] = (i+1) * (D+D);
-				margEsqInf[1] = (j+1) * D;
+				margEsqInf[0] = (i+1) * D;
+				margEsqInf[1] = j * D;
 			}
 			if (grade[i+1][j].terreno == getWaterChar() && grade[i+1][j+1].terreno == getEarthChar()) {
-				margDirInf[0] = (i+1) * (D+D);
-				margDirInf[1] = j * D;
+				margDirInf[0] = (i+1) * D;
+				margDirInf[1] = (j+1) * D;
 			}
 			if (grade[i][j].terreno == getWaterChar() && grade[i][j+1].terreno == getIsleChar()) {
-				ilhaEsq[0] = i * (D+D);
+				ilhaEsq[0] = i * D;
 				ilhaEsq[1] = (j+1) * D;
 			}
 			if (grade[i][j].terreno == getIsleChar() && grade[i][j+1].terreno == getWaterChar()) {
-				ilhaDir[0] = i * (D+D);
+				ilhaDir[0] = i * D;
 				ilhaDir[1] = j * D;
 			}		
 		}
@@ -97,7 +100,10 @@ void desenhaRio(Rio** grade)
 		al_draw_prim(vtx, NULL, 0, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN);
 		if (ilhaEsq[0] != 0)
 			al_draw_filled_rounded_rectangle(ilhaEsq[1], ilhaEsq[0]+D, ilhaDir[1], ilhaDir[0], 0.5, 0.5, al_map_rgb(90, 90, 0));
+		/*al_flip_display();
+		al_rest(0.01);*/
 	}	
     al_flip_display();
-	al_rest(5.0);
+	al_rest(0.1);
+	free(grade);
 }
