@@ -3,7 +3,6 @@
 ;Não delete ou altere os nomes das linhas!
 
 ;Dimensões do Mapa visualizado
-NUM_LINES = 40                 ; números de linhas do mapa
 NUM_LINES = 85                 ; números de linhas do mapa
 NUM_COLUMNS = 100               ; número de colunas do mapa
 
@@ -49,7 +48,6 @@ RIVER_FLUX = 30
 ;REPORT_DATA = 1 
 
 ;Número de linhas a serem geradas. (< 0) = infinito
-NUM_ITERATIONS = 100
 NUM_ITERATIONS = 200
 
 ;fim do arquivo

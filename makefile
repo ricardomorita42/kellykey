@@ -1,6 +1,5 @@
 CFLAGS=-Wall -ansi -pedantic 
 CC=gcc
-ALLEGRO=-lallegro -lallegro_main -lallegro_primitives 
 ALLEGRO=-lallegro -lallegro_main -lallegro_primitives -lallegro_image 
 #=================================
 
