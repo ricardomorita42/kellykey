@@ -145,13 +145,15 @@ int desenhaMenu(int largura, int altura)
 
 void desenhaSetup() {
     int sair = FALSE;
-    int concluido = FALSE;
+    int trocar = FALSE;
     int valor,i;
     char str[3];
+    char str2[10];
     ALLEGRO_FONT *fonte = NULL;
     ALLEGRO_FONT *fonte2 = NULL;
     ALLEGRO_FONT *fonte3 = NULL;
     ALLEGRO_EVENT_QUEUE *eventQueue;
+    ALLEGRO_EVENT event;
 
     /*Carregando fontes para serem usadas*/
     fonte = al_load_font("fonts/pirulen.ttf",12,0);
@@ -178,37 +180,63 @@ void desenhaSetup() {
     }
     /* Adicionando eventos para a fila*/
     al_register_event_source(eventQueue, al_get_keyboard_event_source());
-    al_register_event_source(eventQueue, al_get_display_event_source(janela));
 
+    for (i = 0; i < 4; i++)
+        str[i] = '\0';
+
+    for (i = 0; i < 11; i++)
+        str2[i] = '\0';
 
     while (sair != TRUE) {
-        while (!al_is_event_queue_empty(eventQueue)) {
-            ALLEGRO_EVENT event;
-            al_wait_for_event(eventQueue,&event);
+        al_wait_for_event(eventQueue,&event);
 
-            if (concluido != TRUE) { 
-                if(event.type == ALLEGRO_EVENT_KEY_CHAR) {
-                    if (strlen(str) <= 2) {
-                        if (event.keyboard.unichar >= '0' && event.keyboard.unichar <= '9')
-                            str[strlen(str)] = event.keyboard.unichar;
-                    }
+        if (trocar == FALSE) {
+            if(event.type == ALLEGRO_EVENT_KEY_CHAR) {
+                if (strlen(str) < 2) {
+                    if (event.keyboard.unichar >= '0' && event.keyboard.unichar <= '9')
+                        str[strlen(str)] = event.keyboard.unichar;
+                    if (event.keyboard.unichar == '.' || event.keyboard.unichar == ',' )
+                        str[strlen(str)] = '.';
+                }
 
-                    if (event.keyboard.keycode == ALLEGRO_KEY_BACKSPACE && strlen(str) != 0) 
-                        str[strlen(str)-1] = '\0';
-                }
-                
-                if (event.type == ALLEGRO_EVENT_KEY_DOWN && event.keyboard.keycode == ALLEGRO_KEY_ENTER) {
-                    sscanf(str,"%d",&valor);
-                    concluido = TRUE;
-                    for (i = 0; i < 3; i++)
-                        str[i] = '\0';
-                }
+                if (event.keyboard.keycode == ALLEGRO_KEY_BACKSPACE && strlen(str) != 0) 
+                    str[strlen(str)-1] = '\0';
             }
-            
-            if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-               exit(1); 
         }
 
+        else {
+            if(event.type == ALLEGRO_EVENT_KEY_CHAR) {
+                if (strlen(str2) < 9) {
+                    if (event.keyboard.unichar >= '0' && event.keyboard.unichar <= '9')
+                        str2[strlen(str2)] = event.keyboard.unichar;
+                    if (event.keyboard.unichar == '.' || event.keyboard.unichar == ',' )
+                        str2[strlen(str2)] = '.';
+                }
+
+                if (event.keyboard.keycode == ALLEGRO_KEY_BACKSPACE && strlen(str) != 0) 
+                    str2[strlen(str2)-1] = '\0';
+            }
+        }
+
+        if (event.type == ALLEGRO_EVENT_KEY_DOWN && event.keyboard.keycode == ALLEGRO_KEY_ENTER) {
+            if (trocar == FALSE) {
+                sscanf(str,"%d",&valor);
+                if (valor == 14)
+                    break;
+                trocar = TRUE;
+            }
+
+            else {
+                sscanf(str2,"%d",&valor);
+                for (i = 0; i < 11; i++)
+                    str2[i] = '\0';
+                for (i = 0; i < 4; i++)
+                    str[i] = '\0';
+                trocar =  FALSE;
+            }
+            
+        }
+        
 	    al_clear_to_color(al_map_rgb(0, 0, 0));
         al_draw_text(fonte2,al_map_rgb(255,255,255),50,30,ALLEGRO_ALIGN_LEFT,"Setup");
         al_draw_justified_textf(fonte, al_map_rgb(255,255,255),100,500,100,5,0, "(1) Num linhas do rio:%d\n",getNumLines());
@@ -225,14 +253,16 @@ void desenhaSetup() {
         al_draw_justified_textf(fonte, al_map_rgb(255,255,255),100,500,320,5,0, "(12) Probabilidade de gerar uma ilha: %.2f\n", getIsleProb());
         al_draw_justified_textf(fonte, al_map_rgb(255,255,255),100,500,340,5,0, "(13) Fluxo do Rio: %.2f\n", getRiverFlux());
         al_draw_text(fonte3,al_map_rgb(255,255,255),50,370,ALLEGRO_ALIGN_LEFT,"Escolha (14 = sair):");
-        if (strlen(str) > 0) 
-            al_draw_text(fonte3,al_map_rgb(255,255,255),260,370,ALLEGRO_ALIGN_LEFT,str);
+        al_draw_text(fonte3,al_map_rgb(255,255,255),260,370,ALLEGRO_ALIGN_LEFT,str);
+        if (trocar == TRUE) {
+            al_draw_text(fonte3,al_map_rgb(255,255,255),50,400,ALLEGRO_ALIGN_LEFT,"Digite o novo valor:");
+            al_draw_text(fonte3,al_map_rgb(255,255,255),300,400,ALLEGRO_ALIGN_LEFT,str2);
+        }
         al_flip_display();
     }
 }
 
-void desenhaRio(Rio** grade)
-{
+void desenhaRio(Rio** grade) {
 	int i, j, margEsqInf[2], margEsqSup[2], margDirInf[2], margDirSup[2],
 		ilhaEsq[2], ilhaDir[2];
 	ALLEGRO_VERTEX vtx[4];
