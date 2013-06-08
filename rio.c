@@ -30,7 +30,6 @@ Referencias:
 #include "grade.h"
 #include "debugger.h"
 #include "config.h"
-#include "graficos.h"
 
 /*--1--Gera rio */
 Rio** geraRio(int primeiraLinha, int linha, float fluxoEsperado, Rio **grade) {
