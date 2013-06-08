@@ -46,6 +46,11 @@ int criaJanela(int largura, int altura)
 	janela = al_create_display(largura, altura);
 	if (!janela)
 		return -1;
+    if (!al_init_primitives_addon())
+    {
+        fprintf(stderr, "Falha ao inicializar add-on de primitivas.\n");
+        return -1;
+    }
 
 	return 0;
 }
@@ -215,6 +220,8 @@ void desenhaRio(Rio** grade, ALLEGRO_DISPLAY *janela, ALLEGRO_BITMAP *imagem)
 		vtx[1].x = margDirSup[1]; vtx[1].y = margDirSup[0]; vtx[1].color = al_map_rgb(0, 0, 200);
 		vtx[2].x = margDirInf[1]; vtx[2].y = margDirInf[0]; vtx[2].color = al_map_rgb(0, 0, 200);
 		vtx[3].x = margEsqInf[1]; vtx[3].y = margEsqInf[0]; vtx[3].color = al_map_rgb(0, 0, 200);
+        /*for (i = 0; i < 4; i++)
+            vtx[i].z = 0;*/
 		
 		/*desenhando*/
 		al_draw_prim(vtx, NULL, 0, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN);
@@ -236,7 +243,7 @@ void desenhaRio(Rio** grade, ALLEGRO_DISPLAY *janela, ALLEGRO_BITMAP *imagem)
 	copia = al_load_bitmap("images/canoe_b.png");
 	al_draw_bitmap(copia, 320, 380, 0);
 	al_flip_display();
-	al_rest(0.05);
+	al_rest(0.5);
 	al_destroy_bitmap(copia);
 	freeGrade(grade);
 }

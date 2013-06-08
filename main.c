@@ -107,7 +107,8 @@ int main (int argc, char **argv)
       	rep = getNumIterations();
 		fundo = al_load_bitmap("textures/texture.png");
 
-		while (rep > 0) {
+		/*Loop limitado ou infinito*/
+		while (rep > 0 || rep < 0) {
         
         	grade = geraRio(primeiraLinha, linha, fluxo, grade);
 			desenhaRio(criaImagemGrade(grade, primeiraLinha), janela, fundo);
