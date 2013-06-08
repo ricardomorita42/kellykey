@@ -75,18 +75,17 @@ void printGrade(Rio **grade, int primeiraLinha, float tempoDecorrido)
 }
 
 /*PARA TESTE!*/
-Rio** criaImagemGrade(Rio **grade, int primeiraLinha)
+Rio** criaImagemGrade(Rio **atual, Rio **nova, int primeiraLinha)
 {
 	int i, j, k;
-   	Rio** imagem = alocaGrade();
 	
 	for (i = primeiraLinha-1, k = 0; k < getNumLines() - 1; k++, i--)
 	{
 		if (i < 0)
 			i = getNumLines()-1;
 		for (j = 0; j < getNumColumns(); j++) 
-			imagem[k][j].terreno = grade[i][j].terreno;
+			nova[k][j].terreno = atual[i][j].terreno;
 	}
-	return imagem;
+	return nova;
 
 }

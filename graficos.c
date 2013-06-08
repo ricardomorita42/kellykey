@@ -160,22 +160,20 @@ int desenhaMenu(int largura, int altura)
     return FALSE;
 }
 
-void desenhaRio(Rio** grade, ALLEGRO_DISPLAY *janela, ALLEGRO_BITMAP *imagem)
+void desenhaRio(Rio** grade, ALLEGRO_BITMAP *fundo)
 {
-	int i, j, k = al_get_bitmap_height(imagem)/(D);
+	int i, j, k = al_get_bitmap_height(fundo)/(D);
 	static int altura = 0;
 	float margEsqInf[2], margEsqSup[2], margDirInf[2], margDirSup[2],
 		ilhaEsq[2], ilhaDir[2];
 	ALLEGRO_VERTEX vtx[4];
-	/*ALLEGRO_VERTEX isl[4];*/
-	ALLEGRO_BITMAP *copia = al_clone_bitmap(imagem);
-
+	
+	/*criando fundo animado*/
 	altura++;
 	if (altura == k)
 		altura = 0;
-
-	al_draw_bitmap(imagem, 0, (-k*D + altura*D), 0);
-	al_draw_bitmap(imagem, 0, (altura*D), 0);
+	al_draw_bitmap(fundo, 0, (-k*D + altura*D), 0);
+	al_draw_bitmap(fundo, 0, (altura*D), 0);
 
 	for (i = 0; i < (getNumLines() - 2); i++)
 	{
@@ -197,7 +195,7 @@ void desenhaRio(Rio** grade, ALLEGRO_DISPLAY *janela, ALLEGRO_BITMAP *imagem)
 				margEsqInf[0] = (i+1) * D;
 				margEsqInf[1] = j * D;
 			}
-			if (grade[i+1][j].terreno == getWaterChar() && grade[i+1][j+1].terreno == getEarthChar()) {
+				if (grade[i+1][j].terreno == getWaterChar() && grade[i+1][j+1].terreno == getEarthChar()) {
 				margDirInf[0] = (i+1) * D;
 				margDirInf[1] = (j+1) * D;
 			}
@@ -225,18 +223,19 @@ void desenhaRio(Rio** grade, ALLEGRO_DISPLAY *janela, ALLEGRO_BITMAP *imagem)
 			isl[2].x = ilhaDir[1]; isl[2].y = ilhaDir[0]; isl[2].color = al_map_rgb(200, 200, 0);
 			isl[3].x = ilhaEsq[1]; isl[3].y = ilhaEsq[0]; isl[3].color = al_map_rgb(200, 200, 0);
 			al_draw_prim(isl, NULL, copia, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN);*/
-			al_draw_tinted_bitmap_region(copia, al_map_rgb(50, 50, 0), ilhaEsq[1], ilhaEsq[0], 
-					(ilhaEsq[1]-ilhaDir[1]), D, ilhaDir[1], ilhaDir[0], 0);
-			/*al_draw_filled_rectangle(ilhaEsq[1], ilhaEsq[0]-D, ilhaDir[1], ilhaDir[0], al_map_rgb(100,100,0));*/
-
+			/*al_draw_tinted_bitmap_region(copia, al_map_rgb(50, 50, 0), ilhaEsq[1], ilhaEsq[0], 
+					(ilhaEsq[1]-ilhaDir[1]), D, ilhaDir[1], ilhaDir[0], 0);*/
+			al_draw_filled_rectangle(ilhaEsq[1], ilhaEsq[0]-D, ilhaDir[1], ilhaDir[0], al_map_rgb(100,100,0));
 		}
-		/*al_flip_display();
-		al_rest(0.02);*/
 	}
-	copia = al_load_bitmap("images/canoe_b.png");
-	al_draw_bitmap(copia, 320, 380, 0);
-	al_flip_display();
-	al_rest(0.05);
-	al_destroy_bitmap(copia);
-	freeGrade(grade);
+}
+
+void desenhaCanoa(ALLEGRO_BITMAP *canoa)
+{
+	if (!canoa)
+	{
+		fprintf(stderr, "Oopsie, nao consegui desenhar a canoa. Por acaso ela existe?\n");
+		exit(EXIT_FAILURE);
+	}
+	al_draw_bitmap(canoa, 320, 380, 0);
 }
