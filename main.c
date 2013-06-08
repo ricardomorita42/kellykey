@@ -39,8 +39,8 @@ Referencias:
 #include "debugger.h"
 #include "graficos.h"
 #include "grade.h"
-#define LARGURA 700
-#define ALTURA 500
+#define LARGURA 640
+#define ALTURA 480
 
 /*Prototipos*/
 void testeIntegridade(char** argv);
@@ -101,11 +101,11 @@ int main (int argc, char **argv)
 			seed = getSeed();
 		srand(seed);
 		fluxo = getRiverFlux();
-		
-		al_init_image_addon();
+		/*al_init_image_addon();*/
+
 		primeiraLinha = linha = 0;
-      rep = getNumIterations();
-		fundo = al_load_bitmap("textures/texture4.png");
+      	rep = getNumIterations();
+		fundo = al_load_bitmap("textures/texture.png");
 
 		while (rep > 0) {
         
