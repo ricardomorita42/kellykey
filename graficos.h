@@ -21,8 +21,7 @@ Referencias:
  \__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__\__
 */
 
-
-
-void desenhaMenu();
-int criaJanela(int, int);
-void desenhaRio(Rio**);
+void desenhaRio(Rio**, ALLEGRO_DISPLAY*, ALLEGRO_BITMAP*);
+int desenhaMenu(int,int);
+int criaJanela(int,int);
+void destroiJanela();
