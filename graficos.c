@@ -114,7 +114,7 @@ int desenhaMenu(int largura, int altura)
     al_draw_text(fonte,al_map_rgb(255,255,255),largura/2+2,92,ALLEGRO_ALIGN_CENTRE,"Extreme Canoeing");
     al_draw_text(fonte,al_map_rgb(0,0,0),largura/2,90,ALLEGRO_ALIGN_CENTRE,"Extreme Canoeing");
     al_flip_display();
-    al_rest(2.0);
+    al_rest(0.5);
 
     al_draw_text(fonte2,al_map_rgb(255,255,255),largura/2+1,altura/2+51,ALLEGRO_ALIGN_CENTRE,"Digite uma opção:");
     al_draw_text(fonte2,al_map_rgb(0,0,0),largura/2,altura/2+50,ALLEGRO_ALIGN_CENTRE,"Digite uma opção:");
@@ -144,12 +144,14 @@ int desenhaMenu(int largura, int altura)
 }
 
 void desenhaSetup() {
-    int done = FALSE;
+    int sair = FALSE;
+    int concluido = FALSE;
+    int valor,i;
+    char str[3];
     ALLEGRO_FONT *fonte = NULL;
     ALLEGRO_FONT *fonte2 = NULL;
     ALLEGRO_FONT *fonte3 = NULL;
     ALLEGRO_EVENT_QUEUE *eventQueue;
-    ALLEGRO_EVENT event;
 
     /*Carregando fontes para serem usadas*/
     fonte = al_load_font("fonts/pirulen.ttf",12,0);
@@ -176,8 +178,37 @@ void desenhaSetup() {
     }
     /* Adicionando eventos para a fila*/
     al_register_event_source(eventQueue, al_get_keyboard_event_source());
+    al_register_event_source(eventQueue, al_get_display_event_source(janela));
 
-    while (!done) {
+
+    while (sair != TRUE) {
+        while (!al_is_event_queue_empty(eventQueue)) {
+            ALLEGRO_EVENT event;
+            al_wait_for_event(eventQueue,&event);
+
+            if (concluido != TRUE) { 
+                if(event.type == ALLEGRO_EVENT_KEY_CHAR) {
+                    if (strlen(str) <= 2) {
+                        if (event.keyboard.unichar >= '0' && event.keyboard.unichar <= '9')
+                            str[strlen(str)] = event.keyboard.unichar;
+                    }
+
+                    if (event.keyboard.keycode == ALLEGRO_KEY_BACKSPACE && strlen(str) != 0) 
+                        str[strlen(str)-1] = '\0';
+                }
+                
+                if (event.type == ALLEGRO_EVENT_KEY_DOWN && event.keyboard.keycode == ALLEGRO_KEY_ENTER) {
+                    sscanf(str,"%d",&valor);
+                    concluido = TRUE;
+                    for (i = 0; i < 3; i++)
+                        str[i] = '\0';
+                }
+            }
+            
+            if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+               exit(1); 
+        }
+
 	    al_clear_to_color(al_map_rgb(0, 0, 0));
         al_draw_text(fonte2,al_map_rgb(255,255,255),50,30,ALLEGRO_ALIGN_LEFT,"Setup");
         al_draw_justified_textf(fonte, al_map_rgb(255,255,255),100,500,100,5,0, "(1) Num linhas do rio:%d\n",getNumLines());
@@ -194,24 +225,9 @@ void desenhaSetup() {
         al_draw_justified_textf(fonte, al_map_rgb(255,255,255),100,500,320,5,0, "(12) Probabilidade de gerar uma ilha: %.2f\n", getIsleProb());
         al_draw_justified_textf(fonte, al_map_rgb(255,255,255),100,500,340,5,0, "(13) Fluxo do Rio: %.2f\n", getRiverFlux());
         al_draw_text(fonte3,al_map_rgb(255,255,255),50,370,ALLEGRO_ALIGN_LEFT,"Escolha (14 = sair):");
+        if (strlen(str) > 0) 
+            al_draw_text(fonte3,al_map_rgb(255,255,255),260,370,ALLEGRO_ALIGN_LEFT,str);
         al_flip_display();
-
-        al_wait_for_event(eventQueue,&event);
-        if(event.type == ALLEGRO_EVENT_KEY_DOWN) {
-            if (event.keyboard.keycode == ALLEGRO_KEY_1) {
-            
-            }
-            
-            else if (event.keyboard.keycode == ALLEGRO_KEY_2) {
-                return 2;
-                }
-            else if (event.keyboard.keycode == ALLEGRO_KEY_3) {
-                al_destroy_event_queue(eventQueue);
-                return 3;
-            }
-            else
-                continue;
-        }
     }
 }
 

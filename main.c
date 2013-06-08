@@ -134,7 +134,9 @@ void menu() {
 
     opcao = desenhaMenu(LARGURA,ALTURA);
     if (opcao == 2) {
-        desenhaSetup();
+        destroiJanela();
+        mudaAtributos();
+        criaJanela(LARGURA,ALTURA);
     }
 
     else if (opcao == 3) {
