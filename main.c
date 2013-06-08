@@ -54,8 +54,6 @@ int main (int argc, char **argv)
 	FILE* entrada;
 	Rio **grade;
 	int primeiraLinha, rep;
-	float cronometro, tempoDecorrido = 0.0;
-	time_t t1;
 
     strcpy(nomeArquivo,"debug/config.txt");
 
@@ -130,7 +128,6 @@ int main (int argc, char **argv)
 /*FUNCOES AUXILIARES*/
 void menu() {
     int opcao;
-    char entrada[MAXLINE];
 
     opcao = desenhaMenu(LARGURA,ALTURA);
     if (opcao == 2) {
