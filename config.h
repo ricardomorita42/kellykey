@@ -70,6 +70,11 @@ char getWaterChar();
 char getEarthChar();            
 char getIsleChar();             
 
+/*Funcoes para setar dados*/
+void setParametro(char*, int);
+void setParametrof(char*, float);
+void setParametroc(char*, char);
+
 /*Mostra menu e permite mudar variaveis "on the fly".*/
 void mudaAtributos();
 

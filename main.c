@@ -55,6 +55,7 @@ int main (int argc, char **argv)
 	FILE* entrada;
 	Rio **grade;
 	int primeiraLinha, rep;
+
 	/*float cronometro, tempoDecorrido = 0.0;*/
 	ALLEGRO_DISPLAY *janela = NULL;
 	ALLEGRO_BITMAP *fundo = NULL;
@@ -134,10 +135,13 @@ int main (int argc, char **argv)
 /*FUNCOES AUXILIARES*/
 void menu() {
     int opcao;
-    char entrada[MAXLINE];
 
     opcao = desenhaMenu(LARGURA,ALTURA);
     if (opcao == 2) {
+       desenhaSetup(); 
+    }
+
+    else if (opcao == 3) {
        destroiJanela();
        exit(1);
     }
