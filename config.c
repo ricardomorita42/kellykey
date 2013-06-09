@@ -53,7 +53,7 @@ static float waterSpeed=-1,
              riverFlux=40;
 static char water='.',
             earth='#',
-            isle='#';
+            isle='@';
 
 
 /* Esta funcao le do arquivo de entrada e seta as variaveis do jogo.
@@ -104,7 +104,6 @@ void setEntradas(FILE* entrada, int numEntradas, char* entradaUsuario[]) {
     }
 
     /*Leitura das entradas do usuario*/
-    /*i = 1 e' o nome do arquivo txt*/
     for (i = 2; i < numEntradas; i++) {
 
         checagem = entradaUsuario[i][0] + entradaUsuario[i][1] + entradaUsuario[i][2];

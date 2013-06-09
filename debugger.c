@@ -26,10 +26,12 @@ Referencias:
 #include <unistd.h>
 #include <string.h>
 #include <math.h>
+#include <allegro5/allegro.h>
 #include "rio.h"
 #include "grade.h"
 #include "debugger.h"
 #include "config.h"
+#include "graficos.h"
 
 /*FUNCOES AUXILIARES*/
 /*------------------*/
@@ -239,3 +241,47 @@ void verificaFluxo(float fluxo)
 	cnt++;
 }
 
+void testeIntegridade(char** argv) {
+	char chamada[BUFSIZ];
+
+	/*printf("******************************\n"
+		   "Iniciando testes de robustez\n"
+		   "******************************\n");*/
+	
+	desenhaTeste(1);
+	strcpy(chamada, argv[0]);
+	strcat(chamada, " -fndebug/testeColuna.txt -rd1 -ie1");
+	system(chamada);
+
+	desenhaTeste(2);
+	strcpy(chamada, argv[0]);
+	strcat(chamada, " -fndebug/testeColuna2.txt -rd1 -ie1");
+	system(chamada);
+
+	desenhaTeste(3);
+	strcpy(chamada, argv[0]);
+	strcat(chamada, " -fndebug/testeLinha.txt -rd1 -ie1");
+	system(chamada);
+
+	desenhaTeste(4);
+	strcpy(chamada, argv[0]);
+	strcat(chamada, " -fndebug/testeLinha2.txt -rd1 -ie1");
+	system(chamada);
+
+	desenhaTeste(5);
+	strcpy(chamada, argv[0]);
+	strcat(chamada, " -fndebug/testeMargens.txt -rd1 -ie1");
+	system(chamada);
+
+	desenhaTeste(6);
+	strcpy(chamada, argv[0]);
+	strcat(chamada, " -fndebug/testeFluxo.txt -rd1 -ie1");
+	system(chamada);
+
+	desenhaTeste(7);
+	strcpy(chamada, argv[0]);
+	strcat(chamada, " -fndebug/config.txt -rd1 -ie1");
+	system(chamada);
+
+	desenhaTeste(8);
+}

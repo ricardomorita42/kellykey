@@ -30,7 +30,7 @@ PROB_GEN_ISLE = 0.5
 
 ;Caracteres que definem o tipo de terreno
 DEF_WATER = .                   ; lembrar de não usar 
-DEF_ISLE = #                    ; parâmetro opcional
+DEF_ISLE = @                    ; parâmetro opcional
 DEF_EARTH = #   
 
 ;Define por quanto tempo o rio deve ser gerado. (< 0) = infinito

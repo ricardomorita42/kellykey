@@ -36,6 +36,8 @@ void calculaVarVelocidade(float vMenor, float vMaior, float vMedia);
 void calculaVarMargens(int esq, int dir);
 /*--6--*/
 void verificaFluxo(float fluxo);
+/*--7--*/
+void testeIntegridade(char** argv); 
 
 /*--1--printInfoTopo: imprime o tamanho da matriz (linhas X colunas) e o tempo decorrido
        no topo da tela
@@ -60,5 +62,7 @@ void verificaFluxo(float fluxo);
        fluxo e' constante dentro de uma margem de erro e calcula sua variacao
        media, imprimindo o resultado
        parametros: fluxo de uma linha */
+
+/*--7--testeIntegridade: realiza uma bateria de testes com o programa para verificar sua robustez*/
        
 

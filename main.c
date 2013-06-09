@@ -94,8 +94,6 @@ int main (int argc, char **argv)
     
     /*Chama o jogo*/
     else {
-		/*grade = alocaGrade();*/
-
 		if (getSeed() <= 0)
 			seed = time(NULL);
 		else
@@ -146,6 +144,7 @@ int main (int argc, char **argv)
 	}
     
     fclose(entrada);
+	destroiJanela();
 	return 0;
 }
 
@@ -163,74 +162,5 @@ void menu() {
        destroiJanela();
        exit(1);
     }
-}
-
-void testeIntegridade(char** argv) {
-	char chamada[BUFSIZ];
-
-	printf("******************************\n"
-		   "Iniciando testes de robustez\n"
-		   "******************************\n");
-	sleep(1);
-	printf("Teste 1: colunas muito grandes\n"
-		   "------------------------------\n");
-	sleep(1);
-	strcpy(chamada, argv[0]);
-	strcat(chamada, " -fndebug/testeColuna.txt -rd1 -ie1");
-	system(chamada);
-
-	printf("Teste 2: colunas muito pequenas\n"
-		   "------------------------------\n");
-	sleep(1);
-	strcpy(chamada, argv[0]);
-	strcat(chamada, " -fndebug/testeColuna2.txt -rd1 -ie1");
-	system(chamada);
-
-	printf("Teste 3: linhas muito grandes\n"
-		   "------------------------------\n");
-	sleep(1);
-	strcpy(chamada, argv[0]);
-	strcat(chamada, " -fndebug/testeLinha.txt -rd1 -ie1");
-	system(chamada);
-
-	printf("Teste 4: linhas muito pequenas\n"
-		   "------------------------------\n");
-	sleep(1);
-	strcpy(chamada, argv[0]);
-	strcat(chamada, " -fndebug/testeLinha2.txt -rd1 -ie1");
-	system(chamada);
-
-	printf("Teste 5: margens se tocando\n"
-		   "------------------------------\n");
-	sleep(1);
-	strcpy(chamada, argv[0]);
-	strcat(chamada, " -fndebug/testeMargens.txt -rd1 -ie1");
-	system(chamada);
-
-	printf("Teste 6: Fluxo muito pequeno\n"
-		   "------------------------------\n");
-	sleep(1);
-	strcpy(chamada, argv[0]);
-	strcat(chamada, " -fndebug/testeFluxo.txt -rd1 -ie1");
-	system(chamada);
-
-	printf("***********************************************\n"
-         "Viva! O programa nao quebrou!\n"				
-		   "Testes de robustez encerrados.\n"
-		   "***********************************************\n");
-	sleep(2);
-	printf("Teste 7: Corretude do programa em condicoes normais\n"
-			   "-------------------------------------------------\n");
-	sleep(2);
-	strcpy(chamada, argv[0]);
-	strcat(chamada, " -fndebug/config.txt -rd1 -ie1");
-	system(chamada);
-	
-	printf("***********************************************\n"
-         "Bateria de testes terminada.\n"				
-		   "Obrigado pela paciencia e ate mais!\n"
-		   "(Lembre-se: voce pode testar manualmente se quiser)\n"
-		   "***********************************************\n\n");
-	sleep(1);
 }
 
