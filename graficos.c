@@ -316,7 +316,7 @@ void desenhaSetup() {
         al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,320,5,0, "(12) Probabilidade de gerar uma ilha: %.2f\n", getIsleProb());
         al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,340,5,0, "(13) Fluxo do Rio: %.2f\n", getRiverFlux());
         al_draw_text(fonte3,al_map_rgb(255,255,255),50,370,ALLEGRO_ALIGN_LEFT,"Escolha (14 = canoar!):");
-        al_draw_text(fonte3,al_map_rgb(255,255,255),320,370,ALLEGRO_ALIGN_LEFT,str);
+        al_draw_text(fonte3,al_map_rgb(255,255,255),310,370,ALLEGRO_ALIGN_LEFT,str);
         if (trocar == TRUE) {
             al_draw_text(fonte3,al_map_rgb(255,255,255),50,400,ALLEGRO_ALIGN_LEFT,"Digite o novo valor:");
             al_draw_text(fonte3,al_map_rgb(255,255,255),290,400,ALLEGRO_ALIGN_LEFT,str2);
@@ -441,10 +441,14 @@ void desenhaTeste(int teste)
 			al_draw_text(fonte,al_map_rgb(255,255,255),50,30,ALLEGRO_ALIGN_LEFT,"TESTES AUTOMATICOS");
 			al_draw_justified_textf(fonte, al_map_rgb(255,255,255),50,500,80,5,0, "Teste 7: Corretude do programa em condicoes normais\n");
 			break;
+		case 8:
+			al_draw_justified_textf(fonte, al_map_rgb(255,255,255),50,500,80,5,0, "Bateria de testes terminada.\n");
+			al_draw_justified_textf(fonte, al_map_rgb(255,255,255),50,500,100,5,0, "Obrigado pela paciencia e ate mais!\n");
+			al_draw_justified_textf(fonte, al_map_rgb(255,255,255),50,500,120,5,0, "(Lembre-se: voce pode testar manualmente se quiser)\n");
+			break;
 		default:
 			break;
 	}
 	al_flip_display();
 	al_rest(2.0);
-
 }

@@ -94,8 +94,6 @@ int main (int argc, char **argv)
     
     /*Chama o jogo*/
     else {
-		/*grade = alocaGrade();*/
-
 		if (getSeed() <= 0)
 			seed = time(NULL);
 		else
@@ -146,6 +144,7 @@ int main (int argc, char **argv)
 	}
     
     fclose(entrada);
+	destroiJanela();
 	return 0;
 }
 

@@ -282,10 +282,6 @@ void testeIntegridade(char** argv) {
 	strcpy(chamada, argv[0]);
 	strcat(chamada, " -fndebug/config.txt -rd1 -ie1");
 	system(chamada);
-	
-	printf("***********************************************\n"
-         "Bateria de testes terminada.\n"				
-		   "Obrigado pela paciencia e ate mais!\n"
-		   "(Lembre-se: voce pode testar manualmente se quiser)\n"
-		   "***********************************************\n\n");
+
+	desenhaTeste(8);
 }
