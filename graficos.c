@@ -34,6 +34,8 @@ Referencias:
 #include "graficos.h"
 #include "grade.h"
 #define D 5
+#define ALTURA 480
+#define LARGURA 640
 
 ALLEGRO_DISPLAY *janela = NULL;
 
@@ -45,6 +47,8 @@ int criaJanela(int largura, int altura)
 
 	janela = al_create_display(largura, altura);
 	if (!janela)
+		return -1;
+	if (!al_init_primitives_addon())
 		return -1;
 
 	return 0;
@@ -217,25 +221,18 @@ void desenhaRio(Rio** grade, ALLEGRO_BITMAP *fundo)
 		/*desenhando*/
 		al_draw_prim(vtx, NULL, 0, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN);
 		if (ilhaEsq[0] != 0)
-		{
-			/*isl[0].x = ilhaEsq[1]; isl[0].y = ilhaEsq[0]-D; isl[0].color = al_map_rgb(200, 200, 0);
-			isl[1].x = ilhaDir[1]; isl[1].y = ilhaDir[0]-D; isl[1].color = al_map_rgb(200, 200, 0);
-			isl[2].x = ilhaDir[1]; isl[2].y = ilhaDir[0]; isl[2].color = al_map_rgb(200, 200, 0);
-			isl[3].x = ilhaEsq[1]; isl[3].y = ilhaEsq[0]; isl[3].color = al_map_rgb(200, 200, 0);
-			al_draw_prim(isl, NULL, copia, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN);*/
-			/*al_draw_tinted_bitmap_region(copia, al_map_rgb(50, 50, 0), ilhaEsq[1], ilhaEsq[0], 
-					(ilhaEsq[1]-ilhaDir[1]), D, ilhaDir[1], ilhaDir[0], 0);*/
 			al_draw_filled_rectangle(ilhaEsq[1], ilhaEsq[0]-D, ilhaDir[1], ilhaDir[0], al_map_rgb(100,100,0));
-		}
 	}
 }
 
 void desenhaCanoa(ALLEGRO_BITMAP *canoa)
 {
+	int altura;
 	if (!canoa)
 	{
 		fprintf(stderr, "Oopsie, nao consegui desenhar a canoa. Por acaso ela existe?\n");
 		exit(EXIT_FAILURE);
 	}
-	al_draw_bitmap(canoa, 320, 380, 0);
+	altura = al_get_bitmap_height(canoa);
+	al_draw_bitmap(canoa, LARGURA/2, (ALTURA - altura), 0);
 }
