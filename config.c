@@ -365,6 +365,69 @@ int checaAtributos(int debug) {
     return n;
 }
 
+char* checaAtributosGraf() {
+    char *temp;
+    if (numLines < 1) {
+        temp = "Numero de linhas invalido!";
+        return temp;
+    }
+
+    else if (numColumns < 1) {
+        temp = "Numero de colunas invalido!";
+        return temp;
+    }
+
+   	if (numColumns <= leftMargin) { 
+        temp = "Numero de colunas e' menor que a margem esquerda.";
+        return temp;
+    }
+
+   	if (numColumns <= rightMargin) {
+        temp = "Numero de colunas e' menor que a margem direita.";
+        return temp;
+    }
+
+    if (leftMargin >= rightMargin) {
+        temp = "Margem esquerda nao pode ser maior ou igual 'a direita.";
+        return temp;
+    }
+
+   	if (numIterations > 0 && numSeconds > 0) { 
+        temp = "Dentre (9) e (10), apenas uma das duas pode ter um valor.";
+        return temp;
+    }
+
+   	if (reportData < 0 || reportData > 2) { 
+        temp = "Debugagem deve ser (2=testador), (1=on) ou (0=off)";
+        return temp;
+    }
+
+   	if (refreshRate <= 0) { 
+        temp = "Frequencia  de atualizacao deve ser maior que 0.";
+        return temp;
+    }
+
+   	if (isleDist <= 0) { 
+        temp = "Distancia entre as ilhas deve ser maior que 0.";
+        return temp;
+    }
+
+   	if (waterSpeed <= 0) { 
+        temp = "Velocidade maxima da agua deve ser maior que 0.";
+        return temp;
+    }
+
+   	if (isleProb >1 || isleProb < 0) { 
+        temp = "Probabilidade de gerar ilha deve estar no interavalo [0;1].";
+        return temp;
+    }
+
+    else {
+        temp = "";
+        return temp;
+    }
+}
+
 /*Caso haja algum parametro invalido, so libera caso os parametros se tornem validos.*/
 void checaEntradas(int debugagem) {
     int n, item;

@@ -24,5 +24,6 @@ Referencias:
 void desenhaRio(Rio**, ALLEGRO_BITMAP*);
 void desenhaCanoa(ALLEGRO_BITMAP*);
 int desenhaMenu(int,int);
+void desenhaSetup();
 int criaJanela(int,int);
 void destroiJanela();
