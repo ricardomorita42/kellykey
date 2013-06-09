@@ -3,13 +3,13 @@
 ;Não delete ou altere os nomes das linhas!
 
 ;Dimensões do Mapa visualizado
-NUM_LINES = 30                 ; números de linhas do mapa
+NUM_LINES = 80                 ; números de linhas do mapa
 NUM_COLUMNS = 2000               ; número de colunas do mapa
 
 ;Define os limites para os quais a terra pode chegar.
 ;Respeite os valores permitidos ou o programa reclamará.
-LEFT_MARGIN_LIMIT = 800          ;entre 0 e 800
-RIGHT_MARGIN_LIMIT = 1200         ;entre 1200 e 1999
+LEFT_MARGIN_LIMIT = 40          
+RIGHT_MARGIN_LIMIT = 80      
 
 ;define a velocidade maxima que a agua atinge
 H20_MAX_SPEED = 20.3
