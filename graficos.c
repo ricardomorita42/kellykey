@@ -319,7 +319,7 @@ void desenhaSetup() {
         al_draw_text(fonte3,al_map_rgb(255,255,255),320,370,ALLEGRO_ALIGN_LEFT,str);
         if (trocar == TRUE) {
             al_draw_text(fonte3,al_map_rgb(255,255,255),50,400,ALLEGRO_ALIGN_LEFT,"Digite o novo valor:");
-            al_draw_text(fonte3,al_map_rgb(255,255,255),300,400,ALLEGRO_ALIGN_LEFT,str2);
+            al_draw_text(fonte3,al_map_rgb(255,255,255),290,400,ALLEGRO_ALIGN_LEFT,str2);
         }
         al_draw_text(fonte4,al_map_rgb(255,255,255),50,440,ALLEGRO_ALIGN_LEFT,checaAtributosGraf());
         al_flip_display();
