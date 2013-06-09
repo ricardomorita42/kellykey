@@ -300,7 +300,7 @@ void desenhaSetup() {
             
         }
         
-	     al_clear_to_color(al_map_rgb(0, 0, 0));
+		al_clear_to_color(al_map_rgb(0, 0, 0));
         al_draw_text(fonte2,al_map_rgb(255,255,255),50,30,ALLEGRO_ALIGN_LEFT,"Setup");
         al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,100,5,0, "(1) Num linhas do rio:%d\n",getNumLines());
         al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,120,5,0, "(2) Num colunas do rio:%d\n", getNumColumns());
@@ -309,14 +309,14 @@ void desenhaSetup() {
         al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,180,5,0, "(5) Seed (< 0 = aleatorio): %d\n", getSeed());
         al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,200,5,0, "(6) Frequencia de atualizacao: %d\n", getRefreshRate());
         al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,220,5,0, "(7) Distancia minima entre ilhas: %d\n", getIsleDist());
-        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,240,5,0, "(8) Opção de debugagem (1 = ligado, 2 = testes automaticos): %d\n", getReportData());
+        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,240,5,0, "(8) Debugagem (1 = ligado, 2 = testes automaticos): %d\n", getReportData());
         al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,260,5,0, "(9) Numero de iteracoes (< 0 -> infinito): %d\n",getNumIterations());
         al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,280,5,0, "(10) Numero de segundos (< 0 -> infinito): %d\n",getNumSeconds());
         al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,300,5,0, "(11) Velocidade maxima da agua: %.2f\n",getWaterSpeed());
         al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,320,5,0, "(12) Probabilidade de gerar uma ilha: %.2f\n", getIsleProb());
         al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,340,5,0, "(13) Fluxo do Rio: %.2f\n", getRiverFlux());
         al_draw_text(fonte3,al_map_rgb(255,255,255),50,370,ALLEGRO_ALIGN_LEFT,"Escolha (14 = canoar!):");
-        al_draw_text(fonte3,al_map_rgb(255,255,255),260,370,ALLEGRO_ALIGN_LEFT,str);
+        al_draw_text(fonte3,al_map_rgb(255,255,255),320,370,ALLEGRO_ALIGN_LEFT,str);
         if (trocar == TRUE) {
             al_draw_text(fonte3,al_map_rgb(255,255,255),50,400,ALLEGRO_ALIGN_LEFT,"Digite o novo valor:");
             al_draw_text(fonte3,al_map_rgb(255,255,255),300,400,ALLEGRO_ALIGN_LEFT,str2);
@@ -397,4 +397,54 @@ void desenhaCanoa(ALLEGRO_BITMAP *canoa)
 	}
 	altura = al_get_bitmap_height(canoa);
 	al_draw_bitmap(canoa, LARGURA/2, (ALTURA - altura), 0);
+}
+
+void desenhaTeste(int teste)
+{
+	ALLEGRO_FONT *fonte = NULL;
+ 
+    /*Carregando fonte para ser usada*/
+    fonte = al_load_font("fonts/pirulen.ttf",12,0);
+    if (!fonte) {
+        fprintf(stderr,"nao consegui encontrar a fonte");
+        exit(EXIT_FAILURE);
+    }
+
+	al_clear_to_color(al_map_rgb(0, 0, 0));
+	al_draw_text(fonte,al_map_rgb(255,255,255),50,30,ALLEGRO_ALIGN_LEFT,"TESTES AUTOMATICOS");
+	switch(teste)
+	{
+		case 1:
+			al_draw_justified_textf(fonte, al_map_rgb(255,255,255),50,500,80,5,0, "Teste 1: colunas muito grandes\n");
+			break;
+		case 2:
+			al_draw_justified_textf(fonte, al_map_rgb(255,255,255),50,500,80,5,0, "Teste 2: colunas muito pequenas\n");
+			break;
+		case 3:
+			al_draw_justified_textf(fonte, al_map_rgb(255,255,255),50,500,80,5,0, "Teste 3: linhas muito grandes\n");
+			break;
+		case 4:
+			al_draw_justified_textf(fonte, al_map_rgb(255,255,255),50,500,80,5,0, "Teste 4: linhas muito pequenas\n");
+			break;
+		case 5:
+			al_draw_justified_textf(fonte, al_map_rgb(255,255,255),50,500,80,5,0, "Teste 5: margens se tocando\n");
+			break;
+		case 6:
+			al_draw_justified_textf(fonte, al_map_rgb(255,255,255),50,500,80,5,0, "Teste 6: Fluxo muito pequeno\n");
+			break;
+		case 7:
+			al_draw_justified_textf(fonte, al_map_rgb(255,255,255),50,500,80,5,0, "Viva! O programa nao quebrou!\n");
+			al_draw_justified_textf(fonte, al_map_rgb(255,255,255),50,500,100,5,0, "Testes de robustez encerrados.\n");
+			al_flip_display();
+			al_rest(2.5);
+			al_clear_to_color(al_map_rgb(0, 0, 0));
+			al_draw_text(fonte,al_map_rgb(255,255,255),50,30,ALLEGRO_ALIGN_LEFT,"TESTES AUTOMATICOS");
+			al_draw_justified_textf(fonte, al_map_rgb(255,255,255),50,500,80,5,0, "Teste 7: Corretude do programa em condicoes normais\n");
+			break;
+		default:
+			break;
+	}
+	al_flip_display();
+	al_rest(2.0);
+
 }

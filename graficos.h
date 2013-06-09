@@ -27,3 +27,4 @@ int desenhaMenu(int,int);
 void desenhaSetup();
 int criaJanela(int,int);
 void destroiJanela();
+void desenhaTeste(int);
