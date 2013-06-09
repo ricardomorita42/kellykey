@@ -53,12 +53,12 @@ int main (int argc, char **argv)
 	char nomeArquivo[MAXLINE];
 	float fluxo;
 	FILE* entrada;
-	Rio **grade;
+	Rio **grade, **atual;
 	int primeiraLinha, rep;
 
 	/*float cronometro, tempoDecorrido = 0.0;*/
-	ALLEGRO_DISPLAY *janela = NULL;
 	ALLEGRO_BITMAP *fundo = NULL;
+	ALLEGRO_BITMAP *canoa = NULL;
 
     strcpy(nomeArquivo,"debug/config.txt");
 
@@ -102,17 +102,29 @@ int main (int argc, char **argv)
 			seed = getSeed();
 		srand(seed);
 		fluxo = getRiverFlux();
-		/*al_init_image_addon();*/
 
 		primeiraLinha = linha = 0;
       	rep = getNumIterations();
+
+		/*carregando imagens apenas uma vez*/
 		fundo = al_load_bitmap("textures/texture.png");
+		canoa = al_load_bitmap("images/canoe_b.png");
 
-		while (rep > 0) {
+		/*alocando grade de atualizacao do rio*/
+		grade = alocaGrade();
+		atual = alocaGrade();
+
+			while (rep > 0) {
         
-        	grade = geraRio(primeiraLinha, linha, fluxo, grade);
-			desenhaRio(criaImagemGrade(grade, primeiraLinha), janela, fundo);
-
+        	atual = geraRio(primeiraLinha, linha, fluxo, atual);
+			grade = criaImagemGrade(atual, grade, primeiraLinha);
+			
+			al_clear_to_color(al_map_rgb(0, 0, 0));
+			desenhaRio(grade, fundo);
+			desenhaCanoa(canoa);
+			al_flip_display();
+			al_rest(0.05);
+		
         	primeiraLinha++;
         	if (primeiraLinha == getNumLines()) 
 				primeiraLinha = 0;
@@ -124,7 +136,11 @@ int main (int argc, char **argv)
 			if (rep > 0)
 				rep--;
 		}
+		/*liberando o entulho*/
 		freeGrade(grade);
+		freeGrade(atual);
+		al_destroy_bitmap(fundo);
+		al_destroy_bitmap(canoa);
 	}
     
     fclose(entrada);
