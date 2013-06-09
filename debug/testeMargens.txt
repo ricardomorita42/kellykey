@@ -3,7 +3,7 @@
 ;Não delete ou altere os nomes das linhas!
 
 ;Dimensões do Mapa visualizado
-NUM_LINES = 30                 ; números de linhas do mapa
+NUM_LINES = 80                 ; números de linhas do mapa
 NUM_COLUMNS = 30               ; número de colunas do mapa
 
 ;Define os limites para os quais a terra pode chegar.
