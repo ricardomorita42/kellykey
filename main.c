@@ -94,7 +94,7 @@ int main (int argc, char **argv)
     
     /*Chama o jogo*/
     else {
-		grade = alocaGrade();
+		/*grade = alocaGrade();*/
 
 		if (getSeed() <= 0)
 			seed = time(NULL);
@@ -114,12 +114,14 @@ int main (int argc, char **argv)
 		grade = alocaGrade();
 		atual = alocaGrade();
 
-			while (rep > 0) {
+			/*arquivos de config com tempo ao inves de repeticoes*/
+			while (rep > 0 || rep < 0) {
         
         	atual = geraRio(primeiraLinha, linha, fluxo, atual);
 			grade = criaImagemGrade(atual, grade, primeiraLinha);
 			
 			al_clear_to_color(al_map_rgb(0, 0, 0));
+			/*segfaul no desenha qdo chamado novamente*/
 			desenhaRio(grade, fundo);
 			desenhaCanoa(canoa);
 			al_flip_display();

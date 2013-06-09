@@ -104,7 +104,8 @@ void setEntradas(FILE* entrada, int numEntradas, char* entradaUsuario[]) {
     }
 
     /*Leitura das entradas do usuario*/
-    for (i = 1; i < numEntradas; i++) {
+    /*i = 1 e' o nome do arquivo txt*/
+    for (i = 2; i < numEntradas; i++) {
 
         checagem = entradaUsuario[i][0] + entradaUsuario[i][1] + entradaUsuario[i][2];
 

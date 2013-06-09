@@ -34,7 +34,7 @@ DEF_ISLE = #                    ; parâmetro opcional
 DEF_EARTH = #   
 
 ;Define por quanto tempo o rio deve ser gerado. (< 0) = infinito
-NUM_SECONDS = 5
+;NUM_SECONDS = 5
 
 ;Fluxo do Rio em cada linha
 RIVER_FLUX = 30 
@@ -47,6 +47,6 @@ RIVER_FLUX = 30
 ;REPORT_DATA = 0 
 
 ;Número de linhas a serem geradas. (< 0) = infinito
-;NUM_ITERATIONS = 0
+NUM_ITERATIONS = 50
 
 ;fim do arquivo
