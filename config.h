@@ -71,22 +71,9 @@ char getEarthChar();
 char getIsleChar();             
 
 /*Funcoes para setar dados*/
-int setLeftMargin();            
-int setRightMargin();           
-float setWaterSpeed();          
-int setSeed();                  
-int setRefreshRate();           
-int setIsleDist();              
-float setIsleProb();            
-int setNumLines();              
-int setNumColumns();            
-int setNumIterations();         
-int setNumSeconds();
-float setRiverFlux();           
-int setReportData();            
-int setDebugMode();
-char setWaterChar();            
-char setEarthChar();            
+void setParametro(char*, int);
+void setParametrof(char*, float);
+void setParametroc(char*, char);
 
 /*Mostra menu e permite mudar variaveis "on the fly".*/
 void mudaAtributos();

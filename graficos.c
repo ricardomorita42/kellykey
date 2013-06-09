@@ -146,7 +146,8 @@ int desenhaMenu(int largura, int altura)
 void desenhaSetup() {
     int sair = FALSE;
     int trocar = FALSE;
-    int valor,i;
+    int valor,novo, i;
+    float novof;
     char str[3];
     char str2[10];
     ALLEGRO_FONT *fonte = NULL;
@@ -227,7 +228,49 @@ void desenhaSetup() {
             }
 
             else {
-                sscanf(str2,"%d",&valor);
+                if (valor <= 10) {
+                    sscanf(str2,"%d",&novo);
+                    switch (valor) {
+                        case 1:
+                            setParametro("NUM_LINES",novo);
+                            break;
+                        case 2:
+                            setParametro("NUM_COLUMNS",novo);
+                            break;
+                        case 3:
+                            setParametro("LEFT_MARGIN_LIMIT",novo);
+                            break;
+                        case 4:
+                            setParametro("RIGHT_MARGIN_LIMIT",novo);
+                            break;
+                        case 5:
+                            setParametro("NSEED",novo);
+                            break;
+                        case 6:
+                            setParametro("REFRESH_RATE",novo);
+                            break;
+                        case 7:
+                            setParametro("MIN_ISLE_DIST",novo);
+                            break;
+                        case 8:
+                            setParametro("REPORT_DATA",novo);
+                            break;
+                        case 9:
+                            setParametro("NUM_ITERATIONS",novo);
+                            break;
+                        case 10:
+                            setParametro("NUM_SECONDS",novo);
+                            break;
+                    }
+                }
+
+                else {
+                    sscanf(str2,"%f",&novof); 
+                    if (valor == 11) setParametrof("H20_MAX_SPEED", novof);
+                    else if (valor == 12) setParametrof("PROB_GEN_ISLE",novof);
+                    else if (valor == 13) setParametrof("RIVER_FLUX",novof);
+                }
+
                 for (i = 0; i < 11; i++)
                     str2[i] = '\0';
                 for (i = 0; i < 4; i++)
