@@ -75,8 +75,8 @@ void setParametro(char*, int);
 void setParametrof(char*, float);
 void setParametroc(char*, char);
 
-/*Mostra menu e permite mudar variaveis "on the fly".*/
-void mudaAtributos();
+/*Verifica entradas invalidas*/
+char* checaAtributosGraf(); 
 
 /*Limpa a tela */
 void clearScreen();

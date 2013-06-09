@@ -4,7 +4,7 @@ ALLEGRO=-lallegro -lallegro_main -lallegro_primitives -lallegro_image -lallegro_
 #=================================
 
 main: main.o rio.o grade.o debugger.o config.o graficos.o 
-	$(CC) $(CFLAGS) main.o rio.o grade.o debugger.o config.o graficos.o -o main -lm $(ALLEGRO)
+	$(CC) $(CFLAGS) main.o rio.o grade.o debugger.o config.o graficos.o -o main -lm $(ALLEGRO) && rm *.o
 
 main.o: main.c rio.h
 	$(CC) $(CFLAGS) -c main.c

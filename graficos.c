@@ -152,9 +152,11 @@ void desenhaSetup() {
     float novof;
     char str[3];
     char str2[10];
+
     ALLEGRO_FONT *fonte = NULL;
     ALLEGRO_FONT *fonte2 = NULL;
     ALLEGRO_FONT *fonte3 = NULL;
+    ALLEGRO_FONT *fonte4 = NULL;
     ALLEGRO_EVENT_QUEUE *eventQueue;
     ALLEGRO_EVENT event;
 
@@ -171,6 +173,11 @@ void desenhaSetup() {
     }
     fonte3 = al_load_font("fonts/metalord.ttf",24,0);
     if (!fonte3) {
+        fprintf(stderr,"nao consegui abrir o ttf_addon");
+        exit(EXIT_FAILURE);
+    }
+    fonte4 = al_load_font("fonts/pirulen.ttf",12,0);
+    if (!fonte4) {
         fprintf(stderr,"nao consegui abrir o ttf_addon");
         exit(EXIT_FAILURE);
     }
@@ -192,6 +199,7 @@ void desenhaSetup() {
 
     while (sair != TRUE) {
         al_wait_for_event(eventQueue,&event);
+
 
         if (trocar == FALSE) {
             if(event.type == ALLEGRO_EVENT_KEY_CHAR) {
@@ -224,9 +232,15 @@ void desenhaSetup() {
         if (event.type == ALLEGRO_EVENT_KEY_DOWN && event.keyboard.keycode == ALLEGRO_KEY_ENTER) {
             if (trocar == FALSE) {
                 sscanf(str,"%d",&valor);
-                if (valor == 14)
-                    break;
-                trocar = TRUE;
+                if (valor == 14) {
+                    if (strlen(checaAtributosGraf()) == 0)
+                        break;
+                    for (i = 0; i < 4; i++)
+                        str[i] = '\0';
+                }
+
+                else
+                    trocar = TRUE;
             }
 
             else {
@@ -284,25 +298,26 @@ void desenhaSetup() {
         
 	    al_clear_to_color(al_map_rgb(0, 0, 0));
         al_draw_text(fonte2,al_map_rgb(255,255,255),50,30,ALLEGRO_ALIGN_LEFT,"Setup");
-        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),100,500,100,5,0, "(1) Num linhas do rio:%d\n",getNumLines());
-        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),100,500,120,5,0, "(2) Num colunas do rio:%d\n", getNumColumns());
-        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),100,500,140,5,0, "(3) Posicao margem esquerda: %d\n", getLeftMargin());
-        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),100,500,160,5,0, "(4) Posicao margem direita: %d\n", getRightMargin());
-        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),100,500,180,5,0, "(5) Seed (< 0 = aleatorio): %d\n", getSeed());
-        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),100,500,200,5,0, "(6) Frequencia de atualizacao: %d\n", getRefreshRate());
-        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),100,500,220,5,0, "(7) Distancia minima entre ilhas: %d\n", getIsleDist());
-        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),100,500,240,5,0, "(8) Opção de debugagem (1 = ligado, 2 = testes automaticos): %d\n", getReportData());
-        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),100,500,260,5,0, "(9) Numero de iteracoes (< 0 -> infinito): %d\n",getNumIterations());
-        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),100,500,280,5,0, "(10) Numero de segundos (< 0 -> infinito): %d\n",getNumSeconds());
-        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),100,500,300,5,0, "(11) Velocidade maxima da agua: %.2f\n",getWaterSpeed());
-        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),100,500,320,5,0, "(12) Probabilidade de gerar uma ilha: %.2f\n", getIsleProb());
-        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),100,500,340,5,0, "(13) Fluxo do Rio: %.2f\n", getRiverFlux());
+        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,100,5,0, "(1) Num linhas do rio:%d\n",getNumLines());
+        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,120,5,0, "(2) Num colunas do rio:%d\n", getNumColumns());
+        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,140,5,0, "(3) Posicao margem esquerda: %d\n", getLeftMargin());
+        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,160,5,0, "(4) Posicao margem direita: %d\n", getRightMargin());
+        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,180,5,0, "(5) Seed (< 0 = aleatorio): %d\n", getSeed());
+        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,200,5,0, "(6) Frequencia de atualizacao: %d\n", getRefreshRate());
+        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,220,5,0, "(7) Distancia minima entre ilhas: %d\n", getIsleDist());
+        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,240,5,0, "(8) Opção de debugagem (1 = ligado, 2 = testes automaticos): %d\n", getReportData());
+        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,260,5,0, "(9) Numero de iteracoes (< 0 -> infinito): %d\n",getNumIterations());
+        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,280,5,0, "(10) Numero de segundos (< 0 -> infinito): %d\n",getNumSeconds());
+        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,300,5,0, "(11) Velocidade maxima da agua: %.2f\n",getWaterSpeed());
+        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,320,5,0, "(12) Probabilidade de gerar uma ilha: %.2f\n", getIsleProb());
+        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,340,5,0, "(13) Fluxo do Rio: %.2f\n", getRiverFlux());
         al_draw_text(fonte3,al_map_rgb(255,255,255),50,370,ALLEGRO_ALIGN_LEFT,"Escolha (14 = sair):");
         al_draw_text(fonte3,al_map_rgb(255,255,255),260,370,ALLEGRO_ALIGN_LEFT,str);
         if (trocar == TRUE) {
             al_draw_text(fonte3,al_map_rgb(255,255,255),50,400,ALLEGRO_ALIGN_LEFT,"Digite o novo valor:");
             al_draw_text(fonte3,al_map_rgb(255,255,255),300,400,ALLEGRO_ALIGN_LEFT,str2);
         }
+        al_draw_text(fonte4,al_map_rgb(255,255,255),50,440,ALLEGRO_ALIGN_LEFT,checaAtributosGraf());
         al_flip_display();
     }
 }
