@@ -60,7 +60,7 @@ O arquivo \verb|makefile| contém instruções de compilação para o programa \
 Por padrão, o programa principal irá carregar um arquivo de configuração, o qual será utilizado para determinar as configurações iniciais do jogo. O programa também é responsável por chamar duas funções auxiliares:
 
 \begin{itemize}
-\item \verb|menu()|: gera um menu inicial com três opções e é invocada quando o jogo não está e modo debug;
+\item \verb|menu()|: gera um menu inicial com três opções e é invocada quando o jogo não está no modo debug;
 \item \verb|testeIntegridade()|: realiza testes automatizados e é invocada quando o parâmetro 2 é passado para o modo debug. 
 \end{itemize}
 \newpage
@@ -98,8 +98,6 @@ int getNumLines() & Número de linhas da matriz \\
 int getNumColumns() & Número de colunas da matriz \\ 
 \hline 
 int getNumIterations() & Número de iterações até o fim do programa \\ 
-\hline 
-int getNumSeconds() & Número de segundos até o fim do programa \\ 
 \hline 
 float getRiverFlux() & Fluxo do rio em cada linha da matriz \\ 
 \hline 
@@ -144,6 +142,7 @@ As demais funções são auxiliares:
 \begin{itemize}
 \item \verb|calculaFluxo()|: usada por \verb|printInfoLinha()|, calcula o fluxo numa linha a partir da soma das velocidades;
 \item \verb|calculaVelMedia()|: também usada por \verb|printInfoLinha()|, calcula a velocidade média de cada linha (considerando apenas os pontos com velocidade > 0);
+\item \verb|calculaVelMediaRio()|: usada pela função desenhaRio quando o modo debug estiver ligado. Calcula a velocidade média do rio inteiro.
 \end{itemize}
 
 E as seguintes rotinas são utilizadas em testes de correção e variabilidade:
@@ -163,12 +162,13 @@ Este módulo é composto por três funções:
 \item \verb|printGrade()|: é encarregada de imprimir uma matriz inteira na tela. Portanto, é a função responsável por mostrar as atualizações feitas em cada linha por \verb|geraRio()| (conferir o módulo rio), o que causa uma ilusão de movimento para o espectador;
 \item \verb|alocaGrade()|: aloca espaço para uma matriz do tipo Rio. Essa função impede que não haja vazamento de memória no programa, uma vez que qualquer alteração na matriz será feita usando o espaço reservado apenas uma vez para a grade;
 \item \verb|freeGrade()|: libera o espaço alocado por \verb|alocaGrade()|.
+\item \verb|criaImagemGrade()|: copia matriz com as informações do rio em uma outra matriz com as informações já em ordem correta para impressão.
 \end{itemize}
 
 \subsection{Módulo rio}
 O módulo rio apresenta funções relacionadas à manipulação do tipo abstrato Rio (descrito em \verb|rio.h|), uma \textit{struct} que guarda um valor do tipo \textit{char} (correspondente à representação gráfica do rio) e um valor do tipo \textit{float} (correspondente à velocidade de um ponto na água). \\
 
-A principal função deste móduo é a \verb|geraRio()|, que coleciona chamadas a todas as demais funções do módulo por meio de \verb|geraLinha()| e imprime na tela uma matriz do tipo Rio por um certo tempo, determinado ou não. \\
+A principal função deste módulo é a \verb|geraRio()|, que coleciona chamadas a todas as demais funções do módulo por meio de \verb|geraLinha()|, montando então uma imagem completa do rio naquele instante. \\
 
 A função \verb|geraLinha()| se ocupa de devolver uma linha para \verb|geraRio()| de modo que:
 \begin{itemize}
@@ -192,10 +192,10 @@ Este módulo apresenta funções pertinentes à parte visual do jogo. A parte gr
 
 Este módulo é composto pelas funções abaixo:
 \begin{itemize}
-\item \verb|criaJanela()|: Inicializa a janela do jogo;
+\item \verb|criaJanela()|: Inicializa a janela do jogo e addon's utilizados durante os desenhos;
 \item \verb|destroiJanela()|: Destroi a janela usada pelo programa;
 \item \verb|desenhaMenu()|: Renderiza o Menu inicial do jogo;
-\item \verb|desenhaSetup()|: Renderiza o setup do jogo;
+\item \verb|desenhaSetup()|: Renderiza o menu de opções do jogo;
 \item \verb|desenhaRio()|: Desenha o jogo;
 \end{itemize}
 

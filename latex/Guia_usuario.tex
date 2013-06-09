@@ -83,12 +83,6 @@ Argumento & Variável & Exemplos de uso \\
 \hline 
 -rm & Limite direito do rio & -rm10, -rm50, -rm200 \\ 
 \hline 
--ws & Representação da água & -ws. , -ws! , -ws@ \\ 
-\hline 
--es & Representação da terra & -es\#, -es| , -es+ \\ 
-\hline 
--is & Representacão da ilha & -is\#, -is\& , -is\* \\ 
-\hline 
 -rr & Refresh Rate(microsegundos) & -rr10000, -rr5000, -rr12000 \\ 
 \hline 
 -id & dist.mínima entre ilhas & -id5, -id2, -id8 \\ 
@@ -98,8 +92,6 @@ Argumento & Variável & Exemplos de uso \\
 -ig & Prob. de gerar ilhas & -ig0.5, -ig0.2, -ig0.9 \\ 
 \hline 
 -it & Número de iterações & -it20, -it100, -it0 \\ 
-\hline 
--ns & Número de segundos & -ns20, -ns10, -ns0 \\ 
 \hline 
 -rd & 1:relatório, 2:teste de robustez & -rd0, -rd1, -rd2 \\ 
 \hline 
@@ -111,10 +103,8 @@ Argumento & Variável & Exemplos de uso \\
 Se você estiver bastante arrependido, você ainda pode sair do programa digitando 3 no menu inicial. De toda forma, ao final do jogo, o programa terminará sua execução.
 
 \section{modo depuração}
-Para executar o programa main no modo depuração, você deve alterar a opção 8 do menu de configurações para o valor 2 (ou usando \verb|./main -rd2|). Isso fará com que o programa realize uma série de testes de robustez, correção e variações sobre o rio que é gerado. Nos testes de robustez, serão carregados arquivos pré-configurados com condições extremas. Até por isso, é natural não esperar correção de valores de fluxo, por exemplo, pois queremos apenas que o programa sobreviva. Um relatório final será exibido ao final de cada bateria de testes. \\
+Para executar o programa main no modo depuração, você deve alterar a opção 8 do menu de configurações para o valor 2 (ou usando \verb|./main -rd2|). Isso fará com que o programa realize uma série de testes de robustez, correção e variações sobre o rio que é gerado. Nos testes de robustez, serão carregados arquivos pré-configurados com condições extremas. Até por isso, é natural não esperar correção de valores de fluxo, por exemplo, pois queremos apenas que o programa sobreviva. \\
 
-Para os testes de correção e variações, será executado um ciclo de construção do rio em que o usuário poderá ver os valores gerados de velocidade e fluxo em cada linha e ao final do qual será exibido um relatório em que poderá constatar que o programa se comporta de maneira adequada sob condições normais.\\
-
-Se para a opção 8, modo de debugagem, você digitar 1, o programa fará um teste com as opções carregadas no menu e imprimirá um relatório no final. 
+Se para a opção 8, modo de debugagem, você digitar 1, o programa fará um teste com as opções carregadas no menu e mostrará algumas informações sobre o programa. 
 
 \end{document}
