@@ -316,10 +316,10 @@ void desenhaSetup() {
         al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,320,5,0, "(12) Probabilidade de gerar uma ilha: %.2f\n", getIsleProb());
         al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,340,5,0, "(13) Fluxo do Rio: %.2f\n", getRiverFlux());
         al_draw_text(fonte3,al_map_rgb(255,255,255),50,370,ALLEGRO_ALIGN_LEFT,"Escolha (14 = canoar!):");
-        al_draw_text(fonte3,al_map_rgb(255,255,255),260,370,ALLEGRO_ALIGN_LEFT,str);
+        al_draw_text(fonte3,al_map_rgb(255,255,255),310,370,ALLEGRO_ALIGN_LEFT,str);
         if (trocar == TRUE) {
             al_draw_text(fonte3,al_map_rgb(255,255,255),50,400,ALLEGRO_ALIGN_LEFT,"Digite o novo valor:");
-            al_draw_text(fonte3,al_map_rgb(255,255,255),300,400,ALLEGRO_ALIGN_LEFT,str2);
+            al_draw_text(fonte3,al_map_rgb(255,255,255),290,400,ALLEGRO_ALIGN_LEFT,str2);
         }
         al_draw_text(fonte4,al_map_rgb(255,255,255),50,440,ALLEGRO_ALIGN_LEFT,checaAtributosGraf());
         al_flip_display();
