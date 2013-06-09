@@ -50,6 +50,8 @@ int criaJanela(int largura, int altura)
 		return -1;
 	if (!al_init_primitives_addon())
 		return -1;
+	if (!al_init_image_addon())
+		return -1;
 
 	return 0;
 }
@@ -83,7 +85,6 @@ int desenhaMenu(int largura, int altura)
     }
 
     /*Carregando fundo*/
-    al_init_image_addon();
     imagem = al_load_bitmap("images/background.jpg");
     if (!imagem) {
         fprintf(stderr,"nao consegui abrir a imagem de fundo");
@@ -442,9 +443,9 @@ void desenhaTeste(int teste)
 			al_draw_justified_textf(fonte, al_map_rgb(255,255,255),50,500,80,5,0, "Teste 7: Corretude do programa em condicoes normais\n");
 			break;
 		case 8:
+			al_clear_to_color(al_map_rgb(0, 0, 0));
 			al_draw_justified_textf(fonte, al_map_rgb(255,255,255),50,500,80,5,0, "Bateria de testes terminada.\n");
 			al_draw_justified_textf(fonte, al_map_rgb(255,255,255),50,500,100,5,0, "Obrigado pela paciencia e ate mais!\n");
-			al_draw_justified_textf(fonte, al_map_rgb(255,255,255),50,500,120,5,0, "(Lembre-se: voce pode testar manualmente se quiser)\n");
 			break;
 		default:
 			break;
