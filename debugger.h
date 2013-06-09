@@ -38,7 +38,7 @@ void calculaVarMargens(int esq, int dir);
 void verificaFluxo(float fluxo);
 /*--7--*/
 void testeIntegridade(char** argv);
-
+/*--8--*/
 float calculaVelMediaRio(Rio **grade);
 
 /*--1--printInfoTopo: imprime o tamanho da matriz (linhas X colunas) e o tempo decorrido
@@ -67,4 +67,4 @@ float calculaVelMediaRio(Rio **grade);
 
 /*--7--testeIntegridade: realiza uma bateria de testes com o programa para verificar sua robustez*/
        
-
+/*--8--calculaVelMediaRio: calcula a velocidade media do rio inteiro*/
