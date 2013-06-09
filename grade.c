@@ -79,12 +79,14 @@ Rio** criaImagemGrade(Rio **atual, Rio **nova, int primeiraLinha)
 {
 	int i, j, k;
 	
-	for (i = primeiraLinha-1, k = 0; k < getNumLines() - 1; k++, i--)
+	for (i = primeiraLinha-1, k = 0; k < getNumLines(); k++, i--)
 	{
 		if (i < 0)
 			i = getNumLines()-1;
-		for (j = 0; j < getNumColumns(); j++) 
+		for (j = 0; j < getNumColumns(); j++) {
 			nova[k][j].terreno = atual[i][j].terreno;
+			nova[k][j].velocidade = atual[i][j].velocidade;
+		}
 	}
 	return nova;
 

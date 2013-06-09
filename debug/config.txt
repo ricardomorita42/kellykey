@@ -48,6 +48,6 @@ RIVER_FLUX = 30
 ;REPORT_DATA = 1 
 
 ;Número de linhas a serem geradas. (< 0) = infinito
-NUM_ITERATIONS = 500
+NUM_ITERATIONS = 100
 
 ;fim do arquivo
