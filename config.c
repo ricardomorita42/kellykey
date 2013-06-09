@@ -45,7 +45,6 @@ static int leftMargin=30,
            numLines=30,
            numColumns=100,
            numIterations=0,
-           numSeconds=0,
            reportData=0,
            debugMode=0;
 static float waterSpeed=-1,
@@ -169,12 +168,6 @@ void setEntradas(FILE* entrada, int numEntradas, char* entradaUsuario[]) {
                 setParametro("NUM_ITERATIONS",valor);
                 break;
 
-            case NUMSECONDS: 
-                strcpy(word,&entradaUsuario[i][3]);
-                valor = atoi(word);
-                setParametro("NUM_SECONDS",valor);
-                break;
-
             case RIVERFLUX: 
                 strcpy(word,&entradaUsuario[i][3]);
                 valorf = atof(word);
@@ -228,9 +221,6 @@ void setParametro(char *parametro, int argumento) {
 
     else if (entrada == converteString("NUM_ITERATIONS"))
         numIterations = argumento;
-
-    else if (entrada == converteString("NUM_SECONDS"))
-        numSeconds = argumento;
 
     else if  (entrada == converteString("LEFT_MARGIN_LIMIT"))
         leftMargin = argumento;
@@ -303,7 +293,6 @@ float getIsleProb()     { return isleProb; }
 int getNumLines()       { return numLines;}
 int getNumColumns()     { return numColumns; }
 int getNumIterations()  { return numIterations; }
-int getNumSeconds()     { return numSeconds; }
 float getRiverFlux()    { return riverFlux; }
 int getReportData()     { return reportData; }
 int getDebugMode()      { return debugMode; }
@@ -340,9 +329,6 @@ int checaAtributos(int debug) {
 
        	if (leftMargin >= rightMargin) 
             { printf("Margem esquerda nao pode ser maior ou igual 'a direita.\n"); n++; }
-
-   	    if (numIterations > 0 && numSeconds > 0) 
-            { printf("Dentre (9) e (10), apenas uma das duas pode ter um valor.\n"); n++; }
 
    	    if (reportData < 0 || reportData > 2) 
             { printf("Debugagem deve ser (2=testador), (1=on) ou (0=off)\n"); n++; }
@@ -392,11 +378,6 @@ char* checaAtributosGraf() {
         return temp;
     }
 
-   	if (numIterations > 0 && numSeconds > 0) { 
-        temp = "Dentre (9) e (10), apenas uma das duas pode ter um valor.";
-        return temp;
-    }
-
    	if (reportData < 0 || reportData > 2) { 
         temp = "Debugagem deve ser (2=testador), (1=on) ou (0=off)";
         return temp;
@@ -417,7 +398,7 @@ char* checaAtributosGraf() {
         return temp;
     }
 
-   	if (isleProb >1 || isleProb < 0) { 
+   	if (isleProb > 1 || isleProb < 0) { 
         temp = "Probabilidade de gerar ilha deve estar no interavalo [0;1].";
         return temp;
     }
@@ -528,10 +509,6 @@ void queroInt(int valor) {
             numIterations = saida;
             break;
 
-        case 10:
-            numSeconds = saida;
-            break;
-
         default:
             break;
     }
@@ -599,7 +576,6 @@ void imprimeAtributos() {
     printf("(7) Distancia minima entre ilhas: %d\n", isleDist);
     printf("(8) Opção de debugagem (1 = ligado, 2 = testes automaticos): %d\n", reportData);
     printf("(9) Numero de iteracoes (< 0 -> infinito): %d\n",numIterations);
-    printf("(10) Numero de segundos (< 0 -> infinito): %d\n",numSeconds);
     printf("\n");
     printf("(11) Velocidade maxima da agua: %.2f\n",waterSpeed);
     printf("(12) Probabilidade de gerar uma ilha: %.2f\n", isleProb);

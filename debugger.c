@@ -51,6 +51,23 @@ float calculaFluxo(Rio *linha) {
 	return fluxoCalculado;
 }
 
+float calculaVelMediaRio(Rio **grade) {
+	int i, j, cnt;
+	float media;
+	cnt = 0;
+	media = 0.0;
+
+	for (i = 0; i < getNumLines(); i++)
+		for (j = 0; j < getNumColumns(); j++) {
+			if (grade[i][j].terreno == getWaterChar()) {
+				media += grade[i][j].velocidade;
+				cnt++;
+			}
+		}
+
+	return media/cnt;
+}
+
 /* calculaVelMedia: encontra a menor, a maior e a velocidade media de uma linha normalizada */
 float calculaVelMedia(Rio *linha) {
 	float velMedia, velMenor, velMaior, velAtual;

@@ -37,7 +37,9 @@ void calculaVarMargens(int esq, int dir);
 /*--6--*/
 void verificaFluxo(float fluxo);
 /*--7--*/
-void testeIntegridade(char** argv); 
+void testeIntegridade(char** argv);
+
+float calculaVelMediaRio(Rio **grade);
 
 /*--1--printInfoTopo: imprime o tamanho da matriz (linhas X colunas) e o tempo decorrido
        no topo da tela

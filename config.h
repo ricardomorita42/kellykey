@@ -40,7 +40,6 @@ Referências:
 #define NUMLINES ('-' + 'n' + 'l')
 #define NUMCOLUMNS ('-' + 'n' + 'c')
 #define NUMITERATIONS ('-' + 'i' + 't')
-#define NUMSECONDS ('-' + 'n' + 's')
 #define RIVERFLUX ('-' + 'f' + 'l')
 #define REPORTDATA ('-' + 'r' + 'd')
 #define IGNOREERROR ('-' + 'i' + 'e')
@@ -62,7 +61,6 @@ float getIsleProb();
 int getNumLines();              
 int getNumColumns();            
 int getNumIterations();         
-int getNumSeconds();
 float getRiverFlux();           
 int getReportData();            
 int getDebugMode();

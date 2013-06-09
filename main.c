@@ -56,7 +56,6 @@ int main (int argc, char **argv)
 	Rio **grade, **atual;
 	int primeiraLinha, rep;
 
-	/*float cronometro, tempoDecorrido = 0.0;*/
 	ALLEGRO_BITMAP *fundo = NULL;
 	ALLEGRO_BITMAP *canoa = NULL;
 
@@ -112,14 +111,12 @@ int main (int argc, char **argv)
 		grade = alocaGrade();
 		atual = alocaGrade();
 
-			/*arquivos de config com tempo ao inves de repeticoes*/
 			while (rep > 0 || rep < 0) {
         
         	atual = geraRio(primeiraLinha, linha, fluxo, atual);
 			grade = criaImagemGrade(atual, grade, primeiraLinha);
 			
-			al_clear_to_color(al_map_rgb(0, 0, 0));
-			/*segfaul no desenha qdo chamado novamente*/
+			al_flip_display();
 			desenhaRio(grade, fundo);
 			desenhaCanoa(canoa);
 			al_flip_display();

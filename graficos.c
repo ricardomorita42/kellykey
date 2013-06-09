@@ -33,6 +33,7 @@ Referencias:
 #include "config.h"
 #include "graficos.h"
 #include "grade.h"
+#include "debugger.h"
 #define D 5
 #define ALTURA 480
 #define LARGURA 640
@@ -41,17 +42,35 @@ ALLEGRO_DISPLAY *janela = NULL;
 
 int criaJanela(int largura, int altura)
 {
-
+    /*Iniciando Allegro 5*/
 	if (!al_init())
 		return -1;
 
+    /*Criando janela*/
 	janela = al_create_display(largura, altura);
 	if (!janela)
 		return -1;
+
+    /*Carregando addon de primitivas*/
 	if (!al_init_primitives_addon())
 		return -1;
+
+    /*Carregando addon de imagens*/
 	if (!al_init_image_addon())
 		return -1;
+
+    /*Carregando fonte*/
+    al_init_font_addon();
+    if (!al_init_ttf_addon()) {
+        fprintf(stderr,"nao consegui abrir o ttf_addon");
+        return -1;
+    }
+
+    /*Carregando teclado*/
+    if(!al_install_keyboard()) {
+        fprintf(stderr,"nao consegui iniciar o teclado");
+        return -1;
+    }
 
 	return 0;
 }
@@ -71,11 +90,7 @@ int desenhaMenu(int largura, int altura)
     ALLEGRO_EVENT_QUEUE *eventQueue;
     ALLEGRO_EVENT event;
 
-    /*Carregando teclado*/
-    if(!al_install_keyboard()) {
-        fprintf(stderr,"nao consegui iniciar o teclado");
-        exit(EXIT_FAILURE);
-    }
+    
 
     /*Iniciando a fila de eventos*/
     eventQueue= al_create_event_queue();
@@ -90,13 +105,7 @@ int desenhaMenu(int largura, int altura)
         fprintf(stderr,"nao consegui abrir a imagem de fundo");
         exit(EXIT_FAILURE);
     }
-
-    /*Carregando fonte*/
-    al_init_font_addon();
-    if (!al_init_ttf_addon()) {
-        fprintf(stderr,"nao consegui abrir o ttf_addon");
-        exit(EXIT_FAILURE);
-    }
+    
     fonte = al_load_font("fonts/metalord.ttf",56,0);
     if (!fonte) {
         fprintf(stderr,"nao consegui abrir o ttf_addon");
@@ -237,7 +246,7 @@ void desenhaSetup() {
         if (event.type == ALLEGRO_EVENT_KEY_DOWN && event.keyboard.keycode == ALLEGRO_KEY_ENTER) {
             if (trocar == FALSE) {
                 sscanf(str,"%d",&valor);
-                if (valor == 14) {
+                if (valor == 13) {
                     if (strlen(checaAtributosGraf()) == 0)
                         break;
                     for (i = 0; i < 4; i++)
@@ -249,7 +258,7 @@ void desenhaSetup() {
             }
 
             else {
-                if (valor <= 10) {
+                if (valor <= 9) {
                     sscanf(str2,"%d",&novo);
                     switch (valor) {
                         case 1:
@@ -279,17 +288,14 @@ void desenhaSetup() {
                         case 9:
                             setParametro("NUM_ITERATIONS",novo);
                             break;
-                        case 10:
-                            setParametro("NUM_SECONDS",novo);
-                            break;
                     }
                 }
 
                 else {
                     sscanf(str2,"%f",&novof); 
-                    if (valor == 11) setParametrof("H20_MAX_SPEED", novof);
-                    else if (valor == 12) setParametrof("PROB_GEN_ISLE",novof);
-                    else if (valor == 13) setParametrof("RIVER_FLUX",novof);
+                    if (valor == 10) setParametrof("H20_MAX_SPEED", novof);
+                    else if (valor == 11) setParametrof("PROB_GEN_ISLE",novof);
+                    else if (valor == 12) setParametrof("RIVER_FLUX",novof);
                 }
 
                 for (i = 0; i < 11; i++)
@@ -312,15 +318,14 @@ void desenhaSetup() {
         al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,220,5,0, "(7) Distancia minima entre ilhas: %d\n", getIsleDist());
         al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,240,5,0, "(8) Debugagem (1 = ligado, 2 = testes automaticos): %d\n", getReportData());
         al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,260,5,0, "(9) Numero de iteracoes (< 0 -> infinito): %d\n",getNumIterations());
-        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,280,5,0, "(10) Numero de segundos (< 0 -> infinito): %d\n",getNumSeconds());
-        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,300,5,0, "(11) Velocidade maxima da agua: %.2f\n",getWaterSpeed());
-        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,320,5,0, "(12) Probabilidade de gerar uma ilha: %.2f\n", getIsleProb());
-        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,340,5,0, "(13) Fluxo do Rio: %.2f\n", getRiverFlux());
-        al_draw_text(fonte3,al_map_rgb(255,255,255),50,370,ALLEGRO_ALIGN_LEFT,"Escolha (14 = canoar!):");
-        al_draw_text(fonte3,al_map_rgb(255,255,255),310,370,ALLEGRO_ALIGN_LEFT,str);
+        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,280,5,0, "(10) Velocidade maxima da agua: %.2f\n",getWaterSpeed());
+        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,300,5,0, "(11) Probabilidade de gerar uma ilha: %.2f\n", getIsleProb());
+        al_draw_justified_textf(fonte, al_map_rgb(255,255,255),75,500,320,5,0, "(12) Fluxo do Rio: %.2f\n", getRiverFlux());
+        al_draw_text(fonte3,al_map_rgb(255,255,255),50,350,ALLEGRO_ALIGN_LEFT,"Escolha (13 = canoar!):");
+        al_draw_text(fonte3,al_map_rgb(255,255,255),310,350,ALLEGRO_ALIGN_LEFT,str);
         if (trocar == TRUE) {
-            al_draw_text(fonte3,al_map_rgb(255,255,255),50,400,ALLEGRO_ALIGN_LEFT,"Digite o novo valor:");
-            al_draw_text(fonte3,al_map_rgb(255,255,255),290,400,ALLEGRO_ALIGN_LEFT,str2);
+            al_draw_text(fonte3,al_map_rgb(255,255,255),50,380,ALLEGRO_ALIGN_LEFT,"Digite o novo valor:");
+            al_draw_text(fonte3,al_map_rgb(255,255,255),290,380,ALLEGRO_ALIGN_LEFT,str2);
         }
         al_draw_text(fonte4,al_map_rgb(255,255,255),50,440,ALLEGRO_ALIGN_LEFT,checaAtributosGraf());
         al_flip_display();
@@ -331,9 +336,9 @@ void desenhaRio(Rio** grade, ALLEGRO_BITMAP *fundo)
 {
 	int i, j, k = al_get_bitmap_height(fundo)/(D);
 	static int altura = 0;
-	float margEsqInf[2], margEsqSup[2], margDirInf[2], margDirSup[2],
-		ilhaEsq[2], ilhaDir[2];
+	float margEsqInf[2], margEsqSup[2], margDirInf[2], margDirSup[2], ilhaEsq[2], ilhaDir[2];
 	ALLEGRO_VERTEX vtx[4];
+    ALLEGRO_FONT *fonte = NULL;
 	
 	/*criando fundo animado*/
 	altura++;
@@ -341,6 +346,13 @@ void desenhaRio(Rio** grade, ALLEGRO_BITMAP *fundo)
 		altura = 0;
 	al_draw_bitmap(fundo, 0, (-k*D + altura*D), 0);
 	al_draw_bitmap(fundo, 0, (altura*D), 0);
+
+    /*Carregando fontes para serem usadas*/
+    fonte = al_load_font("fonts/pirulen.ttf",12,0);
+    if (!fonte) {
+        fprintf(stderr,"nao consegui abrir o ttf_addon");
+        exit(EXIT_FAILURE);
+    }
 
 	for (i = 0; i < (getNumLines() - 2); i++)
 	{
@@ -386,6 +398,13 @@ void desenhaRio(Rio** grade, ALLEGRO_BITMAP *fundo)
 		if (ilhaEsq[0] != 0)
 			al_draw_filled_rectangle(ilhaEsq[1], ilhaEsq[0]-D, ilhaDir[1], ilhaDir[0], al_map_rgb(100,100,0));
 	}
+    
+    if (getReportData()) {
+        al_draw_justified_textf(fonte,al_map_rgb(255,255,255),10,10,10,10,0, "%d x %d", LARGURA, ALTURA);
+        al_draw_justified_textf(fonte,al_map_rgb(255,255,255),480,480,10,10,0, "Vel Media: %.3f", calculaVelMediaRio(grade));
+        al_draw_justified_textf(fonte,al_map_rgb(255,255,255),240,240,10,10,0, "Fluxo: %.2f", getRiverFlux());
+    }
+    al_destroy_font(fonte);
 }
 
 void desenhaCanoa(ALLEGRO_BITMAP *canoa)
