@@ -116,11 +116,11 @@ int main (int argc, char **argv)
         	atual = geraRio(primeiraLinha, linha, fluxo, atual);
 			grade = criaImagemGrade(atual, grade, primeiraLinha);
 			
-			al_clear_to_color(al_map_rgb(0, 0, 0));
 			desenhaRio(grade, fundo);
 			desenhaCanoa(canoa);
 			al_flip_display();
 			al_rest(0.05);
+			al_clear_to_color(al_map_rgb(0, 0, 0));
 		
         	primeiraLinha++;
         	if (primeiraLinha == getNumLines()) 
