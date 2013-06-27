@@ -32,15 +32,18 @@ Referencias:
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_primitives.h>
-#include <allegro5/allegro_image.h>
 #include "rio.h"
 #include "grade.h"
 #include "config.h"
 #include "debugger.h"
 #include "graficos.h"
 #include "grade.h"
+#include "controls.h"
 #define LARGURA 640
 #define ALTURA 480
+
+
+ALLEGRO_DISPLAY *janela = NULL;
 
 /*Prototipos*/
 void testeIntegridade(char** argv);
@@ -49,15 +52,16 @@ void menu();
 /*MAIN*/
 int main (int argc, char **argv) 
 {
-	int i, checagem, seed, depuracao, linha;
+	int i, checagem, seed, depuracao, linha, primeiraLinha, rep;
 	char nomeArquivo[MAXLINE];
 	float fluxo;
 	FILE* entrada;
 	Rio **grade, **atual;
-	int primeiraLinha, rep;
 
 	ALLEGRO_BITMAP *fundo = NULL;
 	ALLEGRO_BITMAP *canoa = NULL;
+	ALLEGRO_TIMER *timer = NULL;
+	ALLEGRO_EVENT_QUEUE *fila = NULL;
 
     strcpy(nomeArquivo,"debug/config.txt");
 
@@ -77,9 +81,9 @@ int main (int argc, char **argv)
     setEntradas(entrada, argc, argv);
 	depuracao = getReportData();
 
-	if (criaJanela(LARGURA, ALTURA) == -1) {
+	if (criaJanela(janela, LARGURA, ALTURA) == -1) {
 		fprintf(stderr, "Desculpe, nao consegui gerar uma janela...\n");
-		exit(-1);
+		exit(EXIT_FAILURE);
 	}
 	
     /*Criando um menu para o jogo*/
@@ -105,19 +109,37 @@ int main (int argc, char **argv)
 
 		/*carregando imagens apenas uma vez*/
 		fundo = al_load_bitmap("textures/texture.png");
-		canoa = al_load_bitmap("images/canoe_b.png");
+		canoa = al_load_bitmap("images/canoe_c.tga");
 
 		/*alocando grade de atualizacao do rio*/
 		grade = alocaGrade();
 		atual = alocaGrade();
 
-			while (rep > 0 || rep < 0) {
+		/*criando uma fila de eventos*/
+		fila = al_create_event_queue();
+		if(!fila) {
+			fprintf(stderr, "ERRO: Nao consegui criar uma fila de eventos!\n");
+			exit(EXIT_FAILURE);
+		}
+
+		/*criando um timer*/
+		timer = al_create_timer(1.0/60);
+		if(!timer) {
+			fprintf(stderr, "ERRO: Nao consegui criar um timer!\n");
+			exit(EXIT_FAILURE);	
+		}
+		al_register_event_source(fila, al_get_keyboard_event_source());
+		al_register_event_source(fila, al_get_timer_event_source(timer));
+		al_start_timer(timer);
+
+		/*======== O JOGO ===========*/
+		while (rep > 0 || rep < 0) {
         
         	atual = geraRio(primeiraLinha, linha, fluxo, atual);
 			grade = criaImagemGrade(atual, grade, primeiraLinha);
 			
 			desenhaRio(grade, fundo);
-			desenhaCanoa(canoa);
+			desenhaCanoa(canoa, movimenta(fila, timer));
 			al_flip_display();
 			al_rest(0.05);
 			al_clear_to_color(al_map_rgb(0, 0, 0));
@@ -141,7 +163,7 @@ int main (int argc, char **argv)
 	}
     
     fclose(entrada);
-	destroiJanela();
+	al_destroy_display(janela);
 	return 0;
 }
 
@@ -156,7 +178,7 @@ void menu() {
     }
 
     else if (opcao == 3) {
-       destroiJanela();
+       al_destroy_display(janela);
        exit(1);
     }
 }

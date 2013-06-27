@@ -3,8 +3,8 @@ CC=gcc
 ALLEGRO=-lallegro -lallegro_main -lallegro_primitives -lallegro_image -lallegro_font -lallegro_ttf 
 #=================================
 
-main: main.o rio.o grade.o debugger.o config.o graficos.o 
-	$(CC) $(CFLAGS) main.o rio.o grade.o debugger.o config.o graficos.o -o main -lm $(ALLEGRO) && rm *.o
+main: main.o rio.o grade.o debugger.o config.o graficos.o controls.o
+	$(CC) $(CFLAGS) main.o rio.o grade.o debugger.o config.o graficos.o controls.o -o main -lm $(ALLEGRO) 
 
 main.o: main.c rio.h
 	$(CC) $(CFLAGS) -c main.c
@@ -22,7 +22,10 @@ config.o: config.c config.h
 	$(CC) $(CFLAGS) -c config.c
 
 graficos.o: graficos.c graficos.h
-	$(CC) $(CFLAGS) -c graficos.c 
+	$(CC) $(CFLAGS) -c graficos.c
+
+controls.o: controls.c controls.h
+	$(CC) $(CFLAGS) -c controls.c
 
 clean:
-	-rm *.o
+	rm *.o

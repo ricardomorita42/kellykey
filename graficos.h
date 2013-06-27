@@ -24,16 +24,14 @@ Referencias:
 /*--1--*/
 void desenhaRio(Rio**, ALLEGRO_BITMAP*);
 /*--2--*/
-void desenhaCanoa(ALLEGRO_BITMAP*);
+void desenhaCanoa(ALLEGRO_BITMAP*, int, float);
 /*--3--*/
 int desenhaMenu(int,int);
 /*--4--*/
 void desenhaSetup();
 /*--5--*/
-int criaJanela(int,int);
+int criaJanela(ALLEGRO_DISPLAY*, int, int);
 /*--6--*/
-void destroiJanela();
-/*--7--*/
 void desenhaTeste(int);
 
 
@@ -49,7 +47,5 @@ e terrenos em suas posicoes, e uma imagem, utilizada como textura das margens,
 
 /*-- 5 -- criaJanela: Cria uma janela e inicializa addons a serem utilizados durante o jogo.*/
 
-/*-- 6 -- destroiJanel: Destroi janela criada.*/
-
-/*-- 7 -- desenhaTeste: Desenha na tela os modos de teste que estão sendo executados durante 
+/*-- 6 -- desenhaTeste: Desenha na tela os modos de teste que estão sendo executados durante 
 a bateria de testes de robustez.*/

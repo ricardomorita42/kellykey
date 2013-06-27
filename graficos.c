@@ -23,6 +23,7 @@ Referencias:
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_font.h>
@@ -37,10 +38,11 @@ Referencias:
 #define D 5
 #define ALTURA 480
 #define LARGURA 640
+#define FALSE 0
+#define TRUE 1
 
-ALLEGRO_DISPLAY *janela = NULL;
 
-int criaJanela(int largura, int altura)
+int criaJanela(ALLEGRO_DISPLAY *janela, int largura, int altura)
 {
     /*Iniciando Allegro 5*/
 	if (!al_init())
@@ -50,6 +52,7 @@ int criaJanela(int largura, int altura)
 	janela = al_create_display(largura, altura);
 	if (!janela)
 		return -1;
+	al_set_window_title(janela, "..:: Extreme Canoeing ::..");
 
     /*Carregando addon de primitivas*/
 	if (!al_init_primitives_addon())
@@ -71,12 +74,7 @@ int criaJanela(int largura, int altura)
         fprintf(stderr,"nao consegui iniciar o teclado");
         return -1;
     }
-
 	return 0;
-}
-
-void destroiJanela() {
-    al_destroy_display(janela);
 }
 
 int desenhaMenu(int largura, int altura)
@@ -407,16 +405,16 @@ void desenhaRio(Rio** grade, ALLEGRO_BITMAP *fundo)
     al_destroy_font(fonte);
 }
 
-void desenhaCanoa(ALLEGRO_BITMAP *canoa)
+void desenhaCanoa(ALLEGRO_BITMAP *canoa, int mov, float angulo)
 {
-	int altura;
+	int H;
 	if (!canoa)
 	{
 		fprintf(stderr, "Oopsie, nao consegui desenhar a canoa. Por acaso ela existe?\n");
 		exit(EXIT_FAILURE);
 	}
-	altura = al_get_bitmap_height(canoa);
-	al_draw_bitmap(canoa, LARGURA/2, (ALTURA - altura), 0);
+	H = al_get_bitmap_height(canoa);
+	al_draw_rotated_bitmap(canoa, 0, 0, LARGURA/2 + mov, (ALTURA - H), angulo,  0);
 }
 
 void desenhaTeste(int teste)

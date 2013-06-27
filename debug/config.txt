@@ -8,8 +8,8 @@ NUM_COLUMNS = 120               ; número de colunas do mapa
 
 ;Define os limites para os quais a terra pode chegar.
 ;Respeite os valores permitidos ou o programa reclamará.
-LEFT_MARGIN_LIMIT = 55         ;entre 0 e 35
-RIGHT_MARGIN_LIMIT = 80         ;entre 65 e 99
+LEFT_MARGIN_LIMIT = 35
+RIGHT_MARGIN_LIMIT = 85
 
 ;define a velocidade maxima que a agua atinge
 H20_MAX_SPEED = 20.3
@@ -26,7 +26,7 @@ REFRESH_RATE = 10000              ;em microssegundos
 MIN_ISLE_DIST = 5               ; pelo menos (n-1) linhas entre duas linhas geradas
 
 ;Após a dist. mínima entre duas ilhas, esta é a chance de gerar outra ilha.
-PROB_GEN_ISLE = 0.25
+PROB_GEN_ISLE = 0.2
 
 ;Caracteres que definem o tipo de terreno
 DEF_WATER = .                   ; lembrar de não usar 

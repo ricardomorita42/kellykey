@@ -150,7 +150,7 @@ Rio* geraIlha(int n, int esq, int dir, Rio *linNova)
 	diff = (dir-1) - (esq+1);
 	P = rand() / ((double)RAND_MAX + 1);
 	ponto = (int)((rand() / ((double)RAND_MAX + 1)) * diff + esq + 2);
-	tamanhoIlha = (int)(((double)rand() / RAND_MAX) * diff / 1.6 + 5);
+	tamanhoIlha = (int)(((double)rand() / RAND_MAX) * diff / 2 + 5);
 	
 	/*Se a probabilidade calculada for maior que a de gerar uma ilha, gere-a*/
 	if (P > 1 - getIsleProb())
