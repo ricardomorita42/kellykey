@@ -27,6 +27,7 @@ Referencias:
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_font.h>
@@ -54,7 +55,7 @@ int main (int argc, char **argv)
 {
 	int i, checagem, seed, depuracao, linha, primeiraLinha, rep;
 	char nomeArquivo[MAXLINE];
-	float fluxo;
+	float fluxo, *Vi;
 	FILE* entrada;
 	Rio **grade, **atual;
 
@@ -131,6 +132,7 @@ int main (int argc, char **argv)
 		al_register_event_source(fila, al_get_keyboard_event_source());
 		al_register_event_source(fila, al_get_timer_event_source(timer));
 		al_start_timer(timer);
+		i = 0;
 
 		/*======== O JOGO ===========*/
 		while (rep > 0 || rep < 0) {
@@ -139,9 +141,13 @@ int main (int argc, char **argv)
 			grade = criaImagemGrade(atual, grade, primeiraLinha);
 			
 			desenhaRio(grade, fundo);
-			desenhaCanoa(canoa, movimenta(fila, timer));
+			Vi = posicionaCanoa(canoa, movimenta(fila, timer), grade);
+			desenhaCanoa(canoa, Vi);
+			if (i % 5 == 0)
+				printf("Vv: %f   Vh: %f\n", Vi[0]*sin(Vi[1]), Vi[0]*cos(Vi[1]));
+
 			al_flip_display();
-			al_rest(0.05);
+			al_rest(0.2);
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 		
         	primeiraLinha++;
@@ -154,6 +160,7 @@ int main (int argc, char **argv)
 
 			if (rep > 0)
 				rep--;
+			i++;
 		}
 		/*liberando o entulho*/
 		freeGrade(grade);

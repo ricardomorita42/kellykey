@@ -24,7 +24,7 @@ Referencias:
 /*--1--*/
 void desenhaRio(Rio**, ALLEGRO_BITMAP*);
 /*--2--*/
-void desenhaCanoa(ALLEGRO_BITMAP*, int, float);
+void desenhaCanoa(ALLEGRO_BITMAP*, float*);
 /*--3--*/
 int desenhaMenu(int,int);
 /*--4--*/

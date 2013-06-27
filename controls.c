@@ -23,15 +23,20 @@ Referencias:
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_image.h>
-#include "controls.h"
 #include "rio.h"
+#include "controls.h"
+#include "grade.h"
 #include "graficos.h"
+#define PI2 1.570796327
+#define D 5
+#define LARGURA 640
 #define FALSE 0
 #define TRUE 1
 
@@ -39,7 +44,9 @@ int* movimenta(ALLEGRO_EVENT_QUEUE *fila, ALLEGRO_TIMER *timer)
 {
 	ALLEGRO_EVENT ev;
 	static int tecla = 0;
-	int mov[2] = {0, 0};
+	int *mov = malloc(2*sizeof(int));
+	mov[0] = 0;
+	mov[1] = 0;
 
 	/*enquanto houver um evento na fila de eventos*/
 	while (!al_is_event_queue_empty(fila))
@@ -79,7 +86,28 @@ int* movimenta(ALLEGRO_EVENT_QUEUE *fila, ALLEGRO_TIMER *timer)
 	return mov;
 }
 
-void posicionaCanoa()
+float* posicionaCanoa(ALLEGRO_BITMAP *canoa, int *remadas, Rio **grade)
 {
-	float Vi, teta
+	float Va[2], vd, ve;
+	static float Vi[2] = {0, PI2};
+	static int posicao = LARGURA/(2*D);
+
+	ve = grade[1][posicao-1].velocidade + remadas[0] * 0.8;
+	vd = grade[1][posicao+2].velocidade + remadas[1] * 0.8;
+
+	printf("ve: %f  vd: %f  ", ve, vd);
+
+	Va[0] = (vd + ve)/2;
+	Va[1] = atan(al_get_bitmap_width(canoa)/(vd - ve));
+
+	printf("angulo: %f\n", Va[1]);
+
+	Vi[0] = Vi[0] * 0.8 + Va[0];
+	Vi[1] = (Va[1]*0.5 + Vi[1])/1.5;
+
+	posicao = Vi[0]*cos(Vi[1]);
+	printf("posicao: %d  ", posicao);
+	free (remadas);
+
+	return Vi;
 }

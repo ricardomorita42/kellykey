@@ -12,7 +12,7 @@ LEFT_MARGIN_LIMIT = 35
 RIGHT_MARGIN_LIMIT = 85
 
 ;define a velocidade maxima que a agua atinge
-H20_MAX_SPEED = 20.3
+H20_MAX_SPEED = 2
 
 ;Define o seed de geração das entidades do rio.
 ;Não tem impacto direto com a dificuldade

@@ -396,7 +396,7 @@ void desenhaRio(Rio** grade, ALLEGRO_BITMAP *fundo)
 		if (ilhaEsq[0] != 0)
 			al_draw_filled_rectangle(ilhaEsq[1], ilhaEsq[0]-D, ilhaDir[1], ilhaDir[0], al_map_rgb(100,100,0));
 	}
-    
+    /*modo debug ativado*/
     if (getReportData()) {
         al_draw_justified_textf(fonte,al_map_rgb(255,255,255),10,10,10,10,0, "%d x %d", LARGURA, ALTURA);
         al_draw_justified_textf(fonte,al_map_rgb(255,255,255),480,480,10,10,0, "Vel Media: %.3f", calculaVelMediaRio(grade));
@@ -405,7 +405,7 @@ void desenhaRio(Rio** grade, ALLEGRO_BITMAP *fundo)
     al_destroy_font(fonte);
 }
 
-void desenhaCanoa(ALLEGRO_BITMAP *canoa, int mov, float angulo)
+void desenhaCanoa(ALLEGRO_BITMAP *canoa, float *Vi)
 {
 	int H;
 	if (!canoa)
@@ -414,7 +414,7 @@ void desenhaCanoa(ALLEGRO_BITMAP *canoa, int mov, float angulo)
 		exit(EXIT_FAILURE);
 	}
 	H = al_get_bitmap_height(canoa);
-	al_draw_rotated_bitmap(canoa, 0, 0, LARGURA/2 + mov, (ALTURA - H), angulo,  0);
+	al_draw_rotated_bitmap(canoa, 0, 0, LARGURA/2 + (Vi[0] * cos(Vi[1])), (ALTURA - H), Vi[1],  0);
 }
 
 void desenhaTeste(int teste)
