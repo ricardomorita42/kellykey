@@ -88,25 +88,31 @@ int* movimenta(ALLEGRO_EVENT_QUEUE *fila, ALLEGRO_TIMER *timer)
 
 float* posicionaCanoa(ALLEGRO_BITMAP *canoa, int *remadas, Rio **grade)
 {
-	float Va[2], vd, ve;
-	static float Vi[2] = {0, PI2};
-	static int posicao = LARGURA/(2*D);
+	float Va[2], vd, ve, incremento;
+	static float Vi[2] = {0, 0};
+ 	static int posicao= LARGURA/(2*D);
 
 	ve = grade[1][posicao-1].velocidade + remadas[0] * 0.8;
 	vd = grade[1][posicao+2].velocidade + remadas[1] * 0.8;
 
-	printf("ve: %f  vd: %f  ", ve, vd);
+	printf("--> posicao: %d  ve: %f  vd: %f  \n", posicao, ve, vd);
+
 
 	Va[0] = (vd + ve)/2;
-	Va[1] = atan(al_get_bitmap_width(canoa)/(vd - ve));
+	Va[1] = atan((vd - ve)/al_get_bitmap_width(canoa));
 
-	printf("angulo: %f\n", Va[1]);
+/* 	printf("angulo: %f  cos: %f\n", Va[1], sin(Va[1]));
+ */
 
 	Vi[0] = Vi[0] * 0.8 + Va[0];
-	Vi[1] = (Va[1]*0.5 + Vi[1])/1.5;
+	Vi[1] = Va[1] * 0.3 + Vi[1] * 0.7;
+	incremento = Vi[0] * sin(Vi[1]);
 
-	posicao = Vi[0]*cos(Vi[1]);
-	printf("posicao: %d  ", posicao);
+	if (grade[1][posicao + (int)incremento].velocidade != 0)
+		posicao = posicao + incremento; 
+
+/* 	printf("posicao: %d  ang: %f\n", posicao, sin(Vi[1]));
+ */
 	free (remadas);
 
 	return Vi;

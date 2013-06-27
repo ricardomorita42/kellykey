@@ -144,7 +144,7 @@ int main (int argc, char **argv)
 			Vi = posicionaCanoa(canoa, movimenta(fila, timer), grade);
 			desenhaCanoa(canoa, Vi);
 			if (i % 5 == 0)
-				printf("Vv: %f   Vh: %f\n", Vi[0]*sin(Vi[1]), Vi[0]*cos(Vi[1]));
+				printf("Vvert: %f  Vhoriz: %f\n", Vi[0]*cos(Vi[1]), Vi[0]*sin(Vi[1]));
 
 			al_flip_display();
 			al_rest(0.2);

@@ -408,13 +408,15 @@ void desenhaRio(Rio** grade, ALLEGRO_BITMAP *fundo)
 void desenhaCanoa(ALLEGRO_BITMAP *canoa, float *Vi)
 {
 	int H;
+	static int posicao = 0;
 	if (!canoa)
 	{
 		fprintf(stderr, "Oopsie, nao consegui desenhar a canoa. Por acaso ela existe?\n");
 		exit(EXIT_FAILURE);
 	}
 	H = al_get_bitmap_height(canoa);
-	al_draw_rotated_bitmap(canoa, 0, 0, LARGURA/2 + (Vi[0] * cos(Vi[1])), (ALTURA - H), Vi[1],  0);
+	posicao += Vi[0] * sin(Vi[1]);
+	al_draw_rotated_bitmap(canoa, 0, 0, LARGURA/2 + posicao, (ALTURA - H), Vi[1],  0);
 }
 
 void desenhaTeste(int teste)
