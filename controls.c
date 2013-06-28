@@ -110,11 +110,6 @@ float* posicionaCanoa(ALLEGRO_BITMAP *canoa, int *remadas, Rio **grade, int pos)
 		return Vi;
 	}
 
-	
-/* 	printf("--> posicao: %d  ve: %f  vd: %f  \n", posicao, ve, vd);
- */
-
-
 	Va[0] = (vd + ve)/2;
 	Va[1] = atan((vd - ve)/al_get_bitmap_width(canoa));
 
@@ -128,35 +123,19 @@ float* posicionaCanoa(ALLEGRO_BITMAP *canoa, int *remadas, Rio **grade, int pos)
 int testaColisao(Rio** grade, int pos)
 {
 	int i;
-	/*for (i = 0; i < getNumLines()-1; i++)
-	{
-		printf("linha %d: ", i);
-		for (j = 0; j < getNumColumns()-1; j++)
-		{
-			if (grade[i][j].terreno == getIsleChar())
-				printf("@");
-		}
-		printf("\n");
-	}*/
-
 	/*colisao com ilha*/
 	for (i = 0; i < 5; i++)
 	{
 		if (grade[84+i][(int)(pos/(float)D)+2].terreno == getIsleChar())
-		{
-			printf("bateu na ilha!!!\n");
 			return TRUE;
-		}
 	}
+
+	/*colisao com margem*/
 	for (i = 0; i < 5; i++)
 	{
 		if (grade[85+i][(int)(pos/D)].terreno == getEarthChar()
 		|| grade[85+i][(int)(pos/D)+3].terreno == getEarthChar())
-		{
-			printf("bateu na margem!!!\n");
 			return TRUE;
-		}
 	}
-
 	return FALSE;
 }

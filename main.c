@@ -33,6 +33,8 @@ Referencias:
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
 #include "rio.h"
 #include "grade.h"
 #include "config.h"
@@ -42,6 +44,8 @@ Referencias:
 #include "controls.h"
 #define LARGURA 640
 #define ALTURA 480
+#define TRUE 1
+#define FALSE 0
 
 
 ALLEGRO_DISPLAY *janela = NULL;
@@ -64,6 +68,10 @@ int main (int argc, char **argv)
 	ALLEGRO_BITMAP *gameover = NULL;
 	ALLEGRO_TIMER *timer = NULL;
 	ALLEGRO_EVENT_QUEUE *fila = NULL;
+	ALLEGRO_SAMPLE *musica = NULL;
+	ALLEGRO_SAMPLE *ending = NULL;
+	ALLEGRO_SAMPLE *smash = NULL;
+	ALLEGRO_FONT *fonte = NULL;
 
     strcpy(nomeArquivo,"debug/config.txt");
 
@@ -120,22 +128,39 @@ int main (int argc, char **argv)
 
 		/*criando uma fila de eventos*/
 		fila = al_create_event_queue();
-		if(!fila) {
+		if (!fila) {
 			fprintf(stderr, "ERRO: Nao consegui criar uma fila de eventos!\n");
 			exit(EXIT_FAILURE);
 		}
 
 		/*criando um timer*/
 		timer = al_create_timer(1.0/60);
-		if(!timer) {
+		if (!timer) {
 			fprintf(stderr, "ERRO: Nao consegui criar um timer!\n");
 			exit(EXIT_FAILURE);	
 		}
+		
+		/*carregando arquivos de audio*/
+		musica = al_load_sample("music/tirol.ogg");
+		ending = al_load_sample("music/gameover.ogg");
+		smash = al_load_sample("music/smash.ogg");
+		if (!musica || !ending || !smash) {
+			fprintf(stderr, "ERRO: Nao consegui carregar o audio do jogo!\n");
+			exit(EXIT_FAILURE);
+		}
+		
+		/*carregando fonte*/
+    	fonte = al_load_font("fonts/pirulen.ttf",30,0);
+    	if (!fonte) {
+        	fprintf(stderr,"nao consegui encontrar a fonte pirulen.ttf\n");
+        	exit(EXIT_FAILURE);
+   		}
+
 		al_register_event_source(fila, al_get_keyboard_event_source());
 		al_register_event_source(fila, al_get_timer_event_source(timer));
 		al_start_timer(timer);
-		i = 0;
 		pos = LARGURA/2;
+		al_play_sample(musica, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);
 
 		/*======== O JOGO ===========*/
 		while (rep > 0 || rep < 0) {
@@ -147,23 +172,22 @@ int main (int argc, char **argv)
 			Vi = posicionaCanoa(canoa, movimenta(fila, timer), grade, pos);
 			pos = desenhaCanoa(canoa, Vi);
 			crash = testaColisao(grade, pos);
-			if (desenhaInfo(crash, Vi[0] * cos(Vi[1])) == 0)
+			if (desenhaInfo(crash, Vi[0] * cos(Vi[1]), primeiraLinha) == 0)
 			{
+				al_destroy_sample(musica);
 				al_rest(1.0);
 				break;
 			}
 
-/* 			if (i % 5 == 0)
- * 				printf("Vvert: %f  Vhoriz: %f\n", Vi[0]*cos(Vi[1]), Vi[0]*sin(Vi[1]));
- */
 			al_flip_display();
 			refresh  = 1/(Vi[0]*cos(Vi[1]) + 5);
 			al_rest(refresh);
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 			
-			if (crash == 1)				
+			if (crash == 1) {
+				al_play_sample(smash, 0.5, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
 				continue;
-
+			}
 			primeiraLinha++;
         	if (primeiraLinha == getNumLines()) 
 				primeiraLinha = 0;
@@ -174,17 +198,20 @@ int main (int argc, char **argv)
 
 			if (rep > 0)
 				rep--;
-			i++;
 		}
 		al_clear_to_color(al_map_rgb(0, 0, 0));
 		al_draw_bitmap(gameover, 0, 0, 0);
 		al_flip_display();
-		al_rest(3.0);
+		al_play_sample(ending, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+		al_rest(5.0);
+
 		/*liberando o entulho*/
 		freeGrade(grade);
 		freeGrade(atual);
 		al_destroy_bitmap(fundo);
 		al_destroy_bitmap(canoa);
+		al_destroy_sample(ending);
+		al_destroy_sample(smash);
 	}
     
     fclose(entrada);

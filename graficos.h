@@ -34,7 +34,7 @@ int criaJanela(ALLEGRO_DISPLAY*, int, int);
 /*--6--*/
 void desenhaTeste(int);
 /*--7--*/
-int desenhaInfo(int, float);
+int desenhaInfo(int, float, int);
 
 
 /*-- 1 -- desenhaRio: Utiliza uma grade, ja com as velocidades calculadas

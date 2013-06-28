@@ -30,6 +30,8 @@ Referencias:
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_image.h>
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
 #include "rio.h"
 #include "config.h"
 #include "graficos.h"
@@ -74,6 +76,22 @@ int criaJanela(ALLEGRO_DISPLAY *janela, int largura, int altura)
         fprintf(stderr,"nao consegui iniciar o teclado");
         return -1;
     }
+
+	/*Carregando som*/
+	if (!al_install_audio()) {
+		fprintf(stderr, "nao consegui inicializar o audio");
+		return -1;
+	}
+	if (!al_init_acodec_addon()) {
+		fprintf(stderr, "nao consegui inicializar codecs de audio");
+		return -1;
+	}
+	if (!al_reserve_samples(2)) {
+	
+		fprintf(stderr, "nao consegui reservar instancias para os samples");
+		return -1;
+	}
+
 	return 0;
 }
 
@@ -349,8 +367,8 @@ void desenhaRio(Rio** grade, ALLEGRO_BITMAP *fundo, int linha)
     /*Carregando fontes para serem usadas*/
     fonte = al_load_font("fonts/pirulen.ttf",12,0);
     if (!fonte) {
-        fprintf(stderr,"nao consegui abrir o ttf_addon");
-        exit(EXIT_FAILURE);
+        fprintf(stderr,"nao consegui abrir a fonte pirulen.ttf");
+		exit(EXIT_FAILURE);
     }
 
 	for (i = 0; i < (getNumLines() - 2); i++)
@@ -474,36 +492,58 @@ void desenhaTeste(int teste)
 	}
 	al_flip_display();
 	al_rest(2.0);
+	al_destroy_font(fonte);
 }
 
-int desenhaInfo(int bateu, float velocidade)
+int desenhaInfo(int bateu, float velocidade, int primeiraLinha)
 {
-	static int hp = 0, vidas = 3;
+	static int hp = 0, vidas = 3, paft = 0, score = 0, anterior = -1;
 	ALLEGRO_BITMAP *heart = al_load_bitmap("images/heart.png");
 	ALLEGRO_BITMAP *heartoff = al_load_bitmap("images/heartoff.png");
 	ALLEGRO_FONT *fonte = NULL;
+	ALLEGRO_FONT *fonte2 = NULL;
  
-    /*Carregando fonte para ser usada*/
-    fonte = al_load_font("fonts/pirulen.ttf",12,0);
+    /*Carregando fontes a serem usadas*/
+    fonte = al_load_font("fonts/pirulen.ttf",14,0);
     if (!fonte) {
-        fprintf(stderr,"nao consegui encontrar a fonte");
+        fprintf(stderr,"nao consegui encontrar a fonte pirulen.ttf\n");
         exit(EXIT_FAILURE);
     }
-/* 	al_draw_text(fonte,al_map_rgb(255,255,255),50,30,ALLEGRO_ALIGN_RIGHT,"Velocidade: %.2f", velocidade);
- */
-	al_draw_justified_textf(fonte,al_map_rgb(255,255,255),10,10,10,10,0, "Velocidade: %.2f", velocidade);
+	fonte2 = al_load_font("fonts/bangers.ttf",50,0);
+	if (!fonte2) {
+		fprintf(stderr, "nao consegui encontrar a fonte bangers.ttf\n");
+		exit(EXIT_FAILURE);
+	}
+	
+	/*imprime velocidade vertical do barco e score na tela*/
+	if (anterior != primeiraLinha)
+		score += (int)(velocidade/2);
+	al_draw_textf(fonte,al_map_rgb(255,255,0),LARGURA-13,ALTURA-170,ALLEGRO_ALIGN_RIGHT,"vel: %d",(int)velocidade);
+	al_draw_textf(fonte,al_map_rgb(255,255,0),LARGURA-13,ALTURA-120,ALLEGRO_ALIGN_RIGHT,"score: %d",score);
 
-	/*HP da canoa*/
+	/*desenha barra de HP da canoa*/
 	al_draw_rectangle(LARGURA-60, ALTURA-300, LARGURA-20, ALTURA-200, al_map_rgb(0,0,0), 3);
 	if (bateu == TRUE)
+	{
 		hp += 2;
+		paft = 15;
+	}
 	al_draw_filled_rectangle(LARGURA-59, (ALTURA-298)+hp, LARGURA-22, ALTURA-202, al_map_rgb(180,0,0));
 
-	if (hp == 100)
+	/*desenha onomatopeia*/
+	if (paft != 0)
+	{
+		al_draw_text(fonte2, al_map_rgb(255,255-(paft*10), paft*10), LARGURA/2, (ALTURA-300)-paft*8, ALLEGRO_ALIGN_CENTER, "PAFT!");
+		paft--;
+	}
+
+	/*perde uma vida*/
+	if (hp == 98)
 	{
 		vidas--;
 		hp = 0;
 	}
+
 	/*vidas do jogador*/
 	switch(vidas)
 	{
@@ -530,5 +570,8 @@ int desenhaInfo(int bateu, float velocidade)
 		default:
 			break;
 	}
+	al_destroy_font(fonte);
+	al_destroy_font(fonte2);
+	anterior = primeiraLinha;
 	return vidas;
 }
