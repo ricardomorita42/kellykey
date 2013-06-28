@@ -57,7 +57,8 @@ void menu();
 /*MAIN*/
 int main (int argc, char **argv) 
 {
-	int i, checagem, seed, depuracao, linha, primeiraLinha, rep, pos, crash;
+	int i, checagem, seed, depuracao, linha, primeiraLinha, rep, 
+		pos, crash, velocidade, score = 0;
 	char nomeArquivo[MAXLINE];
 	float fluxo, refresh, *Vi;
 	FILE* entrada;
@@ -71,6 +72,8 @@ int main (int argc, char **argv)
 	ALLEGRO_SAMPLE *musica = NULL;
 	ALLEGRO_SAMPLE *ending = NULL;
 	ALLEGRO_SAMPLE *smash = NULL;
+	ALLEGRO_SAMPLE *intro = NULL;
+	ALLEGRO_SAMPLE *drama = NULL;
 	ALLEGRO_FONT *fonte = NULL;
 
     strcpy(nomeArquivo,"debug/config.txt");
@@ -95,6 +98,14 @@ int main (int argc, char **argv)
 		fprintf(stderr, "Desculpe, nao consegui gerar uma janela...\n");
 		exit(EXIT_FAILURE);
 	}
+
+	/*Chamando musica inicial do jogo*/
+	intro = al_load_sample("music/guile.ogg");
+	if (!intro) {
+		fprintf(stderr, "Nao consegui carregar a musica de abertura\n");
+		exit(EXIT_FAILURE);
+	}
+	al_play_sample(intro, 0.8, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, 0);
 	
     /*Criando um menu para o jogo*/
     if (depuracao != 2 && getDebugMode() != 1) 
@@ -144,13 +155,14 @@ int main (int argc, char **argv)
 		musica = al_load_sample("music/tirol.ogg");
 		ending = al_load_sample("music/gameover.ogg");
 		smash = al_load_sample("music/smash.ogg");
-		if (!musica || !ending || !smash) {
+		drama = al_load_sample("music/dramatic.ogg");
+		if (!musica || !ending || !smash || !drama) {
 			fprintf(stderr, "ERRO: Nao consegui carregar o audio do jogo!\n");
 			exit(EXIT_FAILURE);
 		}
 		
 		/*carregando fonte*/
-    	fonte = al_load_font("fonts/pirulen.ttf",30,0);
+    	fonte = al_load_font("fonts/pirulen.ttf",26,0);
     	if (!fonte) {
         	fprintf(stderr,"nao consegui encontrar a fonte pirulen.ttf\n");
         	exit(EXIT_FAILURE);
@@ -160,7 +172,10 @@ int main (int argc, char **argv)
 		al_register_event_source(fila, al_get_timer_event_source(timer));
 		al_start_timer(timer);
 		pos = LARGURA/2;
+		al_destroy_sample(intro);
 		al_play_sample(musica, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);
+		i = 4;
+		checagem = i;
 
 		/*======== O JOGO ===========*/
 		while (rep > 0 || rep < 0) {
@@ -172,15 +187,39 @@ int main (int argc, char **argv)
 			Vi = posicionaCanoa(canoa, movimenta(fila, timer), grade, pos);
 			pos = desenhaCanoa(canoa, Vi);
 			crash = testaColisao(grade, pos);
-			if (desenhaInfo(crash, Vi[0] * cos(Vi[1]), primeiraLinha) == 0)
+			velocidade = (int)(Vi[0] * cos(Vi[1]));
+
+			if (crash == 0)
+				score += velocidade/2;
+
+			if (desenhaInfo(crash, velocidade, score) == 0)
 			{
 				al_destroy_sample(musica);
 				al_rest(1.0);
 				break;
 			}
+			if (score >= 1000 && score < 4000)
+				i = 8;
+			else if (score >= 4000 && score < 10000)
+				i = 12;
+			else if (score >= 10000 && score < 20000)
+				i = 16;
+			else if (score >= 20000)
+				i = 20;
+			
+			if (checagem != i)
+			{
+				al_stop_samples();
+				al_play_sample(drama, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, 0);
+				al_draw_text(fonte,al_map_rgb(255,255,255),LARGURA/2,ALTURA-400,ALLEGRO_ALIGN_CENTRE,"A correnteza aumentou!");
+				checagem = i;
+				al_flip_display();
+				al_rest(4.0);
+				al_play_sample(musica, 1.0, 0.0, 1.0+(i/60.0), ALLEGRO_PLAYMODE_LOOP, 0);
+			}
 
 			al_flip_display();
-			refresh  = 1/(Vi[0]*cos(Vi[1]) + 5);
+			refresh  = 1/(Vi[0]*cos(Vi[1]) + i);
 			al_rest(refresh);
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 			
@@ -201,6 +240,8 @@ int main (int argc, char **argv)
 		}
 		al_clear_to_color(al_map_rgb(0, 0, 0));
 		al_draw_bitmap(gameover, 0, 0, 0);
+		al_draw_text(fonte,al_map_rgb(255,255,255),LARGURA/2,ALTURA-400,ALLEGRO_ALIGN_CENTRE,"Seu score final foi:");
+		al_draw_textf(fonte,al_map_rgb(255,255,255),LARGURA/2,ALTURA-350,ALLEGRO_ALIGN_CENTRE,"..:: %d ::..", score);
 		al_flip_display();
 		al_play_sample(ending, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
 		al_rest(5.0);
@@ -212,6 +253,9 @@ int main (int argc, char **argv)
 		al_destroy_bitmap(canoa);
 		al_destroy_sample(ending);
 		al_destroy_sample(smash);
+		al_destroy_event_queue(fila);
+		al_destroy_timer(timer);
+		al_destroy_font(fonte);
 	}
     
     fclose(entrada);
@@ -223,6 +267,14 @@ int main (int argc, char **argv)
 /*FUNCOES AUXILIARES*/
 void menu() {
     int opcao;
+	ALLEGRO_SAMPLE *intro = NULL;
+	
+	intro = al_load_sample("music/intro.ogg");
+	if (!intro) {
+		fprintf(stderr, "Nao consegui carregar o arquivo de audio do menu!\n");
+		exit(EXIT_FAILURE);
+	}
+	al_play_sample(intro, 1.1, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, 0);
 
     opcao = desenhaMenu(LARGURA,ALTURA);
     if (opcao == 2) {
@@ -230,8 +282,9 @@ void menu() {
     }
 
     else if (opcao == 3) {
-       al_destroy_display(janela);
-       exit(1);
+		al_destroy_sample(intro);
+		al_destroy_display(janela);
+		exit(1);
     }
 }
 

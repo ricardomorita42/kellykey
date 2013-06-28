@@ -86,7 +86,7 @@ int criaJanela(ALLEGRO_DISPLAY *janela, int largura, int altura)
 		fprintf(stderr, "nao consegui inicializar codecs de audio");
 		return -1;
 	}
-	if (!al_reserve_samples(2)) {
+	if (!al_reserve_samples(4)) {
 	
 		fprintf(stderr, "nao consegui reservar instancias para os samples");
 		return -1;
@@ -405,10 +405,10 @@ void desenhaRio(Rio** grade, ALLEGRO_BITMAP *fundo, int linha)
 			}		
 		}
 		/*preenchendo os vertices do poligono*/
-		vtx[0].x = margEsqSup[1]; vtx[0].y = margEsqSup[0]; vtx[0].color = al_map_rgb(0, 0, 200);
-		vtx[1].x = margDirSup[1]; vtx[1].y = margDirSup[0]; vtx[1].color = al_map_rgb(0, 0, 200);
-		vtx[2].x = margDirInf[1]; vtx[2].y = margDirInf[0]; vtx[2].color = al_map_rgb(0, 0, 200);
-		vtx[3].x = margEsqInf[1]; vtx[3].y = margEsqInf[0]; vtx[3].color = al_map_rgb(0, 0, 200);
+		vtx[0].x = margEsqSup[1]; vtx[0].y = margEsqSup[0]; vtx[0].color = al_map_rgb(0, 0, 220);
+		vtx[1].x = margDirSup[1]; vtx[1].y = margDirSup[0]; vtx[1].color = al_map_rgb(0, 0, 220);
+		vtx[2].x = margDirInf[1]; vtx[2].y = margDirInf[0]; vtx[2].color = al_map_rgb(0, 0, 220);
+		vtx[3].x = margEsqInf[1]; vtx[3].y = margEsqInf[0]; vtx[3].color = al_map_rgb(0, 0, 220);
 		
 		/*desenhando trapezios*/
 		al_draw_prim(vtx, NULL, 0, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN);
@@ -495,16 +495,16 @@ void desenhaTeste(int teste)
 	al_destroy_font(fonte);
 }
 
-int desenhaInfo(int bateu, float velocidade, int primeiraLinha)
+int desenhaInfo(int bateu, int velocidade, int score)
 {
-	static int hp = 0, vidas = 3, paft = 0, score = 0, anterior = -1;
+	static int hp = 0, vidas = 3, paft = 0;
 	ALLEGRO_BITMAP *heart = al_load_bitmap("images/heart.png");
 	ALLEGRO_BITMAP *heartoff = al_load_bitmap("images/heartoff.png");
 	ALLEGRO_FONT *fonte = NULL;
 	ALLEGRO_FONT *fonte2 = NULL;
  
     /*Carregando fontes a serem usadas*/
-    fonte = al_load_font("fonts/pirulen.ttf",14,0);
+    fonte = al_load_font("fonts/pirulen.ttf",15,0);
     if (!fonte) {
         fprintf(stderr,"nao consegui encontrar a fonte pirulen.ttf\n");
         exit(EXIT_FAILURE);
@@ -516,12 +516,13 @@ int desenhaInfo(int bateu, float velocidade, int primeiraLinha)
 	}
 	
 	/*imprime velocidade vertical do barco e score na tela*/
-	if (anterior != primeiraLinha)
-		score += (int)(velocidade/2);
-	al_draw_textf(fonte,al_map_rgb(255,255,0),LARGURA-13,ALTURA-170,ALLEGRO_ALIGN_RIGHT,"vel: %d",(int)velocidade);
-	al_draw_textf(fonte,al_map_rgb(255,255,0),LARGURA-13,ALTURA-120,ALLEGRO_ALIGN_RIGHT,"score: %d",score);
+	al_draw_text(fonte,al_map_rgb(0,0,0),LARGURA-12,ALTURA-169,ALLEGRO_ALIGN_RIGHT,"velocidade:");
+	al_draw_textf(fonte,al_map_rgb(255,255,0),LARGURA-13,ALTURA-150,ALLEGRO_ALIGN_RIGHT,"%d",velocidade);
+	al_draw_text(fonte,al_map_rgb(0,0,0),LARGURA-13,ALTURA-110,ALLEGRO_ALIGN_RIGHT,"score:");
+	al_draw_textf(fonte,al_map_rgb(255,255,0),LARGURA-13,ALTURA-90,ALLEGRO_ALIGN_RIGHT,"%d",score);
 
-	/*desenha barra de HP da canoa*/
+
+	/*desenha barra de health points (HP) da canoa*/
 	al_draw_rectangle(LARGURA-60, ALTURA-300, LARGURA-20, ALTURA-200, al_map_rgb(0,0,0), 3);
 	if (bateu == TRUE)
 	{
@@ -529,6 +530,7 @@ int desenhaInfo(int bateu, float velocidade, int primeiraLinha)
 		paft = 15;
 	}
 	al_draw_filled_rectangle(LARGURA-59, (ALTURA-298)+hp, LARGURA-22, ALTURA-202, al_map_rgb(180,0,0));
+	al_draw_text(fonte,al_map_rgb(0,0,0),LARGURA-40,ALTURA-255,ALLEGRO_ALIGN_CENTRE,"HP");
 
 	/*desenha onomatopeia*/
 	if (paft != 0)
@@ -572,6 +574,5 @@ int desenhaInfo(int bateu, float velocidade, int primeiraLinha)
 	}
 	al_destroy_font(fonte);
 	al_destroy_font(fonte2);
-	anterior = primeiraLinha;
 	return vidas;
 }
