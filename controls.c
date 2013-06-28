@@ -58,10 +58,10 @@ int* movimenta(ALLEGRO_EVENT_QUEUE *fila, ALLEGRO_TIMER *timer)
 		{
 			/*decrementa pixels (esquerda)*/
 			if (tecla == 1)
-				mov[0] += 2;
+				mov[0] += 3;
 			/*incrementa pixels (direita)*/
 			if (tecla == 2)
-				mov[1] += 2;
+				mov[1] += 3;
 		}
 		/*evento: tecla pressionada*/
 		else if (ev.type == ALLEGRO_EVENT_KEY_DOWN)

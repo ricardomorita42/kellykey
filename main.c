@@ -24,7 +24,6 @@ Referencias:
 #include <stdio.h>
 #include <time.h>
 #include <string.h>
-#include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
@@ -51,7 +50,6 @@ Referencias:
 ALLEGRO_DISPLAY *janela = NULL;
 
 /*Prototipos*/
-void testeIntegridade(char** argv);
 void menu();
 
 /*MAIN*/
@@ -152,7 +150,7 @@ int main (int argc, char **argv)
 		}
 		
 		/*carregando arquivos de audio*/
-		musica = al_load_sample("music/tirol.ogg");
+		musica = al_load_sample("music/boat.ogg");
 		ending = al_load_sample("music/gameover.ogg");
 		smash = al_load_sample("music/smash.ogg");
 		drama = al_load_sample("music/dramatic.ogg");
@@ -180,24 +178,34 @@ int main (int argc, char **argv)
 		/*======== O JOGO ===========*/
 		while (rep > 0 || rep < 0) {
         
-        	atual = geraRio(primeiraLinha, linha, fluxo, atual);
+        	/*atualiza grade do rio*/
+			atual = geraRio(primeiraLinha, linha, fluxo, atual);
 			grade = criaImagemGrade(atual, grade, primeiraLinha);
-				
-			desenhaRio(grade, fundo, primeiraLinha);					
+			
+			/*desenha nova imagem do rio*/	
+			desenhaRio(grade, fundo, primeiraLinha);
+
+			/*posiciona e desenha a canoa*/			
 			Vi = posicionaCanoa(canoa, movimenta(fila, timer), grade, pos);
 			pos = desenhaCanoa(canoa, Vi);
+
+			/*verifica colisao e calcula velocidade vertical da canoa*/
 			crash = testaColisao(grade, pos);
 			velocidade = (int)(Vi[0] * cos(Vi[1]));
 
+			/*soma pontos ao jogador*/
 			if (crash == 0)
 				score += velocidade/2;
 
+			/*coloca informacoes na tela e verifica se o jogo acabou*/
 			if (desenhaInfo(crash, velocidade, score) == 0)
 			{
 				al_destroy_sample(musica);
 				al_rest(1.0);
 				break;
 			}
+
+			/*aumenta a velocidade do jogo em funcao do score*/
 			if (score >= 1000 && score < 4000)
 				i = 8;
 			else if (score >= 4000 && score < 10000)
@@ -206,7 +214,6 @@ int main (int argc, char **argv)
 				i = 16;
 			else if (score >= 20000)
 				i = 20;
-			
 			if (checagem != i)
 			{
 				al_stop_samples();
@@ -218,26 +225,36 @@ int main (int argc, char **argv)
 				al_play_sample(musica, 1.0, 0.0, 1.0+(i/60.0), ALLEGRO_PLAYMODE_LOOP, 0);
 			}
 
+			/*atualiza display e tempo de exposicao da tela*/
 			al_flip_display();
 			refresh  = 1/(Vi[0]*cos(Vi[1]) + i);
 			al_rest(refresh);
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 			
+			/*caso haja colisao, nao incremente uma linha na grade*/
 			if (crash == 1) {
 				al_play_sample(smash, 0.5, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
 				continue;
 			}
+
+			/*incrementa uma linha na grade*/
 			primeiraLinha++;
         	if (primeiraLinha == getNumLines()) 
 				primeiraLinha = 0;
-
 			linha = primeiraLinha - 1;
 			if (linha < 0) 
 				linha = getNumLines() - 1;
 
+			/*condicao de parada por numero de iteracoes*/
 			if (rep > 0)
 				rep--;
+
+/* 			if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+ *          		break;
+ *       		}
+ */
 		}
+		/*=== GAME OVER ===*/
 		al_clear_to_color(al_map_rgb(0, 0, 0));
 		al_draw_bitmap(gameover, 0, 0, 0);
 		al_draw_text(fonte,al_map_rgb(255,255,255),LARGURA/2,ALTURA-400,ALLEGRO_ALIGN_CENTRE,"Seu score final foi:");
@@ -253,11 +270,13 @@ int main (int argc, char **argv)
 		al_destroy_bitmap(canoa);
 		al_destroy_sample(ending);
 		al_destroy_sample(smash);
+		al_destroy_sample(intro);
+		al_destroy_sample(drama);
 		al_destroy_event_queue(fila);
 		al_destroy_timer(timer);
 		al_destroy_font(fonte);
 	}
-    
+    /*saindo!*/
     fclose(entrada);
 	al_destroy_display(janela);
 	return 0;
