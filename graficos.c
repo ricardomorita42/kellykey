@@ -330,16 +330,17 @@ void desenhaSetup() {
     }
 }
 
-void desenhaRio(Rio** grade, ALLEGRO_BITMAP *fundo)
+void desenhaRio(Rio** grade, ALLEGRO_BITMAP *fundo, int linha)
 {
 	int i, j, k = al_get_bitmap_height(fundo)/(D);
-	static int altura = 0;
+	static int altura = 0, anterior = -1; 
 	float margEsqInf[2], margEsqSup[2], margDirInf[2], margDirSup[2], ilhaEsq[2], ilhaDir[2];
 	ALLEGRO_VERTEX vtx[4];
     ALLEGRO_FONT *fonte = NULL;
 	
 	/*criando fundo animado*/
-	altura++;
+	if (anterior != linha)
+		altura++;
 	if (altura == k)
 		altura = 0;
 	al_draw_bitmap(fundo, 0, (-k*D + altura*D), 0);
@@ -391,7 +392,7 @@ void desenhaRio(Rio** grade, ALLEGRO_BITMAP *fundo)
 		vtx[2].x = margDirInf[1]; vtx[2].y = margDirInf[0]; vtx[2].color = al_map_rgb(0, 0, 200);
 		vtx[3].x = margEsqInf[1]; vtx[3].y = margEsqInf[0]; vtx[3].color = al_map_rgb(0, 0, 200);
 		
-		/*desenhando*/
+		/*desenhando trapezios*/
 		al_draw_prim(vtx, NULL, 0, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN);
 		if (ilhaEsq[0] != 0)
 			al_draw_filled_rectangle(ilhaEsq[1], ilhaEsq[0]-D, ilhaDir[1], ilhaDir[0], al_map_rgb(100,100,0));
@@ -403,9 +404,10 @@ void desenhaRio(Rio** grade, ALLEGRO_BITMAP *fundo)
         al_draw_justified_textf(fonte,al_map_rgb(255,255,255),240,240,10,10,0, "Fluxo: %.2f", getRiverFlux());
     }
     al_destroy_font(fonte);
+	anterior = linha;
 }
 
-void desenhaCanoa(ALLEGRO_BITMAP *canoa, float *Vi)
+int desenhaCanoa(ALLEGRO_BITMAP *canoa, float *Vi)
 {
 	int H;
 	static int posicao = 0;
@@ -417,6 +419,7 @@ void desenhaCanoa(ALLEGRO_BITMAP *canoa, float *Vi)
 	H = al_get_bitmap_height(canoa);
 	posicao += Vi[0] * sin(Vi[1]);
 	al_draw_rotated_bitmap(canoa, 0, 0, LARGURA/2 + posicao, (ALTURA - H), Vi[1],  0);
+	return LARGURA/2 + posicao;
 }
 
 void desenhaTeste(int teste)
@@ -471,4 +474,61 @@ void desenhaTeste(int teste)
 	}
 	al_flip_display();
 	al_rest(2.0);
+}
+
+int desenhaInfo(int bateu, float velocidade)
+{
+	static int hp = 0, vidas = 3;
+	ALLEGRO_BITMAP *heart = al_load_bitmap("images/heart.png");
+	ALLEGRO_BITMAP *heartoff = al_load_bitmap("images/heartoff.png");
+	ALLEGRO_FONT *fonte = NULL;
+ 
+    /*Carregando fonte para ser usada*/
+    fonte = al_load_font("fonts/pirulen.ttf",12,0);
+    if (!fonte) {
+        fprintf(stderr,"nao consegui encontrar a fonte");
+        exit(EXIT_FAILURE);
+    }
+/* 	al_draw_text(fonte,al_map_rgb(255,255,255),50,30,ALLEGRO_ALIGN_RIGHT,"Velocidade: %.2f", velocidade);
+ */
+	al_draw_justified_textf(fonte,al_map_rgb(255,255,255),10,10,10,10,0, "Velocidade: %.2f", velocidade);
+
+	/*HP da canoa*/
+	al_draw_rectangle(LARGURA-60, ALTURA-300, LARGURA-20, ALTURA-200, al_map_rgb(0,0,0), 3);
+	if (bateu == TRUE)
+		hp += 2;
+	al_draw_filled_rectangle(LARGURA-59, (ALTURA-298)+hp, LARGURA-22, ALTURA-202, al_map_rgb(180,0,0));
+
+	if (hp == 100)
+	{
+		vidas--;
+		hp = 0;
+	}
+	/*vidas do jogador*/
+	switch(vidas)
+	{
+		case 3:
+			al_draw_bitmap(heart, LARGURA-55, ALTURA-410, 0);
+			al_draw_bitmap(heart, LARGURA-55, ALTURA-375, 0);
+			al_draw_bitmap(heart, LARGURA-55, ALTURA-340, 0);
+			break;
+		case 2:
+			al_draw_bitmap(heartoff, LARGURA-55, ALTURA-410, 0);
+			al_draw_bitmap(heart, LARGURA-55, ALTURA-375, 0);
+			al_draw_bitmap(heart, LARGURA-55, ALTURA-340, 0);
+			break;
+		case 1:
+			al_draw_bitmap(heartoff, LARGURA-55, ALTURA-410, 0);
+			al_draw_bitmap(heartoff, LARGURA-55, ALTURA-375, 0);
+			al_draw_bitmap(heart, LARGURA-55, ALTURA-340, 0);
+			break;
+		case 0:
+			al_draw_bitmap(heartoff, LARGURA-55, ALTURA-410, 0);
+			al_draw_bitmap(heartoff, LARGURA-55, ALTURA-375, 0);
+			al_draw_bitmap(heartoff, LARGURA-55, ALTURA-340, 0);
+			break;
+		default:
+			break;
+	}
+	return vidas;
 }

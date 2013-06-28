@@ -53,14 +53,15 @@ void menu();
 /*MAIN*/
 int main (int argc, char **argv) 
 {
-	int i, checagem, seed, depuracao, linha, primeiraLinha, rep;
+	int i, checagem, seed, depuracao, linha, primeiraLinha, rep, pos, crash;
 	char nomeArquivo[MAXLINE];
-	float fluxo, *Vi;
+	float fluxo, refresh, *Vi;
 	FILE* entrada;
 	Rio **grade, **atual;
 
 	ALLEGRO_BITMAP *fundo = NULL;
 	ALLEGRO_BITMAP *canoa = NULL;
+	ALLEGRO_BITMAP *gameover = NULL;
 	ALLEGRO_TIMER *timer = NULL;
 	ALLEGRO_EVENT_QUEUE *fila = NULL;
 
@@ -111,6 +112,7 @@ int main (int argc, char **argv)
 		/*carregando imagens apenas uma vez*/
 		fundo = al_load_bitmap("textures/texture.png");
 		canoa = al_load_bitmap("images/canoe_c.tga");
+		gameover = al_load_bitmap("images/gameover.jpg");
 
 		/*alocando grade de atualizacao do rio*/
 		grade = alocaGrade();
@@ -133,24 +135,36 @@ int main (int argc, char **argv)
 		al_register_event_source(fila, al_get_timer_event_source(timer));
 		al_start_timer(timer);
 		i = 0;
+		pos = LARGURA/2;
 
 		/*======== O JOGO ===========*/
 		while (rep > 0 || rep < 0) {
         
         	atual = geraRio(primeiraLinha, linha, fluxo, atual);
 			grade = criaImagemGrade(atual, grade, primeiraLinha);
-			
-			desenhaRio(grade, fundo);
-			Vi = posicionaCanoa(canoa, movimenta(fila, timer), grade);
-			desenhaCanoa(canoa, Vi);
-			if (i % 5 == 0)
-				printf("Vvert: %f  Vhoriz: %f\n", Vi[0]*cos(Vi[1]), Vi[0]*sin(Vi[1]));
+				
+			desenhaRio(grade, fundo, primeiraLinha);					
+			Vi = posicionaCanoa(canoa, movimenta(fila, timer), grade, pos);
+			pos = desenhaCanoa(canoa, Vi);
+			crash = testaColisao(grade, pos);
+			if (desenhaInfo(crash, Vi[0] * cos(Vi[1])) == 0)
+			{
+				al_rest(1.0);
+				break;
+			}
 
+/* 			if (i % 5 == 0)
+ * 				printf("Vvert: %f  Vhoriz: %f\n", Vi[0]*cos(Vi[1]), Vi[0]*sin(Vi[1]));
+ */
 			al_flip_display();
-			al_rest(0.2);
+			refresh  = 1/(Vi[0]*cos(Vi[1]) + 5);
+			al_rest(refresh);
 			al_clear_to_color(al_map_rgb(0, 0, 0));
-		
-        	primeiraLinha++;
+			
+			if (crash == 1)				
+				continue;
+
+			primeiraLinha++;
         	if (primeiraLinha == getNumLines()) 
 				primeiraLinha = 0;
 
@@ -162,6 +176,10 @@ int main (int argc, char **argv)
 				rep--;
 			i++;
 		}
+		al_clear_to_color(al_map_rgb(0, 0, 0));
+		al_draw_bitmap(gameover, 0, 0, 0);
+		al_flip_display();
+		al_rest(3.0);
 		/*liberando o entulho*/
 		freeGrade(grade);
 		freeGrade(atual);

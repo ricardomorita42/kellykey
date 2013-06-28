@@ -31,6 +31,7 @@ Referencias:
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_image.h>
 #include "rio.h"
+#include "config.h"
 #include "controls.h"
 #include "grade.h"
 #include "graficos.h"
@@ -57,10 +58,10 @@ int* movimenta(ALLEGRO_EVENT_QUEUE *fila, ALLEGRO_TIMER *timer)
 		{
 			/*decrementa pixels (esquerda)*/
 			if (tecla == 1)
-				mov[0] += 1;
+				mov[0] += 2;
 			/*incrementa pixels (direita)*/
 			if (tecla == 2)
-				mov[1] += 1;
+				mov[1] += 2;
 		}
 		/*evento: tecla pressionada*/
 		else if (ev.type == ALLEGRO_EVENT_KEY_DOWN)
@@ -86,34 +87,76 @@ int* movimenta(ALLEGRO_EVENT_QUEUE *fila, ALLEGRO_TIMER *timer)
 	return mov;
 }
 
-float* posicionaCanoa(ALLEGRO_BITMAP *canoa, int *remadas, Rio **grade)
+float* posicionaCanoa(ALLEGRO_BITMAP *canoa, int *remadas, Rio **grade, int pos)
 {
-	float Va[2], vd, ve, incremento;
+	float Va[2], vd, ve;
 	static float Vi[2] = {0, 0};
- 	static int posicao= LARGURA/(2*D);
+ 	int posicao = (int)(pos/(float)D);
 
-	ve = grade[1][posicao-1].velocidade + remadas[0] * 0.8;
-	vd = grade[1][posicao+2].velocidade + remadas[1] * 0.8;
 
-	printf("--> posicao: %d  ve: %f  vd: %f  \n", posicao, ve, vd);
+	ve = grade[getNumLines()-12][posicao+1].velocidade + remadas[0] * 0.8;
+	vd = grade[getNumLines()-12][posicao+3].velocidade + remadas[1] * 0.8;
+
+	if (grade[85][posicao+1].terreno == getEarthChar())
+	{
+		Vi[0] = remadas[1];
+		Vi[1] = 0.025;
+		return Vi;
+	}
+	else if (grade[85][posicao+3].terreno == getEarthChar())
+	{
+		Vi[0] = remadas[0];
+		Vi[1] = -0.025;
+		return Vi;
+	}
+
+	
+/* 	printf("--> posicao: %d  ve: %f  vd: %f  \n", posicao, ve, vd);
+ */
 
 
 	Va[0] = (vd + ve)/2;
 	Va[1] = atan((vd - ve)/al_get_bitmap_width(canoa));
 
-/* 	printf("angulo: %f  cos: %f\n", Va[1], sin(Va[1]));
- */
-
 	Vi[0] = Vi[0] * 0.8 + Va[0];
-	Vi[1] = Va[1] * 0.3 + Vi[1] * 0.7;
-	incremento = Vi[0] * sin(Vi[1]);
-
-	if (grade[1][posicao + (int)incremento].velocidade != 0)
-		posicao = posicao + incremento; 
-
-/* 	printf("posicao: %d  ang: %f\n", posicao, sin(Vi[1]));
- */
+	Vi[1] = Va[1] * 0.25 + Vi[1] * 0.75;
 	free (remadas);
 
 	return Vi;
+}
+
+int testaColisao(Rio** grade, int pos)
+{
+	int i;
+	/*for (i = 0; i < getNumLines()-1; i++)
+	{
+		printf("linha %d: ", i);
+		for (j = 0; j < getNumColumns()-1; j++)
+		{
+			if (grade[i][j].terreno == getIsleChar())
+				printf("@");
+		}
+		printf("\n");
+	}*/
+
+	/*colisao com ilha*/
+	for (i = 0; i < 5; i++)
+	{
+		if (grade[84+i][(int)(pos/(float)D)+2].terreno == getIsleChar())
+		{
+			printf("bateu na ilha!!!\n");
+			return TRUE;
+		}
+	}
+	for (i = 0; i < 5; i++)
+	{
+		if (grade[85+i][(int)(pos/D)].terreno == getEarthChar()
+		|| grade[85+i][(int)(pos/D)+3].terreno == getEarthChar())
+		{
+			printf("bateu na margem!!!\n");
+			return TRUE;
+		}
+	}
+
+	return FALSE;
 }

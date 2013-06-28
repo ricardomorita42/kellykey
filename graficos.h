@@ -22,9 +22,9 @@ Referencias:
 */
 
 /*--1--*/
-void desenhaRio(Rio**, ALLEGRO_BITMAP*);
+void desenhaRio(Rio**, ALLEGRO_BITMAP*, int);
 /*--2--*/
-void desenhaCanoa(ALLEGRO_BITMAP*, float*);
+int desenhaCanoa(ALLEGRO_BITMAP*, float*);
 /*--3--*/
 int desenhaMenu(int,int);
 /*--4--*/
@@ -33,6 +33,8 @@ void desenhaSetup();
 int criaJanela(ALLEGRO_DISPLAY*, int, int);
 /*--6--*/
 void desenhaTeste(int);
+/*--7--*/
+int desenhaInfo(int, float);
 
 
 /*-- 1 -- desenhaRio: Utiliza uma grade, ja com as velocidades calculadas
