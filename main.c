@@ -261,7 +261,7 @@ int main (int argc, char **argv)
 		al_draw_textf(fonte,al_map_rgb(255,255,255),LARGURA/2,ALTURA-350,ALLEGRO_ALIGN_CENTRE,"..:: %d ::..", score);
 		al_flip_display();
 		al_play_sample(ending, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
-		al_rest(5.0);
+		al_rest(4.0);
 
 		/*liberando o entulho*/
 		freeGrade(grade);
@@ -270,7 +270,6 @@ int main (int argc, char **argv)
 		al_destroy_bitmap(canoa);
 		al_destroy_sample(ending);
 		al_destroy_sample(smash);
-		al_destroy_sample(intro);
 		al_destroy_sample(drama);
 		al_destroy_event_queue(fila);
 		al_destroy_timer(timer);

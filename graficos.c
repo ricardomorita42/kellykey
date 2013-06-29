@@ -526,7 +526,7 @@ int desenhaInfo(int bateu, int velocidade, int score)
 	al_draw_rectangle(LARGURA-60, ALTURA-300, LARGURA-20, ALTURA-200, al_map_rgb(0,0,0), 3);
 	if (bateu == TRUE)
 	{
-		hp += 2;
+		hp += 7;
 		paft = 15;
 	}
 	al_draw_filled_rectangle(LARGURA-59, (ALTURA-298)+hp, LARGURA-22, ALTURA-202, al_map_rgb(180,0,0));
@@ -535,7 +535,7 @@ int desenhaInfo(int bateu, int velocidade, int score)
 	/*desenha onomatopeia*/
 	if (paft != 0)
 	{
-		al_draw_text(fonte2, al_map_rgb(255,255-(paft*10), paft*10), LARGURA/2, (ALTURA-300)-paft*8, ALLEGRO_ALIGN_CENTER, "PAFT!");
+		al_draw_text(fonte2, al_map_rgb(255,255-(paft*10), paft*10), LARGURA/2, (ALTURA-300)-paft*8, ALLEGRO_ALIGN_CENTRE, "PAFT!");
 		paft--;
 	}
 
