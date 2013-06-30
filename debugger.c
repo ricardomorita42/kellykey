@@ -297,7 +297,7 @@ void testeIntegridade(char** argv) {
 
 	desenhaTeste(7);
 	strcpy(chamada, argv[0]);
-	strcat(chamada, " -fndebug/config.txt -rd1 -ie1");
+	strcat(chamada, " -fndebug/config2.txt -rd1 -ie1");
 	system(chamada);
 
 	desenhaTeste(8);

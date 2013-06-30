@@ -135,6 +135,9 @@ int main (int argc, char **argv)
 		grade = alocaGrade();
 		atual = alocaGrade();
 
+
+		if(!getDebugMode()) {/**/
+
 		/*criando uma fila de eventos*/
 		fila = al_create_event_queue();
 		if (!fila) {
@@ -175,6 +178,8 @@ int main (int argc, char **argv)
 		i = 4;
 		checagem = i;
 
+		}/**/
+
 		/*======== O JOGO ===========*/
 		while (rep > 0 || rep < 0) {
         
@@ -185,7 +190,8 @@ int main (int argc, char **argv)
 			/*desenha nova imagem do rio*/	
 			desenhaRio(grade, fundo, primeiraLinha);
 
-			/*posiciona e desenha a canoa*/			
+			/*posiciona e desenha a canoa*/
+			if(!getDebugMode()) { /**/
 			Vi = posicionaCanoa(canoa, movimenta(fila, timer), grade, pos);
 			pos = desenhaCanoa(canoa, Vi);
 
@@ -236,6 +242,12 @@ int main (int argc, char **argv)
 				al_play_sample(smash, 0.5, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
 				continue;
 			}
+			}/**/
+			if(getDebugMode()){
+				al_flip_display();
+				al_rest(getRefreshRate()/1000000);
+				al_clear_to_color(al_map_rgb(0, 0, 0));
+			}
 
 			/*incrementa uma linha na grade*/
 			primeiraLinha++;
@@ -254,6 +266,7 @@ int main (int argc, char **argv)
  *       		}
  */
 		}
+		if(!getDebugMode()){/**/
 		/*=== GAME OVER ===*/
 		al_clear_to_color(al_map_rgb(0, 0, 0));
 		al_draw_bitmap(gameover, 0, 0, 0);
@@ -262,11 +275,13 @@ int main (int argc, char **argv)
 		al_flip_display();
 		al_play_sample(ending, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
 		al_rest(4.0);
+		} /**/
 
 		/*liberando o entulho*/
 		freeGrade(grade);
 		freeGrade(atual);
 		al_destroy_bitmap(fundo);
+		if(!getDebugMode()){/**/
 		al_destroy_bitmap(canoa);
 		al_destroy_sample(ending);
 		al_destroy_sample(smash);
@@ -274,6 +289,7 @@ int main (int argc, char **argv)
 		al_destroy_event_queue(fila);
 		al_destroy_timer(timer);
 		al_destroy_font(fonte);
+		}
 	}
     /*saindo!*/
     fclose(entrada);
