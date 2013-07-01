@@ -97,14 +97,17 @@ int main (int argc, char **argv)
 		exit(EXIT_FAILURE);
 	}
 
-	/*Chamando musica inicial do jogo*/
-	intro = al_load_sample("music/guile.ogg");
-	if (!intro) {
-		fprintf(stderr, "Nao consegui carregar a musica de abertura\n");
-		exit(EXIT_FAILURE);
+
+	if(!getDebugMode()) {
+		/*Chamando musica inicial do jogo*/
+		intro = al_load_sample("music/guile.ogg");
+		if (!intro) {
+			fprintf(stderr, "Nao consegui carregar a musica de abertura\n");
+			exit(EXIT_FAILURE);
+		}
+		al_play_sample(intro, 0.8, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, 0);
 	}
-	al_play_sample(intro, 0.8, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, 0);
-	
+
     /*Criando um menu para o jogo*/
     if (depuracao != 2 && getDebugMode() != 1) 
         menu();
@@ -136,49 +139,49 @@ int main (int argc, char **argv)
 		atual = alocaGrade();
 
 
-		if(!getDebugMode()) {/**/
+		if(!getDebugMode()) {
 
-		/*criando uma fila de eventos*/
-		fila = al_create_event_queue();
-		if (!fila) {
-			fprintf(stderr, "ERRO: Nao consegui criar uma fila de eventos!\n");
-			exit(EXIT_FAILURE);
-		}
+			/*criando uma fila de eventos*/
+			fila = al_create_event_queue();
+			if (!fila) {
+				fprintf(stderr, "ERRO: Nao consegui criar uma fila de eventos!\n");
+				exit(EXIT_FAILURE);
+			}
 
-		/*criando um timer*/
-		timer = al_create_timer(1.0/60);
-		if (!timer) {
-			fprintf(stderr, "ERRO: Nao consegui criar um timer!\n");
+			/*criando um timer*/
+			timer = al_create_timer(1.0/60);
+			if (!timer) {
+				fprintf(stderr, "ERRO: Nao consegui criar um timer!\n");
 			exit(EXIT_FAILURE);	
-		}
+			}
 		
-		/*carregando arquivos de audio*/
-		musica = al_load_sample("music/boat.ogg");
-		ending = al_load_sample("music/gameover.ogg");
-		smash = al_load_sample("music/smash.ogg");
-		drama = al_load_sample("music/dramatic.ogg");
-		if (!musica || !ending || !smash || !drama) {
-			fprintf(stderr, "ERRO: Nao consegui carregar o audio do jogo!\n");
-			exit(EXIT_FAILURE);
-		}
+			/*carregando arquivos de audio*/
+			musica = al_load_sample("music/boat.ogg");
+			ending = al_load_sample("music/gameover.ogg");
+			smash = al_load_sample("music/smash.ogg");
+			drama = al_load_sample("music/dramatic.ogg");
+			if (!musica || !ending || !smash || !drama) {
+				fprintf(stderr, "ERRO: Nao consegui carregar o audio do jogo!\n");
+				exit(EXIT_FAILURE);
+			}
 		
-		/*carregando fonte*/
-    	fonte = al_load_font("fonts/pirulen.ttf",26,0);
-    	if (!fonte) {
-        	fprintf(stderr,"nao consegui encontrar a fonte pirulen.ttf\n");
-        	exit(EXIT_FAILURE);
-   		}
+			/*carregando fonte*/
+			fonte = al_load_font("fonts/pirulen.ttf",26,0);
+			if (!fonte) {
+				fprintf(stderr,"nao consegui encontrar a fonte pirulen.ttf\n");
+				exit(EXIT_FAILURE);
+			}
 
-		al_register_event_source(fila, al_get_keyboard_event_source());
-		al_register_event_source(fila, al_get_timer_event_source(timer));
-		al_start_timer(timer);
-		pos = LARGURA/2;
-		al_destroy_sample(intro);
-		al_play_sample(musica, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);
-		i = 4;
-		checagem = i;
+			al_register_event_source(fila, al_get_keyboard_event_source());
+			al_register_event_source(fila, al_get_timer_event_source(timer));
+			al_start_timer(timer);
+			pos = LARGURA/2;
+			al_destroy_sample(intro);
+			al_play_sample(musica, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);
+			i = 4;
+			checagem = i;
 
-		}/**/
+		}
 
 		/*======== O JOGO ===========*/
 		while (rep > 0 || rep < 0) {
@@ -192,58 +195,60 @@ int main (int argc, char **argv)
 
 			/*posiciona e desenha a canoa*/
 			if(!getDebugMode()) { /**/
-			Vi = posicionaCanoa(canoa, movimenta(fila, timer), grade, pos);
-			pos = desenhaCanoa(canoa, Vi);
+				Vi = posicionaCanoa(canoa, movimenta(fila, timer), grade, pos);
+				pos = desenhaCanoa(canoa, Vi);
 
-			/*verifica colisao e calcula velocidade vertical da canoa*/
-			crash = testaColisao(grade, pos);
-			velocidade = (int)(Vi[0] * cos(Vi[1]));
+				/*verifica colisao e calcula velocidade vertical da canoa*/
+				crash = testaColisao(grade, pos);
+				velocidade = (int)(Vi[0] * cos(Vi[1]));
 
-			/*soma pontos ao jogador*/
-			if (crash == 0)
-				score += velocidade/2;
+				/*soma pontos ao jogador*/
+				if (crash == 0)
+					score += velocidade/2;
 
-			/*coloca informacoes na tela e verifica se o jogo acabou*/
-			if (desenhaInfo(crash, velocidade, score) == 0)
-			{
-				al_destroy_sample(musica);
-				al_rest(1.0);
-				break;
-			}
+				/*coloca informacoes na tela e verifica se o jogo acabou*/
+				if (desenhaInfo(crash, velocidade, score) == 0)
+				{
+					al_destroy_sample(musica);
+					al_rest(1.0);
+					break;
+				}
 
-			/*aumenta a velocidade do jogo em funcao do score*/
-			if (score >= 1000 && score < 4000)
-				i = 8;
-			else if (score >= 4000 && score < 10000)
-				i = 12;
-			else if (score >= 10000 && score < 20000)
-				i = 16;
-			else if (score >= 20000)
-				i = 20;
-			if (checagem != i)
-			{
-				al_stop_samples();
-				al_play_sample(drama, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, 0);
-				al_draw_text(fonte,al_map_rgb(255,255,255),LARGURA/2,ALTURA-400,ALLEGRO_ALIGN_CENTRE,"A correnteza aumentou!");
-				checagem = i;
+				/*aumenta a velocidade do jogo em funcao do score*/
+				if (score >= 1000 && score < 4000)
+					i = 8;
+				else if (score >= 4000 && score < 10000)
+					i = 12;
+				else if (score >= 10000 && score < 20000)
+					i = 16;
+				else if (score >= 20000)
+					i = 20;
+				if (checagem != i)
+				{
+					al_stop_samples();
+					al_play_sample(drama, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, 0);
+					al_draw_text(fonte,al_map_rgb(255,255,255),LARGURA/2,ALTURA-400,ALLEGRO_ALIGN_CENTRE,"A correnteza aumentou!");
+					checagem = i;
+					al_flip_display();
+					al_rest(4.0);
+					al_play_sample(musica, 1.0, 0.0, 1.0+(i/60.0), ALLEGRO_PLAYMODE_LOOP, 0);
+				}
+
+				/*atualiza display e tempo de exposicao da tela*/
 				al_flip_display();
-				al_rest(4.0);
-				al_play_sample(musica, 1.0, 0.0, 1.0+(i/60.0), ALLEGRO_PLAYMODE_LOOP, 0);
+				refresh  = 1/(Vi[0]*cos(Vi[1]) + i);
+				al_rest(refresh);
+				al_clear_to_color(al_map_rgb(0, 0, 0));
+			
+				/*caso haja colisao, nao incremente uma linha na grade*/
+				if (crash == 1) {
+					al_play_sample(smash, 0.5, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+					continue;
+				}
+
 			}
 
-			/*atualiza display e tempo de exposicao da tela*/
-			al_flip_display();
-			refresh  = 1/(Vi[0]*cos(Vi[1]) + i);
-			al_rest(refresh);
-			al_clear_to_color(al_map_rgb(0, 0, 0));
-			
-			/*caso haja colisao, nao incremente uma linha na grade*/
-			if (crash == 1) {
-				al_play_sample(smash, 0.5, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
-				continue;
-			}
-			}/**/
-			if(getDebugMode()){
+			if(getDebugMode()) {
 				al_flip_display();
 				al_rest(getRefreshRate()/1000000);
 				al_clear_to_color(al_map_rgb(0, 0, 0));
@@ -266,29 +271,29 @@ int main (int argc, char **argv)
  *       		}
  */
 		}
-		if(!getDebugMode()){/**/
-		/*=== GAME OVER ===*/
-		al_clear_to_color(al_map_rgb(0, 0, 0));
-		al_draw_bitmap(gameover, 0, 0, 0);
-		al_draw_text(fonte,al_map_rgb(255,255,255),LARGURA/2,ALTURA-400,ALLEGRO_ALIGN_CENTRE,"Seu score final foi:");
-		al_draw_textf(fonte,al_map_rgb(255,255,255),LARGURA/2,ALTURA-350,ALLEGRO_ALIGN_CENTRE,"..:: %d ::..", score);
-		al_flip_display();
-		al_play_sample(ending, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
-		al_rest(4.0);
+		if(!getDebugMode()) {/**/
+			/*=== GAME OVER ===*/
+			al_clear_to_color(al_map_rgb(0, 0, 0));
+			al_draw_bitmap(gameover, 0, 0, 0);
+			al_draw_text(fonte,al_map_rgb(255,255,255),LARGURA/2,ALTURA-400,ALLEGRO_ALIGN_CENTRE,"Seu score final foi:");
+			al_draw_textf(fonte,al_map_rgb(255,255,255),LARGURA/2,ALTURA-350,ALLEGRO_ALIGN_CENTRE,"..:: %d ::..", score);
+			al_flip_display();
+			al_play_sample(ending, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+			al_rest(4.0);
 		} /**/
 
 		/*liberando o entulho*/
 		freeGrade(grade);
 		freeGrade(atual);
 		al_destroy_bitmap(fundo);
-		if(!getDebugMode()){/**/
-		al_destroy_bitmap(canoa);
-		al_destroy_sample(ending);
-		al_destroy_sample(smash);
-		al_destroy_sample(drama);
-		al_destroy_event_queue(fila);
-		al_destroy_timer(timer);
-		al_destroy_font(fonte);
+		if(!getDebugMode()) {
+			al_destroy_bitmap(canoa);
+			al_destroy_sample(ending);
+			al_destroy_sample(smash);
+			al_destroy_sample(drama);
+			al_destroy_event_queue(fila);
+			al_destroy_timer(timer);
+			al_destroy_font(fonte);
 		}
 	}
     /*saindo!*/

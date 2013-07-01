@@ -97,13 +97,13 @@ float* posicionaCanoa(ALLEGRO_BITMAP *canoa, int *remadas, Rio **grade, int pos)
 	ve = grade[getNumLines()-12][posicao+1].velocidade + remadas[0] * 0.8;
 	vd = grade[getNumLines()-12][posicao+3].velocidade + remadas[1] * 0.8;
 
-	if (grade[85][posicao+1].terreno == getEarthChar())
+	if (grade[getNumLines()-25][posicao+1].terreno == getEarthChar())
 	{
 		Vi[0] = remadas[1];
 		Vi[1] = 0.025;
 		return Vi;
 	}
-	else if (grade[85][posicao+3].terreno == getEarthChar())
+	else if (grade[getNumLines()-25][posicao+3].terreno == getEarthChar())
 	{
 		Vi[0] = remadas[0];
 		Vi[1] = -0.025;
@@ -126,15 +126,15 @@ int testaColisao(Rio** grade, int pos)
 	/*colisao com ilha*/
 	for (i = 0; i < 5; i++)
 	{
-		if (grade[84+i][(int)(pos/(float)D)+2].terreno == getIsleChar())
+		if (grade[getNumLines()-25+i][(int)(pos/(float)D)+2].terreno == getIsleChar())
 			return TRUE;
 	}
 
 	/*colisao com margem*/
 	for (i = 0; i < 5; i++)
 	{
-		if (grade[85+i][(int)(pos/D)].terreno == getEarthChar()
-		|| grade[85+i][(int)(pos/D)+3].terreno == getEarthChar())
+		if (grade[getNumLines()-25+i][(int)(pos/D)].terreno == getEarthChar()
+		|| grade[getNumLines()-25+i][(int)(pos/D)+3].terreno == getEarthChar())
 			return TRUE;
 	}
 	return FALSE;
