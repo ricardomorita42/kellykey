@@ -5,7 +5,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
 \usepackage{float}
-
+\usepackage{amsmath}
 \floatstyle{boxed}
 \restylefloat{figure}
 \author{Carlos Eduardo Elmadjian, Ricardo Mikio Morita e Gil Santaella}
@@ -179,7 +179,7 @@ A função \verb|geraLinha()| se ocupa de devolver uma linha para \verb|geraRio(
 \item as velocidades tenham sido normalizadas (\verb|normalizaVelocidade()|).
 \end{itemize}
 
-\subsection{Módulo Gráfico *novo*}
+\subsection{Módulo Gráfico}
 Este módulo apresenta funções pertinentes à parte visual do jogo. A parte gráfica é feita pela implementação de bibliotecas do Allegro 5.0, especificamente:
 \begin{itemize}
 \item allegro.h
@@ -197,6 +197,20 @@ Este módulo é composto pelas funções abaixo:
 \item \verb|desenhaMenu()|: Renderiza o Menu inicial do jogo;
 \item \verb|desenhaSetup()|: Renderiza o menu de opções do jogo;
 \item \verb|desenhaRio()|: Desenha o jogo;
+\item \verb|desenhaCanoa()|: desenha a canoa numa determinada posição da tela em função da velocidade horizontal do barco e a cada atualização da imagem. Devolve a posição da canoa.
+\item \verb|desenhaTeste()|: escreve mensagens na tela informando o tipo de teste realizado na bateria de testes automáticos.
+\item \verb|desenhaInfo()|: desenha informações relativas ao jogo, como: velocidade da canoa em função da água; pontuação do jogador; vidas e pontos de vida; avisos de colisão. Devolve o número de vidas do jogador.
+\end{itemize}
+
+\subsection{Módulo de Controle \textbf{* Novo! *}}
+
+Este módulo está relacionado com os controles do jogo. Ele funciona como uma interface para a interatividade, cuidando de questões como detecção de eventos, controle e posicionamento da canoa e detecção de colisões.
+
+\begin{itemize}
+\item \verb|movimenta()|: função que detecta eventos de controle da canoa, devolvendo um valor (em pixels) relativo a quantas “remadas” foram realizadas em uma iteração.
+\item \verb|posicionaCanoa()|: determina por meio de cálculos qual será a posição da canoa na próxima iteração em função do controle do usuário. Para realizar os cálculos necessários, são levados em conta os seguintes dados: a velocidade vetorial anterior da canoa; a velocidade vetorial da água em ambos os lados da canoa; o número de remadas para esquerda ou direita. Como o ângulo da velocidade vetorial da água é definido pela função \textit{arctg(x)}, cujo domínio vai de -$\pi$/2 a $\pi$/2, então utilizamos a função \textit{cos(x)} para definir a componente vertical da velocidade resultante e, analogamente, a função \textit{sen(x)} para a componente horizontal.
+Essa função também impede que a canoa ultrapasse as margens do rio.
+\item \verb|TestaColisao()|: recebe a posição calculada do barco e indica se há uma colisão entre algum ponto da canoa e uma ilha ou uma margem.
 \end{itemize}
 
 \section{Observações}

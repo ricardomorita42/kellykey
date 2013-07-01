@@ -102,6 +102,31 @@ Argumento & Variável & Exemplos de uso \\
 
 Se você estiver bastante arrependido, você ainda pode sair do programa digitando 3 no menu inicial. De toda forma, ao final do jogo, o programa terminará sua execução.
 
+\section{Gameplay/Como Jogar}
+A canoa deve ser controlada com as setas esquerda e direita do teclado. Para ganhar mais velocidade, o usuário deve remar mais, isto é, fazer a canoa ir de um lado para o outro. Quanto mais rápido a canoa se move, mais pontos o usuário conquista.
+
+A velocidade exibida na tela corresponde à velocidade da canoa relativa à água. Portanto, o jogador não ganha pontos se não remar, embora a canoa possa estar se movimentando em função da velocidade do rio.
+
+Em cada partida, o jogador sempre começa com três vidas (representadas por corações vermelhos). Há uma barra de \textit{“health points” (HP)} que indica qual o nível de cada coração. Quando perde uma vida, um dos corações do jogador se apaga. 
+
+Sempre que há colisões entre a canoa e ilhas ou margens, a barra de HP do jogador é gradualmente reduzida. É muito importante que o usuário tente se livrar de um objeto com o qual se chocou o mais rápido possível para que sua barra de HP não diminua ainda mais.
+
+\begin{center}
+\includegraphics[scale=0.4]{explicacao.jpg}
+\end{center}
+
+Ao longo do jogo, o usuário também poderá perceber que a correnteza do rio vai aumentando em função do número de pontos que ele conquista. Quando isso acontece, a navegação se torna mais rápida e a canoa fica mais difícil de controlar.
+
+\begin{center}
+\includegraphics[scale=0.5]{correnteza.jpg}
+\end{center}
+
+Ao perder os três corações, o jogo termina e a tela exibe a pontuação que o jogador conquistou naquela partida.
+
+\begin{center}
+\includegraphics[scale=0.5]{gameover.jpg}
+\end{center}
+
 \section{modo depuração}
 Para executar o programa main no modo depuração, você deve alterar a opção 8 do menu de configurações para o valor 2 (ou usando \verb|./main -rd2|). Isso fará com que o programa realize uma série de testes de robustez, correção e variações sobre o rio que é gerado. Nos testes de robustez, serão carregados arquivos pré-configurados com condições extremas. Até por isso, é natural não esperar correção de valores de fluxo, por exemplo, pois queremos apenas que o programa sobreviva. \\
 
