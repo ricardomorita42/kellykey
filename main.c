@@ -194,7 +194,7 @@ int main (int argc, char **argv)
 			desenhaRio(grade, fundo, primeiraLinha);
 
 			/*posiciona e desenha a canoa*/
-			if(!getDebugMode()) { /**/
+			if(!getDebugMode()) {
 				Vi = posicionaCanoa(canoa, movimenta(fila, timer), grade, pos);
 				pos = desenhaCanoa(canoa, Vi);
 
@@ -266,12 +266,8 @@ int main (int argc, char **argv)
 			if (rep > 0)
 				rep--;
 
-/* 			if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
- *          		break;
- *       		}
- */
 		}
-		if(!getDebugMode()) {/**/
+		if(!getDebugMode()) {
 			/*=== GAME OVER ===*/
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 			al_draw_bitmap(gameover, 0, 0, 0);
@@ -280,7 +276,7 @@ int main (int argc, char **argv)
 			al_flip_display();
 			al_play_sample(ending, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
 			al_rest(4.0);
-		} /**/
+		}
 
 		/*liberando o entulho*/
 		freeGrade(grade);

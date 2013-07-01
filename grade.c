@@ -74,7 +74,6 @@ void printGrade(Rio **grade, int primeiraLinha, float tempoDecorrido)
 	printf ("\n\n");
 }
 
-/*PARA TESTE!*/
 Rio** criaImagemGrade(Rio **atual, Rio **nova, int primeiraLinha)
 {
 	int i, j, k;
